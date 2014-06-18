@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)file:///Users/Alaz/Desktop/Babel/babel.html#_language -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>Babel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="icon" type="image/png" href="file:///Users/Alaz/Desktop/Babel/iui/iui-favicon.png">
+  <link rel="apple-touch-icon" href="file:///Users/Alaz/Desktop/Babel/iui/iui-logo-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" href="./Babel_files/iui.css" type="text/css">
+  <link rel="stylesheet" title="Default" href="./Babel_files/default-theme.css" type="text/css">
+  <link rel="stylesheet" href="./Babel_files/iui-panel-list.css" type="text/css">
+
+  <script type="application/x-javascript" src="./Babel_files/iui.js"></script>
+<script type="application/x-javascript" src="./Babel_files/TbBMod.js"></script>
+	<link href="file:///Users/Alaz/Desktop/Babel/xtra.css" rel="stylesheet" type="text/css">
+
+
+</head>
+<body orient="portrait" class=" portrait">
+ <script type="application/x-javascript" src="./Babel_files/jquery-1.10.2.min.js"></script>
+  <script>
+  	
+  	
+  	var lastLanguage = "";
+  	var dict = [];
+  
+  	$(document).ready(function(){
+    		var turkish = []; 
+  			turkish.push({english: 'Hello, Goodbye', foreign: 'Merhaba,Eygonlar', path: 'BT_Sound/Turkish/MerhabaEyGounlar.mp3'});
+  			turkish.push({english: 'Whats the problem?', foreign: 'Nasesen', path: 'BT_Sound/Turkish/Nasesen.mp3'});
+  			turkish.push({english: 'Yes, No', foreign: 'Evet,Hayer', path: 'BT_Sound/Turkish/EvetHayer.mp3'});
+  			turkish.push({english: 'Pain', foreign: 'Akherior', path: 'BT_Sound/Turkish/Akherior.mp3'});
+  			turkish.push({english: 'Here', foreign: 'Bourda', path: 'BT_Sound/Turkish/Bourda.mp3'});
+  			turkish.push({english: 'Fever', foreign: 'Atez', path: 'BT_Sound/Turkish/Atez.mp3'});
+  			turkish.push({english: 'Breathing', foreign: 'Nafass', path: 'BT_Sound/Turkish/NafassTurkish.mp3'});
+  			turkish.push({english: 'Vomit', foreign: 'Medad Boulanyor', path: 'BT_Sound/Turkish/MedadBoulanyor.mp3'});
+  			turkish.push({english: 'Diarrhea', foreign: 'Is Hal', path: 'BT_Sound/Turkish/IsHalTurkish.mp3'});
+  			turkish.push({english: 'Stool', foreign: 'Poukh', path: 'BT_Sound/Turkish/Poukh.mp3'});
+  			turkish.push({english: 'Urine', foreign: 'Idrar', path: 'BT_Sound/Turkish/Idrar.mp3'});
+  			turkish.push({english: 'Blood', foreign: 'Kan', path: 'BT_Sound/Turkish/Kan.mp3'});
+			turkish.push({english: 'Pregnant', foreign: 'Hamila', path: 'BT_Sound/Turkish/Hamilas.mp3'});
+  			dict['Turkish'] = turkish;
+  			
+  			var french = [];
+  			french.push({english: 'Hello, Goodbye', foreign: 'Bonjour', path: 'BT_Sound/French/bonjour.mp3'});
+  			french.push({english: 'Whats the problem?', foreign: 'Quel est le probleme', path: 'BT_Sound/French/quelEstLeProbleme.mp3'});
+  			french.push({english: 'Yes, No', foreign: 'Oui, non', path: 'BT_Sound/French/ouiNon.mp3'});
+  			french.push({english: 'Pain', foreign: 'Douleur', path: 'BT_Sound/French/douleur.mp3'});
+  			french.push({english: 'Here', foreign: 'Ici', path: 'BT_Sound/French/ici.mp3'});
+  			french.push({english: 'Fever', foreign: 'fievre', path: 'BT_Sound/French/fievre.mp3'});
+  			french.push({english: 'Breathing', foreign: 'Respiration', path: 'BT_Sound/French/respiration.mp3'});
+  			french.push({english: 'Vomit', foreign: 'Vomi', path: 'BT_Sound/French/Vomi.mp3'});
+  			french.push({english: 'Diarrhea', foreign: 'Diarrhee', path: 'BT_Sound/French/diarrhee.mp3'});
+  			french.push({english: 'Stool', foreign: 'Caca', path: 'BT_Sound/French/caca.mp3'});
+  			french.push({english: 'Urine', foreign: 'Urine', path: 'BT_Sound/French/urine.mp3'});
+  			french.push({english: 'Blood', foreign: 'Sang', path: 'BT_Sound/French/sang.mp3'});
+			french.push({english: 'Pregnant', foreign: 'Enceinte', path: 'BT_Sound/French/enceinte.mp3'});
+			dict['French'] = french;
+	});
+	function getWords(language){
+
+  		languageArray = dict[language];
+  		lastLanguage = language;
+		$( "#language" ).remove();
+  		var funcString = '';
+  		for (var i in languageArray) {
+			funcString = funcString + '<li><a href="javascript:;" onClick="getWordDetails('+i+');">'   
+			+"<span style=' font-size:14px;'>" + languageArray[i].english + "</span>" 
+			+ "<span align='right' style='padding-top:5px;font-size:14px; float:right; position:relative; display:block;'> " +  languageArray[i].foreign + '</span></li>';
+		}
+  
+  		$("body").append("<ul id='language' title='"+ language +"'>" + funcString 
+  		+ '<form><input type = "hidden" name = "TbBModHIDE_otherButton" value = "how" /></form>' +"</ul>");
+  		iui.showPageById("language");
+  		}
+  		
+	function getWordDetails(elementId){
+		$( "#languageDetail" ).remove();
+  		var funcString = '';
+		funcString = funcString + '<div class="word" style = "text-align:center; font-size:200%" >'   
+		+ dict[lastLanguage][elementId].english + "</div>" 
+		+ '<div class="word" style = "text-align:center; font-size:200%; margin-top:10px; font-weight:bold;">' + dict[lastLanguage][elementId].foreign + '</div>'
+		+ '<audio controls id="audio" style="position: absolute; bottom: 0; width:100%;">' + '<source src="'+dict[lastLanguage][elementId].path+'" type="audio/mpeg">'
+  		+ '</audio>';
+  		$("body").append('<div id="languageDetail" title="' 
+  		+ dict[lastLanguage][elementId].english + ' (' + lastLanguage + ')'  
+  		+'" style="background-color:white;" otherButtonHref="#about2">' + funcString 
+  		+ '<form><input type = "hidden" name = "TbBModHIDE_otherButton" value = "how" /></form>' 
+  		+ "</div>");
+  		var audio = document.getElementById("audio");
+		audio.play();
+		iui.showPageById("languageDetail");
+  }
+  </script>
+    <div class="toolbar" style="position: fixed;top: 0;width: 100%;z-index: 100;">
+        <h1 id="pageTitle" class="">French</h1>
+        <a id="backButton" class="button" href="file:///Users/Alaz/Desktop/Babel/babel.html#" style="display: inline;">Medical expressions in...</a>
+    <a id="otherButton" class="button" href="file:///Users/Alaz/Desktop/Babel/babel.html#about" style="display: none;">?</a>
+
+    </div>
+<ul id="languages" title="Medical expressions in..." style="left: -100%;">
+	<li><a href="javascript:;" onclick="getWords(&#39;Cree&#39;);">Cree</a></li>
+	<li><a href="javascript:;" onclick="getWords(&#39;Dari&#39;);">Dari</a></li>
+	<li><a href="javascript:;" onclick="getWords(&#39;Farsi&#39;);">Farsi</a></li>
+	<li><a href="javascript:;" onclick="getWords(&#39;French&#39;);">French</a></li>
+	<li><a href="javascript:;" onclick="getWords(&#39;Italian&#39;);">Italian</a></li>
+	<li><a href="javascript:;" onclick="getWords(&#39;Kurdish&#39;);">Kurdish</a></li>
+	<li><a href="javascript:;" onclick="getWords(&#39;Mandarin&#39;);">Mandarin</a></li>
+	<li><a href="javascript:;" onclick="getWords(&#39;Pashtu&#39;);">Pashtu</a></li>
+	<li><a href="javascript:;" onclick="getWords(&#39;Sinhala&#39;);">Sinhala</a></li>
+	<li><a href="javascript:;" onclick="getWords(&#39;Somali&#39;);">Somali</a></li>
+	<li><a href="javascript:;" onclick="getWords(&#39;Spanish&#39;);">Spanish</a></li>
+	<li><a href="javascript:;" onclick="getWords(&#39;Swahili&#39;);">Swahili</a></li>
+	<li><a href="javascript:;" onclick="getWords(&#39;Turkish&#39;);">Turkish</a></li>
+</ul>
+
+<div id="about" title="About This App" style="margin:7px; background-color:white;">
+<center><img src="./Babel_files/img_ballou.png" alt="Ballou" width="90%" height="90%"></center>
+<p>
+About this app:
+I teach family medicine at the University of Ottawa, in Canada. Our patients speak French and English, and many other languages.
+</p>
+<p>
+All people love to be spoken to in their own language, especially when they are ill.
+I have found the shortest possible questionnaire needed to ask about someone's health. There are just 13 expressions:
+<br>- Hello / Goodbye <br>
+- What is the problem?<br>
+- Yes, no<br>
+- Fever<br>
+- Pain<br>
+- Here (a part of the body)<br>
+- Respiration<br>
+- Urine<br>
+- Stool<br>
+- Diarrhea<br>
+- Vomit<br>
+- Blood<br>
+- Pregnant<br>
+</p>
+<p>
+Of course, there will be smiling, hand waving and pointing as well.
+</p>
+<p>
+Doctor of Babel presents these 13 expressions in 14 different languages, in written and audio form. I chose these languages because there are native speakers of each language in our clinic.
+</p>
+<p>
+I have used this list when caring for the Ngobe people in the jungles of Panama, and for the Cree in northern QueÌbec. I have also used these expressions when caring for refugees in Ottawa.
+</p>
+<p>
+To find out more about eachlanguage, touch the &gt; sign in the upper right corner of the page.
+</p>
+<center><img src="./Babel_files/img_inst.png" alt="Ballou" width="75%" height="75%"></center>
+<p>
+There are fascinating discoveries to be made with this app. For example, 'Dard' is the word for 'Pain' in Dari, Pashtu and Farsi.
+</p>
+<p>
+If we look at a map of the world, we find that these languages are found in a very specific area:
+</p>
+<center><img src="./Babel_files/img_world.png" alt="Ballou" width="75%" height="75%"></center>
+<p>
+This basic, emotional word was shared by an ancient group of people, who were later separated by political barriers.
+</p>
+<p>
+I will add new languages as time permits. You can participate by contacting me at Elizabeth Bruyere Hospital:
+<br>sballou@bruyere.org
+<br>Dr. Steve Ballou
+</p>
+	<form>
+		<input type="hidden" name="TbBModHIDE_otherButton" value="how">
+	</form>
+</div>
+
+
+<div id="preloader"></div><ul id="language" title="French" selected="true" style="left: 0%;"><li><a href="javascript:;" onclick="getWordDetails(0);"><span style=" font-size:14px;">Hello, Goodbye</span><span align="right" style="padding-top:5px;font-size:14px; float:right; position:relative; display:block;"> Bonjour</span></a></li><li><a href="javascript:;" onclick="getWordDetails(1);"><span style=" font-size:14px;">Whats the problem?</span><span align="right" style="padding-top:5px;font-size:14px; float:right; position:relative; display:block;"> Quel est le probleme</span></a></li><li><a href="javascript:;" onclick="getWordDetails(2);"><span style=" font-size:14px;">Yes, No</span><span align="right" style="padding-top:5px;font-size:14px; float:right; position:relative; display:block;"> Oui, non</span></a></li><li><a href="javascript:;" onclick="getWordDetails(3);"><span style=" font-size:14px;">Pain</span><span align="right" style="padding-top:5px;font-size:14px; float:right; position:relative; display:block;"> Douleur</span></a></li><li><a href="javascript:;" onclick="getWordDetails(4);"><span style=" font-size:14px;">Here</span><span align="right" style="padding-top:5px;font-size:14px; float:right; position:relative; display:block;"> Ici</span></a></li><li><a href="javascript:;" onclick="getWordDetails(5);"><span style=" font-size:14px;">Fever</span><span align="right" style="padding-top:5px;font-size:14px; float:right; position:relative; display:block;"> fievre</span></a></li><li><a href="javascript:;" onclick="getWordDetails(6);"><span style=" font-size:14px;">Breathing</span><span align="right" style="padding-top:5px;font-size:14px; float:right; position:relative; display:block;"> Respiration</span></a></li><li><a href="javascript:;" onclick="getWordDetails(7);"><span style=" font-size:14px;">Vomit</span><span align="right" style="padding-top:5px;font-size:14px; float:right; position:relative; display:block;"> Vomi</span></a></li><li><a href="javascript:;" onclick="getWordDetails(8);"><span style=" font-size:14px;">Diarrhea</span><span align="right" style="padding-top:5px;font-size:14px; float:right; position:relative; display:block;"> Diarrhee</span></a></li><li><a href="javascript:;" onclick="getWordDetails(9);"><span style=" font-size:14px;">Stool</span><span align="right" style="padding-top:5px;font-size:14px; float:right; position:relative; display:block;"> Caca</span></a></li><li><a href="javascript:;" onclick="getWordDetails(10);"><span style=" font-size:14px;">Urine</span><span align="right" style="padding-top:5px;font-size:14px; float:right; position:relative; display:block;"> Urine</span></a></li><li><a href="javascript:;" onclick="getWordDetails(11);"><span style=" font-size:14px;">Blood</span><span align="right" style="padding-top:5px;font-size:14px; float:right; position:relative; display:block;"> Sang</span></a></li><li><a href="javascript:;" onclick="getWordDetails(12);"><span style=" font-size:14px;">Pregnant</span><span align="right" style="padding-top:5px;font-size:14px; float:right; position:relative; display:block;"> Enceinte</span></a></li><form><a href="javascript:;" onclick="getWordDetails(12);"><input type="hidden" name="TbBModHIDE_otherButton" value="how"></a></form></ul></body></html>
