@@ -74,7 +74,9 @@ router.route('/languages/:lang_id')
 
 	// get all the languages 
 	.get(function(req, res) {
-		Language.findById(req.params.lang_id, function(err, language) {
+		Language.findById(req.params.lang_id)
+		.populate('translations.translation')
+		.exec(function (err, language) {
 			if (err)
 				res.send(err);
 			res.json(language);
