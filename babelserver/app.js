@@ -17,6 +17,8 @@ var app = express();
 app.engine('html', exphbs({ extname: 'html', defaultLayout: 'main' }));
 app.set('view engine', 'html');
 
+app.set('json spaces', 4);
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
@@ -27,7 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 mongoose.connect('mongodb://localhost:27017/babel');
 
-app.use('/', routes);
+app.use('/', routes);   
 app.use('/api', api);
 app.use('/users', users);
 

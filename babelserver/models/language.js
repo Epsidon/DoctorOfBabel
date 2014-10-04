@@ -1,11 +1,13 @@
 var mongoose = require('mongoose');
+var shortid = require('shortid');
 var Schema = mongoose.Schema;
 
 var LanguageSchema = new Schema({
 	name: String,
 	translations: [{
-		translation: { type: Schema.Types.ObjectId, ref: 'Expression' },
-		meaning: String,
+		_id: { type: String, unique: true, 'default': shortid.generate},
+		original: { type: Schema.Types.ObjectId, ref: 'Expression' },
+		translation: String,
 		audio: String,
 	}]
 });

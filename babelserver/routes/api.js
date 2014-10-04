@@ -3,18 +3,20 @@ var router = express.Router();
 var Expression = require('../models/expression');
 var Language = require('../models/language');
 
-/* GET home page. */
+/* Test API GET */
 router.get('/', function(req, res) {
 	res.json({ message: 'API Works!' });
 });
 
+
+/* Expressions */
 router.route('/expressions')
 
 	// create an expression
 	.post(function(req, res) {
 		
 		var expression = new Expression();		
-		expression.sentence = req.body.sentence;  
+		expression.sentence = req.body.sentence;
 
 		expression.save(function(err) {
 			if (err)
@@ -36,6 +38,8 @@ router.route('/expressions')
 		});
 	});
 
+
+/* Languages */
 router.route('/languages')
 
 	// create a language
@@ -43,12 +47,11 @@ router.route('/languages')
 		
 		var language = new Language();		
 		language.name = req.body.name;
-		//language.translations[0] = req.body.translation;
 		language.translations.push({
 			translation: req.body.translation,
 			meaning: req.body.meaning,
-			audio: req.body.audio,	
-		});
+			audio: req.body.audio
+        });
 
 		language.save(function(err) {
 			if (err)
@@ -72,13 +75,13 @@ router.route('/languages')
 
 router.route('/languages/:lang_id')
 
-	// get all the languages 
+	// get specific language 
 	.get(function(req, res) {
 		Language.findById(req.params.lang_id)
 		.populate('translations.translation')
 		.exec(function (err, language) {
 			if (err)
-				res.send(err);
+				res.json({ status: 'Error occured retrieving the language'});
 			res.json(language);
 		});
 	});
