@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var exphbs = require('express-handlebars');
 var mongoose = require('mongoose');
 
-var routes = require('./routes/index');
+var pages = require('./routes/pages');
 var users = require('./routes/users');
 var api = require('./routes/api');
 
@@ -16,7 +16,7 @@ var app = express();
 // Use .html extention name for handlebars files
 app.engine('html', exphbs({ extname: 'html', defaultLayout: 'main' }));
 app.set('view engine', 'html');
-
+// Prettify the json objects returned by setting the spaces
 app.set('json spaces', 4);
 
 // uncomment after placing your favicon in /public
@@ -29,7 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 mongoose.connect('mongodb://localhost:27017/babel');
 
-app.use('/', routes);   
+app.use('/', pages);   
 app.use('/api', api);
 app.use('/users', users);
 
@@ -49,7 +49,7 @@ if (app.get('env') === 'development') {
         res.status(err.status || 500);
         res.render('error', {
             message: err.message,
-            error: err
+            error: err,
         });
     });
 }

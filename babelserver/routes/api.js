@@ -3,7 +3,8 @@ var router = express.Router();
 var Expression = require('../models/expression');
 var Language = require('../models/language');
 
-/* Test API GET */
+// Test API GET
+// This will be removed after API work is done
 router.get('/', function(req, res) {
 	res.json({ message: 'API Works!' });
 });
@@ -44,13 +45,12 @@ router.route('/languages')
 
 	// create a language
 	.post(function(req, res) {
-		
 		var language = new Language();		
 		language.name = req.body.name;
 		language.translations.push({
+			english: req.body.english,
 			translation: req.body.translation,
-			meaning: req.body.meaning,
-			audio: req.body.audio
+			audio: req.body.audio,
         });
 
 		language.save(function(err) {
@@ -59,8 +59,6 @@ router.route('/languages')
 
 			res.json({ message: 'Language created!' });
 		});
-
-		
 	})
 
 	// get all the languages 
@@ -73,6 +71,7 @@ router.route('/languages')
 		});
 	});
 
+// Get a specific language 
 router.route('/languages/:lang_id')
 
 	// get specific language 
