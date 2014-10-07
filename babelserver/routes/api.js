@@ -83,6 +83,25 @@ router.route('/languages/:lang_id')
 				res.json({ status: 'Error occured retrieving the language'});
 			res.json(language);
 		});
+	})
+
+	.put(function(req, res) {
+		Language.findById(req.params.lang_id, function(err, language) {
+			if (err) 
+				console.log(err);
+
+			translation = {
+				english: req.body.english,
+				translation: req.body.translation,
+				audio: req.body.audio,
+			};
+			language.translations.push(translation);
+			language.save(function(err){
+				if (err) 
+					res.send(err)
+				res.json( {message: 'Update successful'});
+			});
+		});
 	});
 
 module.exports = router;

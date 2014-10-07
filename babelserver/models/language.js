@@ -6,6 +6,7 @@ var LanguageSchema = new Schema({
 	_id: { type: String, unique: true, 'default': shortid.generate},
 	name: String,
 	translations: [{
+		_id: {type: String, unique: true, 'default': shortid.generate},
 		english: { type: String, ref: 'Expression' },
 		translation: String,
 		audio: String,

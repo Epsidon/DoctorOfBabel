@@ -81,5 +81,5 @@ Lists of libraries and frameworks that will be used. Also some that might be wor
 * [jQuery](http://jquery.com/) - Much needed library to manipulate the DOM for the web app.
 * [jQuery Mobile](http://jquerymobile.com/) - Similar to above, but will help us for the mobile web app part.
 * [Ionic](http://ionicframework.com/) - This UI framework could be used to build the Phonegap app. Only requirement is that it supports Android 4.0+ and iOS 6+
-* [AngularJS](https://angularjs.org/) - A frontend JS framework built by Google. It's full featured for what we need currently, but if the complexity of the app rises, it could be useful to look into it.
 * [Mobile Angular UI](http://mobileangularui.com/) - A useful library using both AngularJS and Bootstrap to provide a lot of mobile friendly features that are missing from Bootstrap. 
+* [Mongoose](http://mongoosejs.com/) - An ORM for MongoDB that we will be using. There are other more lightweight alternatives, but this one is officially backed by MongoDB team and has a lot of documentation and available help online.
