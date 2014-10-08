@@ -5,12 +5,8 @@ var Schema = mongoose.Schema;
 var LanguageSchema = new Schema({
 	_id: { type: String, unique: true, 'default': shortid.generate},
 	name: String,
-	translations: [{
-		_id: {type: String, unique: true, 'default': shortid.generate},
-		english: { type: String, ref: 'Expression' },
-		translation: String,
-		audio: String,
-	}]
+	info: String,
+	map: String,
 });
 
 module.exports = mongoose.model('Language', LanguageSchema);

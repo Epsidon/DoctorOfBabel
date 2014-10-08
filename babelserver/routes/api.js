@@ -17,7 +17,10 @@ router.route('/expressions')
 	.post(function(req, res) {
 		
 		var expression = new Expression();		
-		expression.sentence = req.body.sentence;
+		expression.english = req.body.english;
+		expression.translation = req.body.translation;
+		expression.audio = req.body.audio;
+		expression.language = req.body.language;
 
 		expression.save(function(err) {
 			if (err)
@@ -47,15 +50,12 @@ router.route('/languages')
 	.post(function(req, res) {
 		var language = new Language();		
 		language.name = req.body.name;
-		language.translations.push({
-			english: req.body.english,
-			translation: req.body.translation,
-			audio: req.body.audio,
-        });
+		language.info = req.body.info;
+		language.map = req.body.map;
 
 		language.save(function(err) {
 			if (err)
-				res.send(err);
+				res.json(err);
 
 			res.json({ message: 'Language created!' });
 		});
@@ -76,31 +76,10 @@ router.route('/languages/:lang_id')
 
 	// get specific language 
 	.get(function(req, res) {
-		Language.findById(req.params.lang_id)
-		.populate('translations.translation')
-		.exec(function (err, language) {
+		Expression.find({ language: req.param('lang_id') }, function(err, expressions){
 			if (err)
-				res.json({ status: 'Error occured retrieving the language'});
-			res.json(language);
-		});
-	})
-
-	.put(function(req, res) {
-		Language.findById(req.params.lang_id, function(err, language) {
-			if (err) 
-				console.log(err);
-
-			translation = {
-				english: req.body.english,
-				translation: req.body.translation,
-				audio: req.body.audio,
-			};
-			language.translations.push(translation);
-			language.save(function(err){
-				if (err) 
-					res.send(err)
-				res.json( {message: 'Update successful'});
-			});
+				console.log(err)
+			res.json(expressions);
 		});
 	});
 
