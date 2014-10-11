@@ -1,22 +1,30 @@
-<div id="lang-title" class="col-xs-4 col-sm-4 col-md-4 col-lg-4"> 
-  <p>Languages</p>
+<div id="lang-title" class="col-xs-4 col-sm-4 col-md-3 col-lg-3"> 
+  <h4 style="float:left;">Languages</h2>
+  <img src="/images/langs-icon.png" style="float:right; height:40px; width:40px;">
 </div>
 <div id="expr-title" class="col-xs-6 col-sm-4  col-md-8 col-lg-8">
-  <p>Expressions</p>
+  <h4>Expressions</h4>
 </div>
 
 <div class="clearfix"></div>
 
-
-<div id="languageList" class="col-xs-4 col-sm-4 col-md-4 col-lg-4" >
+<div id="languageList" class="col-xs-4 col-sm-4 col-md-3 col-lg-3">
   {{#each languages }}
-  <div id ="{{ this.name }}" onClick="populateExpressions('{{ this._id }}')">{{ this.name }}
+  <div id ="{{ this.name }}" class="language" onClick="populateExpressions('{{ this._id }}')">{{ this.name }}
   </div>
   {{/each}}
 </div>
 
 <div id="expressionList" class="col-xs-6 col-sm-4  col-md-8 col-lg-8">
   {{#each expressions }}
-  <div>{{ this.english }} - {{ this.translation }} </div>
+  <div id="{{ this._id }}" class="expression">
+    <div>
+    {{ this.english }} - {{ this.translation }} 
+    </div>
+  <audio controls>
+    <source src="{{ this.audio }}" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio> 
+  </div>
   {{/each}}
 </div>

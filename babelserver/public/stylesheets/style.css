@@ -1,8 +1,15 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+
+
+.language {
+	border-right: 
+	solid #dddddd; 
+	background-color:#e7e7e7; 
+	margin-top:5px; 
+	height: 40px; 
+	padding-left:5px;
 }
 
-a {
-  color: #00B7FF;
+.expression {
+	border-bottom: solid #dddddd; 
+	margin-top:10px
 }
