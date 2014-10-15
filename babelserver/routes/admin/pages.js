@@ -1,12 +1,12 @@
 var express = require('express');
 var router = express.Router();
-var Language = require('../models/language');
-var Expression = require('../models/expression');
+var Language = require('../../models/language');
+var Expression = require('../../models/expression');
 
 router.get('/', function(req, res) {
 	Language.find({}, function(err, langs) {
 
-		var initValue = 0;
+		var initValue = 1;
 
 		if (err)
 			console.log(err);
@@ -21,7 +21,7 @@ router.get('/', function(req, res) {
 		Expression.find({ language: langs[initValue]._id }, function(err, exprs){
 			if (err)
 				console.log(err)
-			res.render('home', { languages: langs, expressions: exprs });
+			res.render('admin/home', { languages: langs, expressions: exprs });
 		});
 		
 	});
