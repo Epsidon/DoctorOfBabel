@@ -15,3 +15,8 @@ function populateExpressions(langId){
     	});
   	});
 }
+
+function update(formId) {
+    var alertItem = document.forms[formId].elements["english"].value;
+    alert(alertItem);
+}

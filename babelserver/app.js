@@ -13,6 +13,7 @@ var bcrypt = require('bcryptjs');
 var pages = require('./routes/pages');
 var users = require('./routes/users');
 var api = require('./routes/api');
+var admin = require('./routes/admin/pages');
 
 var app = express();
 
@@ -35,6 +36,7 @@ mongoose.connect('mongodb://localhost:27017/babel');
 app.use('/', pages);   
 app.use('/api', api);
 app.use('/users', users);
+app.use('/admin', admin);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
