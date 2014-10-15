@@ -6,6 +6,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var exphbs = require('express-handlebars');
 var mongoose = require('mongoose');
+var passport = require('passport');
+var bcrypt = require('bcryptjs');
+
 
 var pages = require('./routes/pages');
 var users = require('./routes/users');
