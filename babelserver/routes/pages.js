@@ -7,21 +7,27 @@ router.get('/', function(req, res) {
 	Language.find({}, function(err, langs) {
 
 		var initValue = 0;
+		var initLang = [];
+		var initInfo;
+		var initMap;
 
 		if (err)
 			console.log(err);
 
 		langs = sortByKey(langs, 'name');
 
-		langs.forEach(function(language) {
-			console.log(language);
-		});
+		initLang = langs[initValue];
+		initInfo = initLang.info;
+		initMap = initLang.map;
 
 		//Callback junction 
 		Expression.find({ language: langs[initValue]._id }, function(err, exprs){
 			if (err)
 				console.log(err)
-			res.render('home', { languages: langs, expressions: exprs });
+			res.render('home', { languages: langs,
+			 expressions: exprs,
+			  initInfo: initInfo,
+			  initMap: initMap });
 		});
 		
 	});
@@ -32,7 +38,7 @@ function sortByKey(array, key) {
     return array.sort(function(a, b) {
         var x = a[key]; var y = b[key];
         return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-    });
+    }); 
 }
 
 module.exports = router;
