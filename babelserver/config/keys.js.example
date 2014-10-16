@@ -1,0 +1,8 @@
+// This file will store any keys/token that will be required.
+// To use it just create another file in the same directory
+// without .example and add the keys value. That new file
+// will not be tracked in git
+
+module.exports = {
+	SESSION_KEY = 'secret key for the session to sign it',
+};

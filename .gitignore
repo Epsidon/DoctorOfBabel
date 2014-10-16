@@ -4,5 +4,8 @@
 # Node modules
 babelserver/node_modules/
 
+# Config file for keys
+babelserver/config/keys.js
+
 # Editor
 .idea/

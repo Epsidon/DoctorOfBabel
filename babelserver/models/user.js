@@ -19,25 +19,26 @@ UserSchema.pre('save', function(next) {
 	if (!user.isModified('password'))
 		return next();
 
-	bcrypt.getnSalt(10, function(err, salt) {
+	// Hash password using bcrypt with 10 rounds
+	bcrypt.genSalt(10, function(err, salt) {
 		if (err)
 			return next(err);
 		bcrypt.hash(user.password, salt, function(err, hash) {
 			if (err)
 				return next(err);
-			user.password = hash
+			user.password = hash;
 			next();
 		});
 	});
 });
 
 // Verify password
-UserSchema.methods.checkPassword(password, callback) {
+UserSchema.methods.checkPassword = function(password, callback) {
 	bcrypt.compare(password, this.password, function(err, match) {
 		if (err)
 			return callback(err);
 		callback(null, match);
 	});
-}
+};
 
 module.exports = mongoose.model('User', UserSchema);
