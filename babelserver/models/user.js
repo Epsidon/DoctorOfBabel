@@ -33,12 +33,8 @@ UserSchema.pre('save', function(next) {
 });
 
 // Verify password
-UserSchema.methods.checkPassword = function(password, callback) {
-	bcrypt.compare(password, this.password, function(err, match) {
-		if (err)
-			return callback(err);
-		callback(null, match);
-	});
+UserSchema.methods.checkPassword = function(password) {
+	return bcrypt.compare(password, this.password);
 };
 
 module.exports = mongoose.model('User', UserSchema);

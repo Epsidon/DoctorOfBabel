@@ -4,5 +4,5 @@
 // will not be tracked in git
 
 module.exports = {
-	SESSION_KEY = 'secret key for the session to sign it',
+	SESSION_KEY : 'secret key for the session to sign it',
 };
