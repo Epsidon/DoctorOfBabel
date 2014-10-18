@@ -10,6 +10,7 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var bcrypt = require('bcryptjs');
 
+
 // Custom config files
 var configKeys = require('./config/keys');
 
@@ -21,6 +22,7 @@ var admin = require('./routes/admin/pages');
 var app = express();
 
 mongoose.connect('mongodb://localhost:27017/babel');
+var MongooseStore = require('express-mongoose-store')(session, mongoose);
 
 // Configure passport for authentication
 require('./config/auth')(passport);
@@ -39,11 +41,19 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({ secret: configKeys.SESSION_KEY,
                   saveUninitialized: true,
-                  resave: true }));
+                  resave: true,
+                  store: new MongooseStore({ttl: 1000 * 60 * 2}) }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('/login', function(req, res) {
+    res.render('login', {user: req.user});
+});
+
+app.post('/login', passport.authenticate('local'), function(req, res) {
+    res.render('login', {user: req.user});
+});
 
 //
 // ROUTES

@@ -14,9 +14,9 @@
     h4{font-size: 24px;}
 }
 
-body {
+/*body {
 	min-width: 640px;
-}
+}*/
 
 img.title-icon {
 	float:right; max-height:40px; max-width:40px; height:60%; width:60%;
@@ -41,5 +41,14 @@ img.title-icon {
 }
 
 .form-login {
-	max-width: 300px;
+	max-width: 350px;
+	margin: 0 auto;
+}
+
+.form-login .form-control {
+	margin: 10px;
+}
+
+.form-login button {
+	margin: 10px;
 }

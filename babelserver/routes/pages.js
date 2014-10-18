@@ -32,11 +32,15 @@ router.get('/', function(req, res) {
 		
 	});
 });
-
+/*
 router.get('/login', function(req, res) {
 	res.render('login');
 });
 
+router.post('/login', function(req, res) {
+
+});
+*/
 //Sorts langauges alphabetically 
 function sortByKey(array, key) {
     return array.sort(function(a, b) {
