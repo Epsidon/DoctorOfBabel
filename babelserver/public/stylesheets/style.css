@@ -39,3 +39,7 @@ img.title-icon {
 .expression-text {
 	padding-bottom: 25px;
 }
+
+.form-login {
+	max-width: 300px;
+}

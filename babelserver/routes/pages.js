@@ -33,6 +33,10 @@ router.get('/', function(req, res) {
 	});
 });
 
+router.get('/login', function(req, res) {
+	res.render('login');
+});
+
 //Sorts langauges alphabetically 
 function sortByKey(array, key) {
     return array.sort(function(a, b) {

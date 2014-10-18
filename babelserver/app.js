@@ -37,7 +37,9 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(session({ secret: configKeys.SESSION_KEY }));
+app.use(session({ secret: configKeys.SESSION_KEY,
+                  saveUninitialized: true,
+                  resave: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
