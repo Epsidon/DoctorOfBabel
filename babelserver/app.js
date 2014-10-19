@@ -1,3 +1,4 @@
+// Loading important modules
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -10,16 +11,11 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var bcrypt = require('bcryptjs');
 
+// Create the express app
+var app = express();
 
 // Custom config files
 var configKeys = require('./config/keys');
-
-var pages = require('./routes/pages');
-var users = require('./routes/users');
-var api = require('./routes/api');
-var admin = require('./routes/admin/pages');
-
-var app = express();
 
 mongoose.connect('mongodb://localhost:27017/babel');
 var MongooseStore = require('express-mongoose-store')(session, mongoose);
@@ -47,22 +43,17 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/login', function(req, res) {
-    res.render('login', {user: req.user});
-});
+var pages = require('./routes/pages')(passport);
+var api = require('./routes/api');
+//var users = require('./routes/users');
+//var admin = require('./routes/admin/pages');
 
-app.post('/login', passport.authenticate('login'), function(req, res) {
-    res.render('login', {user: req.user});
-});
 
 //
 // ROUTES
 //
 app.use('/', pages);   
 app.use('/api', api);
-app.use('/users', users);
-app.use('/admin', admin);
-
 
 //
 // ERRORS HANDLING
@@ -70,9 +61,9 @@ app.use('/admin', admin);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
 
