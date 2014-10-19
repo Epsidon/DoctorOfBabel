@@ -1,25 +1,26 @@
-<div id="lang-title" class="col-xs-4 col-sm-4 col-md-3 col-lg-3"> 
+<div id="lang-title" class="col-xs-12 col-sm-4 col-md-3 col-lg-3"> 
   <h4 style="float:left;">Languages</h2>
   <img class="title-icon" src="/images/langs-icon.png">
 </div>
-<div id="expr-title" class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+<div id="expr-title" class="col-xs-0 col-sm-4 col-md-4 col-lg-4">
   <h4 style="float:left;">Expressions</h4>
   <img class="title-icon" src="/images/exprs-icon.png">
 </div>
-<div id="info-title" class="col-xs-4 col-sm-4 col-md-3 col-lg-3">
+<div id="info-title" class="col-xs-0 col-sm-4 col-md-3 col-lg-3">
   <h4 style="float:left;";>Info</h4>
   <img class="title-icon" src="/images/info-icon.png">
 </div>
 <div class="clearfix"></div>
 
-<div id="languageList" class="col-xs-4 col-sm-4 col-md-3 col-lg-3">
+<div id="language-list" class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
   {{#each languages }}
   <div id ="{{ this.name }}" class="language" onClick="populateExpressions('{{ this._id }}', '{{ this.name }}' ,'{{ this.info }}', '{{ this.map }}')">{{ this.name }}
   </div>
   {{/each}}
 </div>
 
-<div id="expressionList" style="overflow:auto;" class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+<div id="expression-list" style="overflow:auto;" class="col-xs-0 col-sm-4 col-md-4 col-lg-4">
+  <img id = "back-icon" src="/images/back-icon.png" onClick="closeModal();">
   {{#each expressions }}
   <div id="{{ this._id }}" class="expression">
     <div class="expression-text">
@@ -33,7 +34,7 @@
   {{/each}}
 </div>
 
-<div id="info-container" class="col-xs-4 col-sm-4 col-md-3 col-lg-3">
+<div id="info-container" class="col-xs-0 col-sm-4 col-md-3 col-lg-3">
   <div id="info">
   {{ initInfo }}
   </div>
