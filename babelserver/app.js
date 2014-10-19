@@ -45,15 +45,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var pages = require('./routes/pages')(passport);
 var api = require('./routes/api');
-//var users = require('./routes/users');
-//var admin = require('./routes/admin/pages');
-
+var dashboard = require('./routes/dashboard')(passport);
 
 //
 // ROUTES
 //
 app.use('/', pages);   
 app.use('/api', api);
+app.use('/dashboard', dashboard);
 
 //
 // ERRORS HANDLING

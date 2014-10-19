@@ -12,6 +12,7 @@ var UserSchema = new Schema({
 	role: { type: String, enum: roles },
 });
 
+// Hash the password before saving the user to db
 UserSchema.pre('save', function(next) {
 	var user = this;
 
