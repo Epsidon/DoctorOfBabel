@@ -1,3 +1,10 @@
-<div>
-	
+<div class="container">
+	<p>{{#if user}}
+	{{user}}
+	{{/if}}</p>
+	<form action="/signup" method="post" class="form-login" role="form">
+		<input type="text" class="form-control" name="username" placeholder="Username">
+		<input type="password" class="form-control" name="password" placeholder="Password">
+		<button type="submit" class="btn btn-large btn-primary btn-block">Login</button>
+	</form>	
 </div>
