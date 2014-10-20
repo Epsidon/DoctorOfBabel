@@ -10,6 +10,7 @@ var exphbs = require('express-handlebars');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var bcrypt = require('bcryptjs');
+var upload = require('jquery-file-upload-middleware');
 
 // Create the express app
 var app = express();
@@ -29,9 +30,21 @@ app.set('view engine', 'html');
 // Prettify the json objects returned by setting the spaces
 app.set('json spaces', 4);
 
+upload.configure({
+        uploadDir: __dirname + '/public/uploads',
+        uploadUrl: '/uploads',
+        imageVersions: {
+            thumbnail: {
+                width: 80,
+                height: 80
+            }
+        }
+    });
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
+app.use('/upload', upload.fileHandler());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());

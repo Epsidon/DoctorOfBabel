@@ -61,9 +61,10 @@ img.title-icon {
 }
 
 .form-login .form-control {
-	margin: 10px;
+	margin-bottom: 10px;
 }
 
-.form-login button {
-	margin: 10px;
+span.glyphicon-globe {
+	font-size: 1.6em;
+	float: right;
 }

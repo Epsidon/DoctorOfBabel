@@ -4,13 +4,13 @@ var backButton = document.getElementById("back-icon");
 
  // executes when HTML-Document is loaded and DOM is ready
 $(document).ready(function() {
-    isMobileBrowser();
+  isMobileBrowser();
 });
 
 
 //Captures width resize
 $(window).resize(function() {
-    isMobileBrowser();
+  isMobileBrowser();
 });
 
 function isMobileBrowser(width) {

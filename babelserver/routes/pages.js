@@ -37,9 +37,10 @@ module.exports = function(passport) {
 		res.render('login', { user: req.user });
 	});
 
-	router.post('/login', passport.authenticate('login'), function(req, res) {
-		res.render('login', { user: req.user });
-	});
+	router.post('/login', passport.authenticate('login', {
+		successRedirect: '/dashboard',
+		failureRedirect: '/login',
+	}));
 
 	return router;
 };
