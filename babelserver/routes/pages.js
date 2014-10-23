@@ -20,6 +20,8 @@ module.exports = function(passport) {
 			initLang = langs[initValue];
 			initInfo = initLang.info;
 			initMap = initLang.map;
+			initLangName = initLang.name;
+			console.log("INIT LANG NAME:" + initLangName);
 
 			//Callback junction 
 			Expression.find({ language: langs[initValue]._id }, function(err, exprs) {
@@ -28,7 +30,8 @@ module.exports = function(passport) {
 				res.render('home', { languages: langs,
 				 expressions: exprs,
 				  initInfo: initInfo,
-				  initMap: initMap });
+				  initMap: initMap,
+				  initLangName: initLangName });
 			});
 		});
 	});

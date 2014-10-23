@@ -20,7 +20,10 @@
 </div>
 
 <div id="expression-list" style="overflow:auto;" class="col-xs-0 col-sm-4 col-md-4 col-lg-4">
-  <img id = "back-icon" src="/images/back-icon.png" onClick="closeModal();">
+  <div id="hidden-header">
+    <img style="float:left;"id="back-icon" src="/images/back-icon.png" onClick="closeModal();">
+    <h5 style="text-align: center;">{{initLangName}}</h5>
+  </div>
   {{#each expressions }}
   <div id="{{ this._id }}" class="expression">
     <div class="expression-text">
