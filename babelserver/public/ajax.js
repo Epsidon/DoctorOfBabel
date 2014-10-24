@@ -63,6 +63,12 @@ function populateExpressions(langId, name, info, mapPath) {
 }
 
 function update(formId) {
-    var alertItem = document.forms[formId].elements["english"].value;
-    alert(alertItem);
+    var postURL = "../../api/expressions/edit/";
+    var english = document.forms[formId].elements["english"].value;
+    var translation = document.forms[formId].elements["translation"].value;
+
+    $.post( postURL, { id: formId, english: english, translation: translation }, function( data ) {
+        console.log(data);
+    });
+
 }

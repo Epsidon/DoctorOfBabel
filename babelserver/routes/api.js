@@ -43,6 +43,23 @@ router.route('/expressions')
 		});
 	});
 
+router.route('/expressions/edit')
+
+	// Edit an expression
+	.post(function(req, res) {
+
+		if(req.body.file != null) {}
+			Expression.update({ _id: req.body.id }, 
+				{$set: {english: req.body.english, translation: req.body.translation}}, 
+				function (err, numberAffected, raw) {
+  				if (err) console.log("Error: " + err);
+				res.json({ numberAffected: numberAffected });
+			});
+	}
+		else {
+
+		}
+	});
 
 /* Languages */
 router.route('/languages')
