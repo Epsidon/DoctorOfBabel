@@ -62,13 +62,53 @@ function populateExpressions(langId, name, info, mapPath) {
   	});
 }
 
-function update(formId) {
-    var postURL = "../../api/expressions/edit/";
-    var english = document.forms[formId].elements["english"].value;
-    var translation = document.forms[formId].elements["translation"].value;
+function update(formId, languageId) {
+        var postURL = "../../api/expressions/edit/";
+        var english = document.forms[formId].elements["english"].value;
+        var translation = document.forms[formId].elements["translation"].value;
+        var fileupload = document.forms[formId].elements["fileupload"].value;
 
-    $.post( postURL, { id: formId, english: english, translation: translation }, function( data ) {
-        console.log(data);
-    });
+        if(fileupload.lastIndexOf("mp3")===fileupload.length-3)
+            console.log('A new file is selected. New file should be uploaded and replaced with the former one');
+            //Checks if there is a new mp3 file selected
+            //If there is a new file 
+            //Then update the existing one 
+        else
+            console.log('No new file is added');
+            //Otherwise leave the file as is.
+
+        $.post( postURL, { id: formId, english: english, translation: translation }, function( data ) {
+            console.log(data);
+        });
+
+    return false;
+}
+
+
+var formMethods = {
+
+    addExpression: function (languageId) {
+        var newCount = 0;
+        var newFormId = 'new-expression-' + newCount+1;
+        newForm = '<form class="form-expr" id="' + newFormId +'">' +
+                '<div class="form-group">' +
+                '<label for="english">English</label>' +
+                '<input type="text" class="form-control" id="english" value="">' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<label for="translation">Translation</label>' +
+                '<input type="text" class="form-control" id="translation" value="">' +
+                '</div>' +
+                '<input id="fileupload" type="file" name="files[]" data-url="/upload" multiple>' +
+                '<button onSubmit="return false" class="btn btn-primary" onClick="this.create("'+newFormId+'", "'+languageId+'"); return false;" style="margin-top: 10px;">Update</button>' +
+            '</form>';
+
+        $('#expression-list').append(newForm);       
+    },
+
+    create: function(formId, languageId) {
+        return false;
+    }
+
 
 }

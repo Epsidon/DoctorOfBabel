@@ -56,7 +56,7 @@ module.exports = function(passport) {
 			Expression.find({ language: req.params.lang_id }, function(err, expressions){
 			if (err)
 				console.log(err);
-			res.render('dashboard/editlanguages', { expressions: expressions} );
+			res.render('dashboard/editlanguages', { expressions: expressions, language: req.param('lang_id')} );
 			});
 		}
 	});
