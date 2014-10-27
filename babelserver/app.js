@@ -51,7 +51,7 @@ app.use(cookieParser());
 app.use(session({ secret: configKeys.SESSION_KEY,
                   saveUninitialized: true,
                   resave: true,
-                  store: new MongooseStore({ttl: 1000 * 60 * 2}) }));
+                  store: new MongooseStore({ttl: 1000 * 60 * 20}) }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -63,6 +63,11 @@ var dashboard = require('./routes/dashboard')(passport);
 //
 // ROUTES
 //
+// Expose the user object to templates
+app.use(function(req, res, next) {
+  res.locals.user = req.user;
+  next();
+});
 app.use('/', pages);   
 app.use('/api', api);
 app.use('/dashboard', dashboard);
