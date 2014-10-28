@@ -24,11 +24,11 @@ router.route('/expressions')
 		expression.audio = req.body.audio;
 		expression.language = req.body.language;
 
-		expression.save(function(err) {
+		expression.save(function(err, product, numberAffected) {
 			if (err)
 				res.send(err);
 
-			res.json({ message: 'Expression created!' });
+			res.json({ numberAffected: numberAffected });
 		});
 
 		
@@ -49,12 +49,12 @@ router.route('/expressions/edit')
 	// Edit an expression
 	.post(function(req, res) {
 
-			Expression.update({ _id: req.body.id }, 
-				{$set: {english: req.body.english, translation: req.body.translation}}, 
-				function (err, numberAffected, raw) {
-  				if (err) console.log("Error: " + err);
-				res.json({ numberAffected: numberAffected });
-			});
+		Expression.update({ _id: req.body.id }, 
+			{$set: {english: req.body.english, translation: req.body.translation}}, 
+			function (err, numberAffected, raw) {
+  			if (err) console.log("Error: " + err);
+			res.json({ numberAffected: numberAffected });
+		});
 	});
 
 /* Languages */
