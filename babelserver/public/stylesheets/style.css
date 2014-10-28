@@ -1,3 +1,6 @@
+body {
+	padding-top: 100px;
+}
 @media screen and (max-width: 768px) {  
 	#expr-title { display: none; }
 	#info-title { display: none; }
