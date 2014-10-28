@@ -37,7 +37,7 @@ module.exports = function(passport) {
 	});
 
 	router.get('/login', function(req, res) {
-		res.render('login', { message: req.flash('loginMessage') });
+		res.render('login', { message: req.flash('errorLogin') });
 	});
 
 	router.post('/login', passport.authenticate('login', {
@@ -47,8 +47,13 @@ module.exports = function(passport) {
 	}));
 
 	router.get('/logout', function(req, res) {
-		req.logout();
-		res.redirect('/');
+		if (req.isAuthenticated()) {
+			req.logout();
+			res.redirect('/');	
+		} else {
+			res.redirect('/login');
+		}
+		
 	});
 
 	return router;
