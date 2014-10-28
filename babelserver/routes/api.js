@@ -3,6 +3,7 @@ var router = express.Router();
 var Expression = require('../models/expression');
 var Language = require('../models/language');
 var User = require('../models/user');
+var Version = require('../models/version');
 
 // Test API GET
 // This will be removed after API work is done
@@ -120,5 +121,22 @@ router.route('/users')
 			res.json(users);
 		});
 	});
+
+router.get('/version', function(req, res) {
+	Version.find({name: 'global'}, function(err, version) {
+		if (err)
+			console.log(err);
+		res.json(version);
+	});
+});
+
+router.post('/version', function(req, res) {
+	var version = new Version();
+	version.save(function(err) {
+		if (err)
+			console.log(err);
+		res.json({ message: 'Created' });
+	});
+});
 
 module.exports = router;
