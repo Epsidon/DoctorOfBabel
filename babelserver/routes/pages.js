@@ -37,12 +37,13 @@ module.exports = function(passport) {
 	});
 
 	router.get('/login', function(req, res) {
-		res.render('login', { user: req.user });
+		res.render('login', { message: req.flash('loginMessage') });
 	});
 
 	router.post('/login', passport.authenticate('login', {
 		successRedirect: '/dashboard',
 		failureRedirect: '/login',
+		failureFlash: true,
 	}));
 
 	router.get('/logout', function(req, res) {

@@ -11,6 +11,7 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var bcrypt = require('bcryptjs');
 var upload = require('jquery-file-upload-middleware');
+var flash = require('connect-flash');
 
 // Create the express app
 var app = express();
@@ -54,6 +55,7 @@ app.use(session({ secret: configKeys.SESSION_KEY,
                   store: new MongooseStore({ttl: 1000 * 60 * 20}) }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 
 var pages = require('./routes/pages')(passport);

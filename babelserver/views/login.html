@@ -1,10 +1,20 @@
-<div class="container">
-	<p>{{#if user}}
-	{{user}}
-	{{/if}}</p>
+<div class="col-sm-6 col-sm-offset-3">
+{{#if message}}
+	<div class="alert alert-danger" role="alert">
+		<p>{{ message }}</p>
+	</div>
+{{/if}}
+	<h1>Login</h1>
+	<hr>
 	<form action="/login" method="post" class="form-login" role="form">
-		<input type="text" class="form-control" name="username" placeholder="Username">
-		<input type="password" class="form-control" name="password" placeholder="Password">
+		<div>
+			<label>Username</label>
+			<input type="text" class="form-control" name="username">
+		</div>
+		<div>
+			<label>Password</label>
+			<input type="password" class="form-control" name="password">		
+		</div>
 		<button type="submit" class="btn btn-large btn-primary btn-block">Login</button>
 	</form>	
 </div>
