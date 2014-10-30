@@ -57,6 +57,17 @@ router.route('/expressions/edit')
 		});
 	});
 
+router.route('/expressions/remove')
+
+	// Edit an expression
+	.post(function(req, res) {
+
+		Expression.findOneAndRemove({ _id: req.body.id }, 
+			function (err, numberAffected, raw) {
+  			if (err) console.log("Error: " + err);
+			res.json({ numberAffected: numberAffected });
+		});
+	});
 
 /* Languages */
 router.route('/languages')

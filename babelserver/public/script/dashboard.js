@@ -36,7 +36,7 @@ function postExpression (newFormId, languageId) {
     });    
 }
 
-function update(formId, languageId) {
+function update (formId, languageId) {
         var postURL = "../../api/expressions/edit/";
         var english = document.forms[formId].elements["english"].value;
         var translation = document.forms[formId].elements["translation"].value;
@@ -61,3 +61,17 @@ function update(formId, languageId) {
 
     return false;
 }
+
+function removeExpression (formId) {
+        var postURL = "../../api/expressions/remove/";
+
+        $.post( postURL, { id: formId }, function( data ) {
+            if(data.numberAffected !== null) {
+                alert('Remove Successful');
+                $('#'+formId).remove();
+            }
+        });
+
+    return false;
+}
+

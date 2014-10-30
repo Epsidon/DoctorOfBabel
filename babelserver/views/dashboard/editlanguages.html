@@ -50,6 +50,7 @@
                 <input id="fileupload" type="file" name="files[]" data-url="/upload" multiple>
    <script>$('#fileupload').fileupload({ dataType: 'json' })</script>
                 <button onSubmit="return false" class="btn btn-primary" onClick="update('{{ this._id }}', 'null'); return false;" style="margin-top: 10px;">Update</button>
+                <button onSubmit="return false" class="btn btn-primary" onClick="removeExpression('{{ this._id }}', 'null'); return false;" style="margin-top: 10px;">Remove</button>   
             </form>
           {{/each}}
         </div>

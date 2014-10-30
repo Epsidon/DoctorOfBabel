@@ -8,6 +8,7 @@ var ExpressionSchema = new Schema({
 	translation: String,
 	audio: String,
 	language: { type: String, ref: 'Language'},
+	pronunciation: String,
 });
 
 module.exports = mongoose.model('Expression', ExpressionSchema);
