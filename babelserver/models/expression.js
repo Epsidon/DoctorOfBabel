@@ -10,13 +10,18 @@ var ExpressionSchema = new Schema({
 	audio: String,
 	language: { type: String, ref: 'Language'},
 	pronunciation: String,
+	version: Number,
 });
 
 ExpressionSchema.pre('save', function(next) {
-	Version.findOneAndUpdate({ name: 'global' }, { $inc: { global_version: 1 }}, function(err) {
-		if (err)
+	var expression = this;
+	Version.findOneAndUpdate({ name: 'global' }, { $inc: { global_version: 1 }}, function(err, version) {
+		if (err) {
 			next(err);
-		next();
+		} else {
+			expression.version = version.global_version;
+			next();
+		}
 	});
 });
 

@@ -8,13 +8,18 @@ var LanguageSchema = new Schema({
 	name: String,
 	info: String,
 	map: String,
+	version: Number,
 });
 
-ExpressionSchema.pre('save', function(next) {
-	Version.findOneAndUpdate({ name: 'global' }, { $inc: { global_version: 1 }}, function(err) {
-		if (err)
+LanguageSchema.pre('save', function(next) {
+	var language = this;
+	Version.findOneAndUpdate({ name: 'global' }, { $inc: { global_version: 1 }}, function(err, version) {
+		if (err) {
 			next(err);
-		next();
+		} else {
+			language.version = version.global_version;
+			next();
+		}
 	});
 });
 
