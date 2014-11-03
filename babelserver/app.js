@@ -19,7 +19,7 @@ var app = express();
 // Custom config files
 var configKeys = require('./config/keys');
 
-mongoose.connect('mongodb://localhost:27017/babel');
+mongoose.connect(configKeys.DB_URL);
 var MongooseStore = require('express-mongoose-store')(session, mongoose);
 
 // Configure passport for authentication
