@@ -5,7 +5,8 @@ var Expression = require('../models/expression');
 
 module.exports = function(passport) {
 	router.get('/', function(req, res) {
-		Language.find({}, function(err, langs) {
+		res.render('home');
+		/*Language.find({}, function(err, langs) {
 
 			var initValue = 0;
 			var initLang = [];
@@ -33,7 +34,7 @@ module.exports = function(passport) {
 				  initMap: initMap,
 				  initLangName: initLangName });
 			});
-		});
+		});*/
 	});
 
 	router.get('/login', function(req, res) {
