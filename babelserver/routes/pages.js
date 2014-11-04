@@ -5,7 +5,11 @@ var Expression = require('../models/expression');
 
 module.exports = function(passport) {
 	router.get('/', function(req, res) {
-		res.render('home');
+		Language.find({}, null, {sort: {name: 1}}, function(err, langs) {
+			if (err)
+				console.log(err);
+			res.render('home', { languages: langs})
+		});
 		/*Language.find({}, function(err, langs) {
 
 			var initValue = 0;

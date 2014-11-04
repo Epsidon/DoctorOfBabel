@@ -18,34 +18,10 @@ module.exports = function(passport) {
 	});
 
 	router.get('/', function(req, res) {
-		Language.find({}, function(err, langs) {
-
-			var initValue = 1;
-
-			if (err)
-				console.log(err);
-
-			langs = sortByKey(langs, 'name');
-
-			langs.forEach(function(language) {
-				console.log(language);
-			});
-
-			//Callback junction 
-			Expression.find({ language: langs[initValue]._id }, function(err, exprs){
-				if (err)
-					console.log(err)
-				if(!req.user)
-					res.redirect('/login');
-				else {
-					if(req.user.role === 'admin')
-						res.render('dashboard/dashboard-admin', {languages: langs, expressions: exprs });
-					if(req.user.role === 'staff')
-						res.render('dashboard/dashboard', { languages: langs, expressions: exprs });
-				}
-			});
-			
-		});
+		if(req.user.role === 'admin')
+			res.render('dashboard/dashboard-admin');
+		if(req.user.role === 'staff')
+			res.render('dashboard/dashboard');			
 	});
 
 	router.get('/languages', function(req, res) {
