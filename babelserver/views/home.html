@@ -3,7 +3,7 @@
   <img class="title-icon" src="/images/langs-icon.png">
 </div>
 <div id="expr-title" class="col-xs-0 col-sm-4 col-md-4 col-lg-4">
-  <h4 style="float:left;">Expressions</h4>
+  <h4 id="lang-name" style="float:left;">{{welcomeTitle}}</h4>
   <img class="title-icon" src="/images/exprs-icon.png">
 </div>
 <div id="info-title" class="col-xs-0 col-sm-4 col-md-3 col-lg-3">
@@ -22,24 +22,14 @@
 <div id="expression-list" style="overflow:auto;" class="col-xs-0 col-sm-4 col-md-4 col-lg-4">
   <div id="hidden-header">
     <img style="float:left;"id="back-icon" src="/images/back-icon.png" onClick="closeModal();">
-    <h5 style="text-align: center;">{{initLangName}}</h5>
+    <h5 style="text-align: center;">Expressions</h5>
   </div>
-  {{#each expressions }}
-  <div id="{{ this._id }}" class="expression">
-    <div class="expression-text">
-    {{ this.english }} - {{ this.translation }} 
-    </div>
-  <audio controls style="width:50px;">
-    <source src="{{ this.audio }}" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio> 
-  </div>
-  {{/each}}
+  {{{welcomeBody}}}
 </div>
 
 <div id="info-container" class="col-xs-0 col-sm-4 col-md-3 col-lg-3 hidden-md">
   <div id="info">
-  {{ initInfo }}
+  {{{welcomeInfo}}}
   </div>
   <img id="map" src="{{ initMap }}">
 </div>

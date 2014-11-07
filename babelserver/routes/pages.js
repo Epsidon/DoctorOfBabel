@@ -2,13 +2,17 @@ var express = require('express');
 var router = express.Router();
 var Language = require('../models/language');
 var Expression = require('../models/expression');
+var Resources = require('../resources/resources');
 
 module.exports = function(passport) {
 	router.get('/', function(req, res) {
 		Language.find({}, null, {sort: {name: 1}}, function(err, langs) {
 			if (err)
 				console.log(err);
-			res.render('home', { languages: langs})
+			res.render('home', { languages: langs, 
+				welcomeTitle: Resources.getWelcomeTitle, 
+				welcomeBody: Resources.getWelcomeBody,
+				welcomeInfo: Resources.getWelcomeInfo });
 		});
 		/*Language.find({}, function(err, langs) {
 
