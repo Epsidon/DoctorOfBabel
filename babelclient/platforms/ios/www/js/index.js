@@ -34,7 +34,7 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
-        downloadAndExtract.downloadFile();
+        requestApi.downloadFile();
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
@@ -49,15 +49,15 @@ var app = {
     }
 };
 
-var downloadAndExtract = {
+var requestApi = {
     
     downloadFile: function(){
         console.log('downloadFile');
         window.requestFileSystem(
                                  LocalFileSystem.PERSISTENT,
                                  0,
-                                 jsonDownloader.onRequestFileSystemSuccess,
-                                 jsonDownloader.fail
+                                 requestApi.onRequestFileSystemSuccess,
+                                 requestApi.fail
                                  );
     },
         
@@ -66,8 +66,8 @@ var downloadAndExtract = {
         fileSystem.root.getFile(
                                 'dummy.html',
                                 {create: true, exclusive: false},
-                                jsonDownloader.onGetFileSuccess,
-                                jsonDownloader.fail
+                                requestApi.onGetFileSuccess,
+                                requestApi.fail
                                 );
     },
     
@@ -79,15 +79,23 @@ var downloadAndExtract = {
         fileEntry.remove();
         
         fileTransfer.download(
-                              'http://download.thinkbroadband.com/5MB.zip',
-                              path + '5MB.zip',
+                              'http://www.colorado.edu/conflict/peace/download/peace.zip',
+                              path + 'peace.zip',
                               function(file) {
+                                zip.unzip(path+'peace.zip', path, function result(result) {
+                                    if(result===0) {
+                                        alert("worked!");
+                                    } else if (result===-1) {
+                                        alert("failed");
+                                    }
+                                });
+
                               alert('download complete: ' + file.toURL());
                               },
                               function(error) {
-                              alert('download error source ' + error.source);
-                              alert('download error target ' + error.target);
-                              alert('upload error code: ' + error.code);
+                                alert('download error source ' + error.source);
+                                alert('download error target ' + error.target);
+                                alert('upload error code: ' + error.code);
                               }
                               );
         
