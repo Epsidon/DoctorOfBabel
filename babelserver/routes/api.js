@@ -143,6 +143,34 @@ router.get('/version', function(req, res) {
 	});
 });
 
+
+// This will reply back to the client sending a status code
+// 100: updates found, get ready to download
+// 200: no update required
+// 300: error encountered somewhere, try again
+router.get('/version/:client_version', function(req, res) {
+	var clientVersion = req.params.client_version;
+	Version.findOne({name: 'global'}, function(err, version) {
+		if (err)
+			res.json({ status: 300,
+							   message: 'Error encountered. Please try again.' });
+		if (version - clientVersion <= 0) {
+			res.json({ status: 200,
+								 message: 'No new updates.' });
+		} else {
+			getUpdates(clientVersion, function(err, download) {
+				if (err) {
+					res.json({ status: 300,
+									   message: 'Error encountered. Please try again.' });
+				} else {
+					res.json({ status: 100,
+										 link: download });
+				}
+			});
+		}
+	});
+});
+
 router.post('/version', function(req, res) {
 	var version = new Version();
 	version.save(function(err) {
@@ -153,3 +181,30 @@ router.post('/version', function(req, res) {
 });
 
 module.exports = router;
+
+
+
+
+
+// Helper to construct the updates. Consider moving it somewhere else after
+function getUpdates(clientVersion, done) {
+	var result = {};
+	// Get the languages first
+	Language.find({ version: { $gt: clientVersion } }, 
+		'_id name info map', function(err, languages) {
+  	if (err) {
+  		done(err, null);
+  	} else {
+  		result.languages = languages;
+  		Expression.find({ version: { $gt: clientVersion } }, 
+  			'_id english translation audio languages', function(err, expressions) {
+		  	if (err) {
+		  		done(err, null);
+		  	} else {
+		  		result.expressions = expressions;
+		  		done(null, result);
+		  	}
+		 });		
+  	}
+	});
+}
