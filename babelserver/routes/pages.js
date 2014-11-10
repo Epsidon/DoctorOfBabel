@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var fs = require('fs');
 var Language = require('../models/language');
 var Expression = require('../models/expression');
 var Resources = require('../resources/resources');
@@ -14,35 +15,6 @@ module.exports = function(passport) {
 				welcomeBody: Resources.getWelcomeBody,
 				welcomeInfo: Resources.getWelcomeInfo });
 		});
-		/*Language.find({}, function(err, langs) {
-
-			var initValue = 0;
-			var initLang = [];
-			var initInfo;
-			var initMap;
-
-			if (err)
-				console.log(err);
-
-			langs = sortByKey(langs, 'name');
-
-			initLang = langs[initValue];
-			initInfo = initLang.info;
-			initMap = initLang.map;
-			initLangName = initLang.name;
-			console.log("INIT LANG NAME:" + initLangName);
-
-			//Callback junction 
-			Expression.find({ language: langs[initValue]._id }, function(err, exprs) {
-				if (err)
-					console.log(err)
-				res.render('home', { languages: langs,
-				 expressions: exprs,
-				  initInfo: initInfo,
-				  initMap: initMap,
-				  initLangName: initLangName });
-			});
-		});*/
 	});
 
 	router.get('/login', function(req, res) {
@@ -61,8 +33,12 @@ module.exports = function(passport) {
 			res.redirect('/');	
 		} else {
 			res.redirect('/login');
-		}
-		
+		}	
+	});
+
+	router.get('/download/:file_id', function(req, res) {
+		var zipArchive = fs.createReadStream('./public/uploads/' + req.params.file_id + '.zip');
+		zipArchive.pipe(res);
 	});
 
 	return router;

@@ -35,7 +35,7 @@ app.set('json spaces', 4);
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
-app.use(multer({ dest: './public/uploads/' }));
+app.use(multer({ dest: './public/uploads/audio/' }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());

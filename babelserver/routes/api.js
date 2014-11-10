@@ -1,4 +1,7 @@
 var express = require('express');
+var fs = require('fs');
+var archiver = require('archiver');
+var uuid = require('node-uuid');
 var router = express.Router();
 var Expression = require('../models/expression');
 var Language = require('../models/language');
@@ -158,7 +161,7 @@ router.get('/version/:client_version', function(req, res) {
 			res.json({ status: 200,
 								 message: 'No new updates.' });
 		} else {
-			getUpdates(clientVersion, function(err, download) {
+			getUpdates(req, clientVersion, function(err, download) {
 				if (err) {
 					res.json({ status: 300,
 									   message: 'Error encountered. Please try again.' });
@@ -169,6 +172,12 @@ router.get('/version/:client_version', function(req, res) {
 			});
 		}
 	});
+});
+
+router.post('/version/delete', function(req, res) {
+	var uuid = req.body.name;
+	fs.unlink('./routes/' + uuid + '.zip');
+	res.json({ message: 'Deleted' });
 });
 
 router.post('/version', function(req, res) {
@@ -187,7 +196,7 @@ module.exports = router;
 
 
 // Helper to construct the updates. Consider moving it somewhere else after
-function getUpdates(clientVersion, done) {
+function getUpdates(req, clientVersion, done) {
 	var result = {};
 	// Get the languages first
 	Language.find({ version: { $gt: clientVersion } }, 
@@ -202,7 +211,13 @@ function getUpdates(clientVersion, done) {
 		  		done(err, null);
 		  	} else {
 		  		result.expressions = expressions;
-		  		done(null, result);
+		  		var name = uuid.v4();
+		  		var output = fs.createWriteStream('./public/uploads/' + name + '.zip');
+		  		var archive = archiver('zip');
+		  		archive.pipe(output);
+		  		archive.append(JSON.stringify(result), { name: name+'.json' }).finalize();
+		  		var link = req.protocol + '://' + req.hostname + '/download/' + name;
+		  		done(null, link);
 		  	}
 		 });		
   	}
