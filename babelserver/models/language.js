@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var shortid = require('shortid');
 var Version = require('./version');
-var Schema = mongoose.Schema;
+var Schema = mongoose.Schema; 
 
 var LanguageSchema = new Schema({
 	_id: { type: String, unique: true, 'default': shortid.generate},
@@ -9,6 +9,7 @@ var LanguageSchema = new Schema({
 	info: String,
 	map: String,
 	version: Number,
+	ready: { type: Boolean, 'default': false },
 });
 
 LanguageSchema.pre('save', function(next) {
