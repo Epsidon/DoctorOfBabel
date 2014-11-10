@@ -24,6 +24,11 @@ module.exports = function(passport) {
 			res.render('dashboard/dashboard');			
 	});
 
+	router.post('/', function(req, res) {
+		console.dir(req.files);
+		res.json(req.files);
+	});
+
 	router.get('/languages', function(req, res) {
 		Language.find(function(err, languages) {
 			if (err)
@@ -34,11 +39,16 @@ module.exports = function(passport) {
 	});
 
 	router.get('/languages/:lang_id', function(req, res) {
-	Expression.find({ language: req.params.lang_id }, function(err, expressions){
-		if (err)
-			console.log(err);
-		res.render('dashboard/editlanguages', { expressions: expressions, language: req.param('lang_id')} );
+		Expression.find({ language: req.params.lang_id }, function(err, expressions){
+			if (err)
+				console.log(err);
+			res.render('dashboard/editlanguages', { expressions: expressions, language: req.param('lang_id')} );
 		});
+	});
+
+	router.post('/languages/:lang_id', function(req, res) {
+		console.dir(req.files);
+		res.json(req.files);
 	});
 
 	router.get('/users', function(req, res) {

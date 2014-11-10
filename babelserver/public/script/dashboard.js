@@ -75,3 +75,25 @@ function removeExpression (formId) {
     return false;
 }
 
+// Handle ajax file uploads for audio files and images
+$(document).ready(function() {
+  $('.form-expr').on('submit', function(e) {
+    e.preventDefault();
+    $.ajax({
+      url: window.location.pathname,
+      type: 'POST',
+      dataType: 'json',
+      data: new FormData(this),
+      mimeType: 'multipart/form-data',
+      processData: false,
+      contentType: false,
+    })
+    .done(function(data) {
+      alert('it worked');
+    })
+    .fail(function() {
+      alert("error");
+    });
+  });
+});
+
