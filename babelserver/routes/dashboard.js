@@ -24,10 +24,6 @@ module.exports = function(passport) {
 			res.render('dashboard/dashboard');			
 	});
 
-	router.post('/', function(req, res) {
-		console.dir(req.files);
-		res.json(req.files);
-	});
 
 	router.get('/languages', function(req, res) {
 		Language.find(function(err, languages) {
@@ -47,9 +43,15 @@ module.exports = function(passport) {
 	});
 
 	router.post('/languages/:lang_id', function(req, res) {
-		console.dir(req.files);
-		res.json(req.files);
+		// TODO
+		// This is where we verify the user info
 	});
+
+	router.post('/languages/:lang_id/ready', function(req, res) {
+		// TODO
+		// This is where the language will change from draft to ready
+	});
+
 
 	router.get('/users', function(req, res) {
 		User.find(function(err, users) {
@@ -59,6 +61,7 @@ module.exports = function(passport) {
 			res.render('dashboard/users', { users: users });
 		});
 	});
+
 
 	router.get('/expressions', function(req, res) {
 		Expression.find(function(err, expressions) {
@@ -78,11 +81,3 @@ module.exports = function(passport) {
 };
 
 
-
-//Sorts langauges alphabetically 
-function sortByKey(array, key) {
-    return array.sort(function(a, b) {
-        var x = a[key]; var y = b[key];
-        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-    });
-}

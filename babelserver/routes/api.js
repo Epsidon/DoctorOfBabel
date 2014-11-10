@@ -8,12 +8,6 @@ var Language = require('../models/language');
 var User = require('../models/user');
 var Version = require('../models/version');
 
-// Test API GET
-// This will be removed after API work is done
-router.get('/', function(req, res) {
-	res.json({ message: 'API Works!' });
-});
-
 
 /* Expressions */
 router.route('/expressions')
