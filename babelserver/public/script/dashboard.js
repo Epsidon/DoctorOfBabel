@@ -80,7 +80,7 @@ $(document).ready(function() {
   $('.form-expr').on('submit', function(e) {
     e.preventDefault();
     $.ajax({
-      url: window.location.pathname,
+      url: window.location.pathname,  // dashboard/languages/lang_id
       type: 'POST',
       dataType: 'json',
       data: new FormData(this),
@@ -93,6 +93,25 @@ $(document).ready(function() {
     })
     .fail(function() {
       alert("error");
+    });
+  });
+
+  $('.form-lang').on('submit', function(e) {
+    e.preventDefault();
+    $.ajax({
+        url: window.location.pathname,
+        type: 'POST',
+        dataType: 'json',
+        data: new FormData(this),
+        mimeType: 'multipart/form-data',
+        processData: false,
+        contentType: false,
+    })
+    .done(function(data) {
+        alert('it worked');
+    })
+    .fail(function() {
+        alert('error');
     });
   });
 });

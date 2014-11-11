@@ -1,0 +1,40 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3 col-md-2 sidebar">
+      <ul class="nav nav-sidebar">
+        <li><a href="/dashboard">Overview</a></li>
+        <li class="active"><a href="languages">Languages</a></li>
+        <li><a href="expressions">Expressions</a></li>
+        <li><a href="users">Users</a></li>
+        <li><a href="sessions">Sessions</a></li>
+      </ul>
+    </div>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+      <div class="new-language">
+        <a href="/dashboard/languages"><button class="btn btn-primary">Back</button></a>
+      </div>
+      <div class="add-language">
+      	<h1>Add a new language.</h1>
+      	<p class="help-block">After the new language is saved, you will be able to
+      	enter expressions for the language.</p>
+      	<hr>
+      	<form class="form-lang" method="post" enctype="multipart/form-data">
+      		<div class="form-group">
+      			<label for="name">Name</label>
+            <input type="text" class="form-control" id="name">
+      		</div>
+      		<div class="form-group">
+      			<label for="info">Info</label>
+            <input type="text" class="form-control" id="info">
+      		</div>
+					<div class="form-group">
+            <label for="map">Upload your map</label>
+            <input type="file" name="map" id="map">
+            <p class="help-block">Please enter the map for the language</p>
+          </div>
+          <button type="submit" class="btn btn-primary">Add Language</button>
+      	</form>
+      </div>
+    </div>
+  </div>
+</div>

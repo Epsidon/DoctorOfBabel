@@ -24,7 +24,7 @@ module.exports = function(passport) {
 			res.render('dashboard/dashboard');			
 	});
 
-
+	// List the languages to edit them
 	router.get('/languages', function(req, res) {
 		Language.find(function(err, languages) {
 			if (err)
@@ -34,6 +34,20 @@ module.exports = function(passport) {
 		});
 	});
 
+	/*router.get('/languages/new', function(req, res) {
+		res.render('dashboard/newlanguages');
+	});
+
+	router.post('/languages/new', function(req, res) {
+		//var language = new Language();
+		//language.name = req.body.name.charAt(0).toUpperCase + req.body.name.slice(1);
+		//language.info = req.body.info;
+		console.dir(req.files.map.originalname);
+		res.json({message: 'it worked'});
+
+	});*/
+
+	// Page to modify a language
 	router.get('/languages/:lang_id', function(req, res) {
 		Expression.find({ language: req.params.lang_id }, function(err, expressions){
 			if (err)
@@ -42,9 +56,14 @@ module.exports = function(passport) {
 		});
 	});
 
+
+
+
 	router.post('/languages/:lang_id', function(req, res) {
 		// TODO
-		// This is where we verify the user info
+		// This is where we verify the language info
+		Language.find({ _id: req.params.lang_id })
+		res.json({data: 'it worked'});
 	});
 
 	router.post('/languages/:lang_id/ready', function(req, res) {
