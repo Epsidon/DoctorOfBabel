@@ -12,6 +12,7 @@ var passport = require('passport');
 var bcrypt = require('bcryptjs');
 var multer = require('multer');
 var flash = require('connect-flash');
+var MongoStore = require('connect-mongo')(session);
 
 // Create the express app
 var app = express();
@@ -41,7 +42,10 @@ app.use(cookieParser());
 app.use(session({ secret: configKeys.SESSION_KEY,
                   saveUninitialized: true,
                   resave: true,
-                  cookie: { maxAge: 1000*60*60*24},
+                  cookie: { maxAge: 1000*60*60},
+                  store: new MongoStore({
+                    db: mongoose.connection.db,
+                  }),
                 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -52,12 +56,14 @@ var pages = require('./routes/pages')(passport);
 var api = require('./routes/api');
 var dashboard = require('./routes/dashboard')(passport);
 
+
 //
 // ROUTES
 //
 // Expose the user object to templates
 app.use(function(req, res, next) {
   res.locals.user = req.user;
+  console.dir(mongoose.connection.db);
   next();
 });
 app.use('/', pages);   
