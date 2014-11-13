@@ -12,3 +12,5 @@ babelserver/public/uploads/
 
 # Editor
 .idea/
+
+.DS_Store

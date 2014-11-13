@@ -20,7 +20,6 @@ var app = express();
 var configKeys = require('./config/keys');
 
 mongoose.connect(configKeys.DB_URL);
-var MongooseStore = require('express-mongoose-store')(session, mongoose);
 
 // Configure passport for authentication
 require('./config/auth')(passport);
@@ -42,7 +41,8 @@ app.use(cookieParser());
 app.use(session({ secret: configKeys.SESSION_KEY,
                   saveUninitialized: true,
                   resave: true,
-                  store: new MongooseStore({ttl: 1000 * 60 * 20}) }));
+                  cookie: { maxAge: 1000*60*60*24},
+                }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
