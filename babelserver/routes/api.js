@@ -206,7 +206,7 @@ function getUpdates(req, clientVersion, done) {
 		  	} else {
 		  		result.expressions = expressions;
 		  		var name = uuid.v4();
-		  		var output = fs.createWriteStream('./public/uploads/' + name + '.zip');
+		  		var output = fs.createWriteStream('./public/' + name + '.zip');
 		  		var archive = archiver('zip');
 		  		archive.pipe(output);
 		  		archive.append(JSON.stringify(result), { name: name+'.json' }).finalize();
