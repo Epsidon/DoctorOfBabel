@@ -38,7 +38,16 @@ var app = {
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
         db = window.openDatabase("Database", "1.0", "BabelAppDb", 200000);
-        requestApi.doRequest();
+        requestApi.doRequest(function(responseValue, updateUrl) {
+            if(responseValue === 100) {
+                console.log("Update needed");
+                console.log("Update URL: " + updateUrl);
+            } else if(responseValue === 200) {
+                console.log("Update is not needed");
+            } else {
+                console.log("An error occured, carry on");
+            }
+        });
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {

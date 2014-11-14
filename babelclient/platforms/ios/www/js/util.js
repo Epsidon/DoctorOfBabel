@@ -1,16 +1,27 @@
 var requestApi = {
     
-    //Not working - needs to be resolved
-    //This function is to return a callback method
-    //If an update is available, than return 0
-    //Else, -1
-    doRequest: function() {
-        database.getLocalVersion(function(version_no) { 
-            alert("version: " +  version_no);
-            var url = "localhost:8086/api/version/" + version_no;
-            $.getJSON(url, function(json) {
-                console.log(json);
-            });
+    doRequest: function(callback) {
+        // callback values:
+        // 100: updates found, get ready to download
+        // 200: no update required
+        // 300: error encountered somewhere, try again
+        // 400: request error
+        database.getLocalVersion(function(versionNo) { 
+            var url = "https://doctorofbabel.herokuapp.com/api/version/" + versionNo;
+            $.getJSON(url, function(data, status) {
+                if(status === 'success') {
+                    if(data["status"] === 100) {
+                        callback(data["status"], data["link"]);
+                    } else {
+                        callback(data["status"], null);
+                    }
+                } else {
+                    callback(400, null);
+                }
+                }).fail(function() {
+                    //callback should return error
+                    callback(400, null);
+                });
         });
     },
 
@@ -82,6 +93,7 @@ var database = {
         tx.executeSql('CREATE TABLE IF NOT EXISTS LANGUAGE (id INTEGER NOT NULL PRIMARY KEY, name TEXT NOT NULL, info TEXT, map TEXT, version INTEGER)');
         tx.executeSql('CREATE TABLE IF NOT EXISTS EXPRESSION (id INTEGER NOT NULL PRIMARY KEY, english TEXT NOT NULL, translation TEXT NOT NULL, audio TEXT, language TEXT NOT NULL, pronunciation TEXT, version INTEGER)');
         tx.executeSql('CREATE TABLE IF NOT EXISTS VERSION (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, version_no INTEGER NOT NULL)');
+        tx.executeSql('INSERT INTO VERSION (version_no) VALUES (0)');
     },
 
     errorCallback: function(tx, err) {
@@ -137,5 +149,16 @@ var database = {
     //TBD
     setLocalVersion: function(callback) {
         callback(true);
+    }
+};
+
+var util = {
+    getConnection: function(callback) {
+        var networkState = navigator.network.connection.type;
+        if(networkState === 'Unknown connection' || networkState === 'Cell 2G connection' || networkState === 'Unknown connection') {
+            callback(false);
+        } else {
+            callback(true);
+        }
     }
 };
