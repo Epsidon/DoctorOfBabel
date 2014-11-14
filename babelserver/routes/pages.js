@@ -38,7 +38,7 @@ module.exports = function(passport) {
 
 	// Download the temp ZIP files
 	router.get('/download/:file_id', function(req, res) {
-		var zipArchive = fs.createReadStream('./public/uploads/' + req.params.file_id + '.zip');
+		var zipArchive = fs.createReadStream('./public/' + req.params.file_id + '.zip');
 
 		res.writeHead(200, {
 			'Content-Type': 'application/zip',
