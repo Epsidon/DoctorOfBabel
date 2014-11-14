@@ -63,7 +63,6 @@ var dashboard = require('./routes/dashboard')(passport);
 // Expose the user object to templates
 app.use(function(req, res, next) {
   res.locals.user = req.user;
-  console.dir(mongoose.connection.db);
   next();
 });
 app.use('/', pages);   
