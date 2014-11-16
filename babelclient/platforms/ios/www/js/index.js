@@ -38,6 +38,7 @@ var app = {
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
         db = window.openDatabase("Database", "1.0", "BabelAppDb", 200000);
+        //database.connectDb();
         requestApi.doRequest(function(responseValue, updateUrl) {
             if(responseValue === 100) {
                 console.log("Update needed");
