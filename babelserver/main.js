@@ -13,24 +13,17 @@ var bcrypt = require('bcryptjs');
 var multer = require('multer');
 var flash = require('connect-flash');
 var MongoStore = require('connect-mongo')(session);
-var AWS = require('aws-sdk');
 
 // Create the express app
 var app = express();
 
 // Custom config files
-var configKeys = require('./config/config')(app);
+var configKeys = require('./config/config');
 
 mongoose.connect(configKeys.DB_URL);
 
 // Configure passport for authentication
 require('./config/auth')(passport);
-
-AWS.config = {
-  accessKeyId: configKeys.S3_ACCESS_KEY,
-  secretAccessKey: configKeys.S3_SECRET_KEY,
-};
-var s3 = new AWS.S3({ params: {Bucket: configKeys.S3_BUCKET} });
 
 
 // Use .html extention name for handlebars files
@@ -43,7 +36,8 @@ app.set('json spaces', 4);
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
-app.use(multer({ dest: './uploads/' }));
+app.use(multer({ dest: './uploads/',
+                 inMemory: true, }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -61,7 +55,7 @@ app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'uploads')));
 
-var pages = require('./routes/pages')(passport, s3);
+var pages = require('./routes/pages')(passport);
 var api = require('./routes/api');
 var dashboard = require('./routes/dashboard')(passport);
 

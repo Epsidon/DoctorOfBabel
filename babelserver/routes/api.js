@@ -66,6 +66,8 @@ router.route('/expressions/remove')
 		});
 	});
 
+
+
 /* Languages */
 router.route('/languages')
 
@@ -107,6 +109,7 @@ router.route('/languages/:lang_id')
 	});
 
 
+
 // Users
 router.route('/users')
 	// Create user
@@ -130,6 +133,7 @@ router.route('/users')
 			res.json(users);
 		});
 	});
+
 
 
 router.get('/version', function(req, res) {
@@ -206,7 +210,7 @@ function getUpdates(req, clientVersion, done) {
 		  	} else {
 		  		result.expressions = expressions;
 		  		var name = uuid.v4();
-		  		var output = fs.createWriteStream('./public/' + name + '.zip');
+		  		var output = fs.createWriteStream('./uploads/' + name + '.zip');
 		  		var archive = archiver('zip');
 		  		archive.pipe(output);
 		  		archive.append(JSON.stringify(result), { name: name+'.json' }).finalize();
