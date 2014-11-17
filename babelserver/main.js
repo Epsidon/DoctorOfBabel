@@ -43,7 +43,7 @@ app.set('json spaces', 4);
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
-app.use(multer({ dest: './public/uploads/audio/' }));
+app.use(multer({ dest: './uploads/' }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -59,6 +59,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'uploads')));
 
 var pages = require('./routes/pages')(passport, s3);
 var api = require('./routes/api');

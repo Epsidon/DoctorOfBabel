@@ -5,10 +5,10 @@
 babelserver/node_modules/
 
 # Config file for keys
-babelserver/config/keys.js
+# babelserver/config/keys.js
 
 # Uploads folder for audio/images
-babelserver/public/uploads/
+babelserver/uploads/
 
 # Editor
 .idea/
