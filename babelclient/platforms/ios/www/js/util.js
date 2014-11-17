@@ -67,7 +67,11 @@ var requestApi = {
                 zip.unzip(zipPath, path, function(result) {
                     if (result === 0) {
                         $.getJSON(path + 'scheme.json', function(json) {
-                            database.addLanguages(json["languages"]);
+                            database.addLanguages(json["languages"], function(result) {
+                                if(result === 0) {
+                                    database.addExpressions(json["expressions"]);
+                                }
+                            });
                         });
                     } else if (result === -1) {
                         alert("failed");
@@ -93,8 +97,28 @@ var requestApi = {
 
 var database = {
 
-    connectDb: function() {
-        db.transaction(database.initiateDb, database.errorCallback, database.successCallback);
+    connectDb: function(callback) {
+        db.transaction(function(tx) {
+            tx.executeSql('DROP TABLE LANGUAGE');
+            tx.executeSql('DROP TABLE EXPRESSION');
+            tx.executeSql('DROP TABLE VERSION');
+
+            tx.executeSql('CREATE TABLE IF NOT EXISTS LANGUAGE (id TEXT NOT NULL PRIMARY KEY, name TEXT NOT NULL, info TEXT, map TEXT, version INTEGER)');
+            tx.executeSql('CREATE TABLE IF NOT EXISTS EXPRESSION (id TEXT NOT NULL PRIMARY KEY, english TEXT NOT NULL, translation TEXT NOT NULL, audio TEXT, language TEXT NOT NULL, pronunciation TEXT, version INTEGER)');
+            tx.executeSql('CREATE TABLE IF NOT EXISTS VERSION (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, version_no INTEGER NOT NULL)');
+            tx.executeSql('INSERT INTO VERSION (version_no) VALUES (0)');
+        }, 
+        function(tx, err) {
+            alert("Error processing SQL: " + err);
+            // In case db fails initializing, return -1
+            callback(-1);
+        }, 
+        function() {
+            // 
+            alert("database created!");
+            database.getLocalVersion();
+            callback(0);
+        });
     },
 
     // LANGUAGE TABLE: id, name, info, map, version
@@ -102,14 +126,7 @@ var database = {
     // VERSION TABLE: id, version_no
 
     initiateDb: function(tx) {
-        tx.executeSql('DROP TABLE LANGUAGE');
-        tx.executeSql('DROP TABLE EXPRESSION');
-        tx.executeSql('DROP TABLE VERSION');
 
-        tx.executeSql('CREATE TABLE IF NOT EXISTS LANGUAGE (id TEXT NOT NULL PRIMARY KEY, name TEXT NOT NULL, info TEXT, map TEXT, version INTEGER)');
-        tx.executeSql('CREATE TABLE IF NOT EXISTS EXPRESSION (id TEXT NOT NULL PRIMARY KEY, english TEXT NOT NULL, translation TEXT NOT NULL, audio TEXT, language TEXT NOT NULL, pronunciation TEXT, version INTEGER)');
-        tx.executeSql('CREATE TABLE IF NOT EXISTS VERSION (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, version_no INTEGER NOT NULL)');
-        tx.executeSql('INSERT INTO VERSION (version_no) VALUES (0)');
     },
 
     errorCallback: function(tx, err) {
@@ -118,8 +135,7 @@ var database = {
     },
 
     successCallback: function() {
-        alert("database created!");
-        database.getLocalVersion();
+
     },
 
     isTableExists: function(tx, tableName, callback) {
@@ -149,10 +165,14 @@ var database = {
         });
     },
 
+    // getLanguages: function(languageId) {
+
+    // },
+
     getLocalVersion: function(callback) {
         db.transaction(function(tx) {
             tx.executeSql('SELECT * FROM VERSION ORDER BY `id` DESC LIMIT 1;', [], function(tx, resultSet) {
-                var lastRow = resultSet.rows.item(resultSet.rows.length - 1);
+                var lastRow = resultSet.rows.item(0);
                 var version_no = lastRow.version_no;
                 console.log("Version Number: " + version_no);
                 callback(version_no);
@@ -168,25 +188,41 @@ var database = {
     },
 
     // version attribute is missing
-    addLanguages: function(languages) {
+    addLanguages: function(languages, callback) {
         db.transaction(function(tx) {
             for (var i = languages.length - 1; i >= 0; i--) {
                 tx.executeSql(
                     'INSERT INTO LANGUAGE (id, name, info, map) VALUES (?, ?, ?, ?)', [languages[i]["_id"], languages[i]["name"], languages[i]["info"], languages[i]["map"]],
                     function() {
                         console.log("success");
+                        callback(0);
                     },
                     function(er, err) {
                         console.log("unsuccess: " + err.message);
+                        callback(-1);
                     }
                 );
             };
         });
+    },
+
+    addExpressions: function (expressions) {
+        db.transaction(function(tx) {
+            for (var i = expressions.length - 1; i >= 0; i--) {
+                tx.executeSql(
+                    'INSERT INTO EXPRESSION (id, english, translation, audio, language, pronunciation) VALUES (?, ?, ?, ?, ?, ?)', 
+                    [expressions[i]["_id"], expressions[i]["english"], expressions[i]["translation"], expressions[i]["audio"], expressions[i]["language"], expressions[i]["pronunciation"]],
+                    function() {
+                        console.log("expressions success");
+                    },
+                    function(er, err) {
+                        console.log("expressions unsuccess: " + err.message);
+                    }
+                );
+            };
+        });
+
     }
-
-    // addExpressions: function (expressions, callback) {
-
-    // }
 };
 
 var util = {
