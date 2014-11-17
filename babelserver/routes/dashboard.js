@@ -83,20 +83,20 @@ module.exports = function(passport) {
 
 	// Page to modify a language
 	router.get('/languages/:lang_id/edit', function(req, res) {
-		Language.find({ _id: req.params.lang_id}, function(err, language) {
+		console.log(req.params.lang_id);
+		Language.findOne({ _id: req.params.lang_id}, function(err, language) {
 			if (err) {
-				res.render('error');
+				console.log(err);
 			} else {
 				Expression.find({ language: req.params.lang_id}, function(err, expressions) {
-					if (err)
-						res.render('error');
+					if (err) {
+						console.log(err);
+					} else {
+						console.dir(language);
+						res.render('dashboard/editlanguages', { expressions: expressions, language: language} );
+					}
 				});
 			}
-		});
-		Expression.find({ language: req.params.lang_id }, function(err, expressions) {
-			if (err)
-				console.log(err);
-			res.render('dashboard/editlanguages', { expressions: expressions, language: req.param('lang_id')} );
 		});
 	});
 
