@@ -99,9 +99,9 @@ var database = {
 
     connectDb: function(callback) {
         db.transaction(function(tx) {
-            tx.executeSql('DROP TABLE LANGUAGE');
+            /*tx.executeSql('DROP TABLE LANGUAGE');
             tx.executeSql('DROP TABLE EXPRESSION');
-            tx.executeSql('DROP TABLE VERSION');
+            tx.executeSql('DROP TABLE VERSION');*/
 
             tx.executeSql('CREATE TABLE IF NOT EXISTS LANGUAGE (id TEXT NOT NULL PRIMARY KEY, name TEXT NOT NULL, info TEXT, map TEXT, version INTEGER)');
             tx.executeSql('CREATE TABLE IF NOT EXISTS EXPRESSION (id TEXT NOT NULL PRIMARY KEY, english TEXT NOT NULL, translation TEXT NOT NULL, audio TEXT, language TEXT NOT NULL, pronunciation TEXT, version INTEGER)');
