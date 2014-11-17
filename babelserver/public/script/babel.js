@@ -5,9 +5,9 @@ var backButton = document.getElementById("back-icon");
 var bootstrapXsParam = 768;
 
  // executes when HTML-Document is loaded and DOM is ready
-$(document).ready(function() {
-  isMobileBrowser();
-});
+//$(document).ready(function() {
+//  isMobileBrowser();
+//});
 
 
 //Captures width resize

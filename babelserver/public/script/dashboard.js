@@ -23,7 +23,7 @@ function addExpression (languageId) {
         $('#expression-list').append(newForm);  
 }
 
-function postExpression (newFormId, languageId) {
+/*function postExpression (newFormId, languageId) {
     var postURL = "../../api/expressions/";
     var english = document.forms[newFormId].elements["english"].value;
     var translation = document.forms[newFormId].elements["translation"].value;
@@ -73,7 +73,7 @@ function removeExpression (formId) {
         });
 
     return false;
-}
+}*/
 
 // Handle ajax file uploads for audio files and images
 $(document).ready(function() {
@@ -96,23 +96,24 @@ $(document).ready(function() {
     });
   });
 
-  $('.form-lang').on('submit', function(e) {
+  $('.form-lang').on('click', function(e) {
     e.preventDefault();
     $.ajax({
-        url: window.location.pathname,
-        type: 'POST',
-        dataType: 'json',
-        data: new FormData(this),
-        mimeType: 'multipart/form-data',
-        processData: false,
-        contentType: false,
+      url: window.location.pathname,  // dashboard/languages/new
+      type: 'POST',
+      dataType: 'json',
+      data: new FormData(this),
+      mimeType: 'multipart/form-data',
+      processData: false,
+      contentType: false,
     })
     .done(function(data) {
-        alert('it worked');
+      alert('it worked');
     })
     .fail(function() {
-        alert('error');
+      alert("error");
     });
   });
 });
+
 
