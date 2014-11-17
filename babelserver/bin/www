@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 var debug = require('debug')('babelserver');
-var app = require('../app');
+var app = require('../main');
 
 app.set('port', process.env.PORT || 8086);
 
