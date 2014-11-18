@@ -32,8 +32,7 @@ app.set('view engine', 'html');
 // Prettify the json objects returned by setting the spaces
 app.set('json spaces', 4);
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(multer({ dest: './uploads/',
                  inMemory: true, }));
