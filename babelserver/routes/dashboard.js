@@ -92,7 +92,6 @@ module.exports = function(passport) {
 					if (err) {
 						console.log(err);
 					} else {
-						console.dir(language);
 						res.render('dashboard/editlanguages', { expressions: expressions, language: language} );
 					}
 				});
