@@ -42,3 +42,17 @@
 .new-language {
   padding: 20px;
 }
+
+.lang-panel:first-child {
+  text-align: center;
+  font-size: 18px;
+}
+
+.edit-lang .form-lang {
+  padding: 30px;
+}
+
+.edit-lang img {
+  width: 80%;
+  height: auto;
+}

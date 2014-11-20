@@ -96,7 +96,7 @@ $(document).ready(function() {
     });
   });
 
-  $('.form-lang').on('click', function(e) {
+  /*$('.form-lang').on('submit', function(e) {
     e.preventDefault();
     $.ajax({
       url: window.location.pathname,  // dashboard/languages/new
@@ -108,12 +108,16 @@ $(document).ready(function() {
       contentType: false,
     })
     .done(function(data) {
-      alert('it worked');
+      if (data.error) {
+        $('#new-lang-error').append('<p>'+ data.error +'</p>').show();
+      } else {
+        $('#new-lang-success').append('<p>'+ data.success +'</p>').show();
+      }
     })
     .fail(function() {
       alert("error");
     });
-  });
+  });*/
 });
 
 

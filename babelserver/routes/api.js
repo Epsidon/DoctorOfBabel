@@ -174,7 +174,7 @@ router.get('/version/:client_version', function(req, res) {
 
 router.post('/version/delete', function(req, res) {
 	var uuid = req.body.name;
-	fs.unlink('./routes/' + uuid + '.zip');
+	fs.unlink('./uploads/' + uuid + '.zip');
 	res.json({ message: 'Deleted' });
 });
 

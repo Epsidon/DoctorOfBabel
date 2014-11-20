@@ -3,6 +3,7 @@ var router = express.Router();
 var Language = require('../models/language');
 var Expression = require('../models/expression');
 var User = require('../models/user')
+var fs = require('fs');
 
 module.exports = function(passport) {
 
@@ -38,29 +39,68 @@ module.exports = function(passport) {
 
 
 	router.get('/languages/new', function(req, res) {
-		res.render('dashboard/newlanguages');
+		res.render('dashboard/newlanguages', {
+			name: req.flash('nameError'),
+			info: req.flash('infoError'),
+			error: req.flash('error'),
+		});
 	});
 
 	router.post('/languages/new', function(req, res) {
-		//var language = new Language();
-		//language.name = req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1);
-		//language.info = req.body.info;
-		//console.log(req.files.map.originalname);
-		res.json({data: 'it nsdkfndsklfnsdfksn'});
+		if (!req.body.name || !req.body.info || !req.files.map) {
+			req.flash('nameError', req.body.name);
+			req.flash('infoError', req.body.info);
+			req.flash('error', 'Error! There are empty fields.');
+			res.redirect(req.originalUrl);
+		} else {
+			var language = new Language();
+			language.name = req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1);
+			language.info = req.body.info;
+			var path = './uploads/' + req.files.map.name;
+			fs.writeFile(path, req.files.map.buffer, function(err) {
+				if (err) {
+					req.flash('nameError', req.body.name);
+					req.flash('infoError', req.body.info);
+					req.flash('error', 'Error uploading the image. Try again.');
+					res.redirect(req.originalUrl);
+				} else {
+					language.map = req.protocol + '://' + req.headers.host + '/' + req.files.map.name;
+					language.save(function(err, lang) {
+						if (err) {
+							req.flash('nameError', req.body.name);
+							req.flash('infoError', req.body.info);
+							req.flash('error', 'Error occured creating language. Submit again.')
+							res.redirect(req.originalUrl);
+						} else {
+							res.redirect(req.baseUrl + '/languages/' + lang._id + '/edit');
+						}
+					});
+				}
+			});
+		}
 	});
 
 
 	// Page to modify a language
-	router.get('/languages/:lang_id', function(req, res) {
-		Expression.find({ language: req.params.lang_id }, function(err, expressions){
-			if (err)
+	router.get('/languages/:lang_id/edit', function(req, res) {
+		console.log(req.params.lang_id);
+		Language.findOne({ _id: req.params.lang_id}, function(err, language) {
+			if (err) {
 				console.log(err);
-			res.render('dashboard/editlanguages', { expressions: expressions, language: req.param('lang_id')} );
+			} else {
+				Expression.find({ language: req.params.lang_id}, function(err, expressions) {
+					if (err) {
+						console.log(err);
+					} else {
+						res.render('dashboard/editlanguages', { expressions: expressions, language: language} );
+					}
+				});
+			}
 		});
 	});
 
 
-	router.post('/languages/:lang_id', function(req, res) {
+	router.post('/languages/:lang_id/edit', function(req, res) {
 		// TODO
 		// This is where we verify the language info
 		//Language.find({ _id: req.params.lang_id })
