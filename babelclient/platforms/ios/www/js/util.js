@@ -150,24 +150,16 @@ var database = {
         });
     },
 
-    getLanguages: function() {
+    getLanguages: function(callback) {
         db.transaction(function(tx) {
             tx.executeSql('SELECT * FROM LANGUAGE', [], function(tx, resultSet) {
-                for (var i = 0; i < resultSet.rows.length; i++) {
-                    var row = resultSet.rows.item(i);
-                    var name = resultSet.rows.item(i).name; //supposing there is an id in your result
-                    console.log('Language name: ' + name);
-                }
+                callback(resultSet);
             }, function(tx, err) {
                 console.log("getLanguages error: " + err);
-                return null;
+                callback(-1);
             });
         });
     },
-
-    // getLanguages: function(languageId) {
-
-    // },
 
     getLocalVersion: function(callback) {
         db.transaction(function(tx) {
@@ -221,8 +213,7 @@ var database = {
                 );
             };
         });
-
-    }
+    },
 };
 
 var util = {

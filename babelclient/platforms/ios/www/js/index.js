@@ -19,6 +19,10 @@
 
 var db;
 
+// Global collections
+var languageList = [];
+var expressionList = [];
+
 var app = {
     // Application Constructor
     initialize: function() {
@@ -36,7 +40,7 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        app.receivedEvent('deviceready');
+        // app.receivedEvent('deviceready');
         db = window.openDatabase("Database", "1.0", "BabelAppDb", 200000);
 
         database.connectDb(function(dbResult) {
@@ -54,18 +58,41 @@ var app = {
             }
         });
 
-    },
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
+        controller.listLanguages();
 
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
-        console.log('Received Event: ' + id);
     }
+    // ,
+    // // Update DOM on a Received Event
+    // receivedEvent: function(id) {
+    //     var parentElement = document.getElementById(id);
+    //     var listeningElement = parentElement.querySelector('.listening');
+    //     var receivedElement = parentElement.querySelector('.received');
+
+    //     listeningElement.setAttribute('style', 'display:none;');
+    //     receivedElement.setAttribute('style', 'display:block;');
+
+    //     console.log('Received Event: ' + id);
+    // }
+};
+
+var controller = {
+    listLanguages: function() {
+        database.getLanguages(function(resultSet) {
+            if (resultSet !== -1) {
+                for (var i = 0; i < resultSet.rows.length; i++) {
+                    var row = resultSet.rows.item(i);
+                    var name = resultSet.rows.item(i).name;
+                    $( "#language-list" ).append( "<div>" + name + "</div>" );
+                    //console.log(name);
+                }
+
+            } else {
+                console.log("Error occurred ListLanguages() in controller");
+            }
+        });
+    }
+
+    // listExpressions: function(languageId) { }
 };
 
 app.initialize();
