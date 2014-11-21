@@ -97,19 +97,28 @@ var requestApi = {
 
 var database = {
 
+    // LANGUAGE TABLE: id, name, info, map, version
+    // EXPRESSION TABLE: id, english, translation, audio, language, pronunciation, version
+    // VERSION TABLE: id, version_no
+
     connectDb: function(callback) {
         db.transaction(function(tx) {
-            tx.executeSql('DROP TABLE LANGUAGE');
-            tx.executeSql('DROP TABLE EXPRESSION');
-            tx.executeSql('DROP TABLE VERSION');
+            // tx.executeSql('DROP TABLE LANGUAGE');
+            // tx.executeSql('DROP TABLE EXPRESSION');
+            // tx.executeSql('DROP TABLE VERSION');
 
             tx.executeSql('CREATE TABLE IF NOT EXISTS LANGUAGE (id TEXT NOT NULL PRIMARY KEY, name TEXT NOT NULL, info TEXT, map TEXT, version INTEGER)');
             tx.executeSql('CREATE TABLE IF NOT EXISTS EXPRESSION (id TEXT NOT NULL PRIMARY KEY, english TEXT NOT NULL, translation TEXT NOT NULL, audio TEXT, language TEXT NOT NULL, pronunciation TEXT, version INTEGER)');
             tx.executeSql('CREATE TABLE IF NOT EXISTS VERSION (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, version_no INTEGER NOT NULL)');
-            tx.executeSql('INSERT INTO VERSION (version_no) VALUES (0)');
+            // tx.executeSql('INSERT INTO EXPRESSION (id, english, translation, audio, language, pronunciation, version) VALUES ("qq11", "english 1", "translation 1", "/eng1.mp3", "zJzzSgPn", "pronun", 0)');
+            // tx.executeSql('INSERT INTO EXPRESSION (id, english, translation, audio, language, pronunciation, version) VALUES ("qq12", "english 2", "translation 2", "/eng2.mp3", "zJzzSgPn", "pronun", 0)');
+            // tx.executeSql('INSERT INTO EXPRESSION (id, english, translation, audio, language, pronunciation, version) VALUES ("qq13", "english 3", "translation 3", "/eng3.mp3", "zJzzSgPn", "pronun", 0)');
+            // tx.executeSql('INSERT INTO EXPRESSION (id, english, translation, audio, language, pronunciation, version) VALUES ("qq14", "english 4", "translation 4", "/eng4.mp3", "zJzzSgPn", "pronun", 0)');
+
+
         }, 
         function(tx, err) {
-            alert("Error processing SQL: " + err);
+            console.log("Error processing SQL: " + err.message);
             // In case db fails initializing, return -1
             callback(-1);
         }, 
@@ -120,10 +129,6 @@ var database = {
             callback(0);
         });
     },
-
-    // LANGUAGE TABLE: id, name, info, map, version
-    // EXPRESSION TABLE: id, english, translation, audio, language, pronunciation, version
-    // VERSION TABLE: id, version_no
 
     initiateDb: function(tx) {
 

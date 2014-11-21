@@ -43,20 +43,20 @@ var app = {
         // app.receivedEvent('deviceready');
         db = window.openDatabase("Database", "1.0", "BabelAppDb", 200000);
 
-        database.connectDb(function(dbResult) {
-            if(dbResult === 0) {
-                requestApi.doRequest(function(responseValue, updateUrl) {
-                    if(responseValue === 100) {
-                        console.log("Update needed");
-                        console.log("Update URL: " + updateUrl);
-                    } else if(responseValue === 200) {
-                        console.log("Update is not needed");
-                    } else {
-                        console.log("An error occured, carry on");
-                    }
-                });                
-            }
-        });
+        // database.connectDb(function(dbResult) {
+        //     if(dbResult === 0) {
+        //         requestApi.doRequest(function(responseValue, updateUrl) {
+        //             if(responseValue === 100) {
+        //                 console.log("Update needed");
+        //                 console.log("Update URL: " + updateUrl);
+        //             } else if(responseValue === 200) {
+        //                 console.log("Update is not needed");
+        //             } else {
+        //                 console.log("An error occured, carry on");
+        //             }
+        //         });                
+        //     }
+        // });
 
         controller.listLanguages();
 
@@ -82,7 +82,8 @@ var controller = {
                 for (var i = 0; i < resultSet.rows.length; i++) {
                     var row = resultSet.rows.item(i);
                     var name = resultSet.rows.item(i).name;
-                    $( "#language-list" ).append( "<div>" + name + "</div>" );
+                    $( "#language-list" ).append( "<div class='language'>" + name + "</div>" );
+                    console.log(name);
                     //console.log(name);
                 }
 
