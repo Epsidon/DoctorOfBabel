@@ -13,23 +13,34 @@
       <div class="edit-lang panel panel-primary">
         <div class="panel-heading lang-panel">Edit Language</div>
         <form class="form-lang" id="new-lang" method="post" enctype="multipart/form-data">
+          {{#if language.ready }}
+            <div class="bg-success">
+              <p>Published</p>
+            </div>
+          {{ else }}
+            <div class="bg-warning">
+              <p>Draft</p>
+            </div>  
+          {{/if}}
           <div class="form-group">
             <label for="name">Name</label>
             <input type="text" class="form-control" value="{{ language.name }}" name="name">
           </div>
           <div class="form-group">
             <label for="info">Info</label>
-            <textarea class="form-control" name="info" rows="5">{{ language.info }}</textarea>
+            <textarea class="form-control" name="info" rows="4">{{ language.info }}</textarea>
           </div>
           <div class="form-group">
             <label for="map">Upload your map</label>
             <input type="file" name="map" id="map">
-            <p class="help-block">Please enter the map for the language</p>
+            <p class="help-block">Upload a map to change the current one.</p>
             <p class="help-block">Current Map: <a href="{{ language.map }}">{{language.map }}</a></p>
             <img src="{{ language.map }}">
           </div>
-          <button type="submit" class="btn btn-primary">Publish Language</button>
-          <button type="submit" class="btn btn-primary">Save as Draft</button>
+          <input type="submit" class="btn btn-primary" name="action" value="Publish Language">
+          {{#unless language.ready }}
+            <input type="submit" class="btn btn-primary" name="action" value="Save as Draft">
+          {{/unless}}
         </form>
       </div>
       <div class="bg-info">

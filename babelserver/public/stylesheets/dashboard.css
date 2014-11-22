@@ -56,3 +56,15 @@
   width: 80%;
   height: auto;
 }
+
+.edit-lang .bg-success {
+  text-align: center;
+  width: 50%;
+}
+
+.edit-lang .bg-warning {
+  text-align: center;
+  line-height: 220%;
+  width: 50%;
+  margin-left: 25%;
+}

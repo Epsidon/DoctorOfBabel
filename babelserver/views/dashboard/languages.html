@@ -14,7 +14,7 @@
         <a href="languages/new"><button class="btn btn-primary" type="button">Add New Language</button></a>
       </div>
       <div class="table-responsive">
-        <table class="table table-striped">
+        <table class="table table-striped table-bordered">
           <thead>
             <tr>
               <th>ID</th>
@@ -31,7 +31,7 @@
                 <td>{{ this._id }}</td>
                 <td>{{ this.name }}</td>
                 <td>{{ this.info }}</td>
-                <td>{{ this.map }}</td>
+                <td><a href="{{ this.map }}">Link</a></td>
                 <td>{{#if this.ready }}
                   READY
                 {{else}}

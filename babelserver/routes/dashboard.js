@@ -18,6 +18,9 @@ module.exports = function(passport) {
 		}
 	});
 
+
+	// Check for user permission level
+	// Will be removed, we will just remove options for staff
 	router.get('/', function(req, res) {
 		if(req.user.role === 'admin')
 			res.render('dashboard/dashboard-admin');
@@ -26,18 +29,20 @@ module.exports = function(passport) {
 	});
 
 
-	// List the languages to edit them
+	// List the languages as tabular data to edit them
 	router.get('/languages', function(req, res) {
 		Language.find(function(err, languages) {
-			if (err)
-				res.send(err);
-
-			res.render('dashboard/languages', { languages: languages });
+			if (err) {
+				console.log(err);
+			} else {
+				res.render('dashboard/languages', { languages: languages });
+			}
 		});
 	});
 
 
-
+	// Router to create new pages. The Flash messages are there
+	// in case form error so we preserve the user input	
 	router.get('/languages/new', function(req, res) {
 		res.render('dashboard/newlanguages', {
 			name: req.flash('nameError'),
@@ -46,7 +51,11 @@ module.exports = function(passport) {
 		});
 	});
 
+
+	// Form submission for a new language. 
 	router.post('/languages/new', function(req, res) {
+		// If any field is missing, redirect user back to the form with 
+		// error message
 		if (!req.body.name || !req.body.info || !req.files.map) {
 			req.flash('nameError', req.body.name);
 			req.flash('infoError', req.body.info);
@@ -101,10 +110,49 @@ module.exports = function(passport) {
 
 
 	router.post('/languages/:lang_id/edit', function(req, res) {
-		// TODO
-		// This is where we verify the language info
-		//Language.find({ _id: req.params.lang_id })
-		res.json({data: 'it worked'});
+		// Either publishing language or continuing as draft
+		if (req.body.action === 'Save as Draft') {
+			Language.findOne({ _id: req.params.lang_id }, function(err, language) {
+				if (err) {
+					console.log(err);
+				} else {
+					if (req.body.name)
+						language.name = req.body.name;
+					if (req.body.info)
+						language.info = req.body.info;
+					if (req.files.map) {
+						var path = './uploads/' + req.files.map.name;
+						fs.writeFile(path, req.files.map.buffer, function(err) {
+							if (err) {
+								console.log(err);
+							} else {
+								language.map = req.protocol + '://' + req.headers.host + '/' + req.files.map.name;
+								language.save(function(err, lang) {
+									if (err) {
+										console.log(err);
+									} else {
+										res.redirect(req.baseUrl + '/languages/' + lang._id + '/edit');
+									}
+								});
+							}
+						});
+					} else {
+						language.save(function(err, lang) {
+							if (err) {
+								console.log(err);
+							} else {
+								res.redirect(req.baseUrl + '/languages/' + lang._id + '/edit');
+							}
+						});		
+					}
+				}
+			});
+		// Publishing a language	
+		} else {
+			Language.findOne({ _id: req.params.lang_id }, function(err, language) {
+				
+			});
+		}
 	});
 
 	router.post('/languages/:lang_id/ready', function(req, res) {
