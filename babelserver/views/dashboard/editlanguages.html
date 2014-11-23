@@ -37,7 +37,11 @@
             <p class="help-block">Current Map: <a href="{{ language.map }}">{{language.map }}</a></p>
             <img src="{{ language.map }}">
           </div>
-          <input type="submit" class="btn btn-primary" name="action" value="Publish Language">
+          {{#if language.ready }}
+            <input type="submit" class="btn btn-primary" name="action" value="Update Language">
+          {{ else }}
+            <input type="submit" class="btn btn-primary" name="action" value="Publish Language">  
+          {{/if}}
           {{#unless language.ready }}
             <input type="submit" class="btn btn-primary" name="action" value="Save as Draft">
           {{/unless}}
@@ -49,7 +53,7 @@
         </p>
       </div>
       <div class="new-expression">
-        <button class="btn btn-primary" onclick="addExpression('{{language}}');">Add New Expression</button>
+        <button class="btn btn-primary">Add New Expression</button>
       </div>
       <div id="expression-list" class="col-xs-6 col-sm-4  col-md-8 col-lg-8">
         {{#each expressions }}

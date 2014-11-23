@@ -3,6 +3,7 @@ var router = express.Router();
 var Language = require('../models/language');
 var Expression = require('../models/expression');
 var User = require('../models/user')
+var Version = require('../models/version');
 var fs = require('fs');
 
 module.exports = function(passport) {
@@ -150,7 +151,55 @@ module.exports = function(passport) {
 		// Publishing a language	
 		} else {
 			Language.findOne({ _id: req.params.lang_id }, function(err, language) {
-				
+				if (err) {
+					console.log(err);
+				} else {
+					if (req.body.name)
+						language.name = req.body.name;
+					if (req.body.info)
+						language.info = req.body.info;
+					if (req.files.map) {
+						var path = './uploads/' + req.files.map.name;
+						fs.writeFile(path, req.files.map.buffer, function(err) {
+							if (err) {
+								console.log(err);
+							} else {
+								language.map = req.protocol + '://' + req.headers.host + '/' + req.files.map.name;
+								language.ready = true;
+								Version.findOneAndUpdate({ name: 'global'}, { $inc: {global_version: 1} }, function(err, version) {
+									if (err) {
+										console.log(err);
+									} else {
+										language.version = version.global_version;
+										language.save(function(err, lang) {
+											if (err) {
+												console.log(err);
+											} else {
+												res.redirect(req.baseUrl + '/languages/' + lang._id + '/edit');
+											}
+										});
+									}	
+								});
+							}
+						});
+					} else {
+						language.ready = true;
+						Version.findOneAndUpdate({ name: 'global'}, { $inc: {global_version: 1} }, function(err, version) {
+							if (err) {
+								console.log(err);
+							} else {
+								language.version = version.global_version;
+								language.save(function(err, lang) {
+									if (err) {
+										console.log(err);
+									} else {
+										res.redirect(req.baseUrl + '/languages/' + lang._id + '/edit');
+									}
+								});
+							}	
+						});
+					}
+				}
 			});
 		}
 	});

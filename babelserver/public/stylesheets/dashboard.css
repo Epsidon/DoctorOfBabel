@@ -59,12 +59,19 @@
 
 .edit-lang .bg-success {
   text-align: center;
+  line-height: 220%;
   width: 50%;
+  margin-left: 25%;
 }
 
-.edit-lang .bg-warning {
+.edit-lang .bg-warning .bg-success {
   text-align: center;
   line-height: 220%;
   width: 50%;
   margin-left: 25%;
+}
+
+div.bg-info p {
+  padding: 10px;
+  text-align: center;
 }

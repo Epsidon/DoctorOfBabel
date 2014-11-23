@@ -12,16 +12,4 @@ var LanguageSchema = new Schema({
 	ready: { type: Boolean, 'default': false },
 });
 
-LanguageSchema.pre('save', function(next) {
-	var language = this;
-	Version.findOneAndUpdate({ name: 'global' }, { $inc: { global_version: 1 }}, function(err, version) {
-		if (err) {
-			next(err);
-		} else {
-			language.version = version.global_version;
-			next();
-		}
-	});
-});
-
 module.exports = mongoose.model('Language', LanguageSchema);

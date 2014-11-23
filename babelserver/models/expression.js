@@ -14,16 +14,4 @@ var ExpressionSchema = new Schema({
 	deleted: { type: Boolean, 'default': false },
 });
 
-ExpressionSchema.pre('save', function(next) {
-	var expression = this;
-	Version.findOneAndUpdate({ name: 'global' }, { $inc: { global_version: 1 }}, function(err, version) {
-		if (err) {
-			next(err);
-		} else {
-			expression.version = version.global_version;
-			next();
-		}
-	});
-});
-
 module.exports = mongoose.model('Expression', ExpressionSchema);

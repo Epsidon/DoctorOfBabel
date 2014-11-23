@@ -96,6 +96,10 @@ $(document).ready(function() {
     });
   });
 
+  $('.new-expression').click(function(event) {
+    alert('IT WORKED');
+  });
+
   /*$('.form-lang').on('submit', function(e) {
     e.preventDefault();
     $.ajax({
