@@ -19,6 +19,10 @@
 
 var db;
 
+// Global collections
+var languageList = [];
+var expressionList = [];
+
 var app = {
     // Application Constructor
     initialize: function() {
@@ -36,36 +40,60 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        app.receivedEvent('deviceready');
+        // app.receivedEvent('deviceready');
         db = window.openDatabase("Database", "1.0", "BabelAppDb", 200000);
 
-        database.connectDb(function(dbResult) {
-            if(dbResult === 0) {
-                requestApi.doRequest(function(responseValue, updateUrl) {
-                    if(responseValue === 100) {
-                        console.log("Update needed");
-                        console.log("Update URL: " + updateUrl);
-                    } else if(responseValue === 200) {
-                        console.log("Update is not needed");
-                    } else {
-                        console.log("An error occured, carry on");
-                    }
-                });                
+        // database.connectDb(function(dbResult) {
+        //     if(dbResult === 0) {
+        //         requestApi.doRequest(function(responseValue, updateUrl) {
+        //             if(responseValue === 100) {
+        //                 console.log("Update needed");
+        //                 console.log("Update URL: " + updateUrl);
+        //             } else if(responseValue === 200) {
+        //                 console.log("Update is not needed");
+        //             } else {
+        //                 console.log("An error occured, carry on");
+        //             }
+        //         });                
+        //     }
+        // });
+
+        controller.listLanguages();
+
+    }
+    // ,
+    // // Update DOM on a Received Event
+    // receivedEvent: function(id) {
+    //     var parentElement = document.getElementById(id);
+    //     var listeningElement = parentElement.querySelector('.listening');
+    //     var receivedElement = parentElement.querySelector('.received');
+
+    //     listeningElement.setAttribute('style', 'display:none;');
+    //     receivedElement.setAttribute('style', 'display:block;');
+
+    //     console.log('Received Event: ' + id);
+    // }
+};
+
+var controller = {
+    listLanguages: function() {
+        database.getLanguages(function(resultSet) {
+            if (resultSet !== -1) {
+                for (var i = 0; i < resultSet.rows.length; i++) {
+                    var row = resultSet.rows.item(i);
+                    var name = resultSet.rows.item(i).name;
+                    $( "#language-list" ).append( "<div class='language'>" + name + "</div>" );
+                    console.log(name);
+                    //console.log(name);
+                }
+
+            } else {
+                console.log("Error occurred ListLanguages() in controller");
             }
         });
-
-    },
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
-        console.log('Received Event: ' + id);
     }
+
+    // listExpressions: function(languageId) { }
 };
 
 app.initialize();

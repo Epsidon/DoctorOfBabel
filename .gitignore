@@ -14,3 +14,6 @@ babelserver/uploads/
 .idea/
 
 .DS_Store
+babelserver/.DS_Store
+babelclient/.DS_Store
+babelclient/platforms/.DS_Store
