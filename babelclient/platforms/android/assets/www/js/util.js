@@ -10,7 +10,9 @@ var requestApi = {
         // 300: error encountered somewhere, try again
         // 400: request error
         database.getLocalVersion(function(versionNo) {
-            var url = "https://doctorofbabel.herokuapp.com/api/version/" + versionNo;
+            console.log('INSIDE getlocalversion ' + versionNo);
+            var url = "http://doctorofbabel.elasticbeanstalk.com/api/version/" + versionNo;
+            console.log(url);
             $.getJSON(url, function(data, status) {
                 if (status === 'success') {
                     if (data["status"] === 100) {
@@ -24,6 +26,7 @@ var requestApi = {
                     callback(400, null);
                 }
             }).fail(function() {
+                console.log('IT FAILED');
                 //callback should return error
                 callback(400, null);
             });
@@ -109,11 +112,12 @@ var database = {
 
             tx.executeSql('CREATE TABLE IF NOT EXISTS LANGUAGE (id TEXT NOT NULL PRIMARY KEY, name TEXT NOT NULL, info TEXT, map TEXT, version INTEGER)');
             tx.executeSql('CREATE TABLE IF NOT EXISTS EXPRESSION (id TEXT NOT NULL PRIMARY KEY, english TEXT NOT NULL, translation TEXT NOT NULL, audio TEXT, language TEXT NOT NULL, pronunciation TEXT, version INTEGER)');
-            tx.executeSql('CREATE TABLE IF NOT EXISTS VERSION (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, version_no INTEGER NOT NULL)');
-            // tx.executeSql('INSERT INTO EXPRESSION (id, english, translation, audio, language, pronunciation, version) VALUES ("qq11", "english 1", "translation 1", "/eng1.mp3", "zJzzSgPn", "pronun", 0)');
-            // tx.executeSql('INSERT INTO EXPRESSION (id, english, translation, audio, language, pronunciation, version) VALUES ("qq12", "english 2", "translation 2", "/eng2.mp3", "zJzzSgPn", "pronun", 0)');
-            // tx.executeSql('INSERT INTO EXPRESSION (id, english, translation, audio, language, pronunciation, version) VALUES ("qq13", "english 3", "translation 3", "/eng3.mp3", "zJzzSgPn", "pronun", 0)');
-            // tx.executeSql('INSERT INTO EXPRESSION (id, english, translation, audio, language, pronunciation, version) VALUES ("qq14", "english 4", "translation 4", "/eng4.mp3", "zJzzSgPn", "pronun", 0)');
+            tx.executeSql('CREATE TABLE IF NOT EXISTS VERSION (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT DEFAULT 1, version_no INTEGER NOT NULL DEFAULT 0)');
+            tx.executeSql('INSERT INTO VERSION (version_no) VALUES(0)');
+            // tx.executeSql('INSERT INTO EXPRESSION (id, english, translation, audio, language, pronunciation, version) VALUES ("qq112", "english 5", "translation 5", "/eng1.mp3", "zJzzSgPn", "pronun", 0)');
+            // tx.executeSql('INSERT INTO EXPRESSION (id, english, translation, audio, language, pronunciation, version) VALUES ("qq123", "english 6", "translation 6", "/eng2.mp3", "zJzzSgPn", "pronun", 0)');
+            // tx.executeSql('INSERT INTO EXPRESSION (id, english, translation, audio, language, pronunciation, version) VALUES ("qq134", "english 7", "translation 7", "/eng3.mp3", "zJzzSgPn", "pronun", 0)');
+            // tx.executeSql('INSERT INTO EXPRESSION (id, english, translation, audio, language, pronunciation, version) VALUES ("qq145", "english 8", "translation 4", "/eng4.mp3", "zJzzSgPn", "pronun", 0)');
 
 
         }, 
@@ -125,7 +129,7 @@ var database = {
         function() {
             // 
             alert("database created!");
-            database.getLocalVersion();
+            //database.getLocalVersion();
             callback(0);
         });
     },
@@ -144,7 +148,7 @@ var database = {
     },
 
     isTableExists: function(tx, tableName, callback) {
-        tx.executeSql('SELECT * FROM LANGUAGES', [], function(tx, resultSet) {
+        tx.executeSql('SELECT * FROM LANGUAGE', [], function(tx, resultSet) {
             if (resultSet.rows.length <= 0) {
                 callback(false);
             } else {
@@ -160,7 +164,19 @@ var database = {
             tx.executeSql('SELECT * FROM LANGUAGE', [], function(tx, resultSet) {
                 callback(resultSet);
             }, function(tx, err) {
-                console.log("getLanguages error: " + err);
+                console.log("getLanguages error: " + err.message);
+                callback(-1);
+            });
+        });
+    },
+
+    getExpressions: function(languageId, callback) {
+        console.log("languageId: " + languageId);
+        db.transaction(function(tx) {
+            tx.executeSql('SELECT * FROM EXPRESSION WHERE language = ?', [languageId], function(tx, resultSet) {
+                callback(resultSet);
+            }, function(tx, err) {
+                console.log("getExpressions error: " + err.message);
                 callback(-1);
             });
         });
@@ -171,7 +187,6 @@ var database = {
             tx.executeSql('SELECT * FROM VERSION ORDER BY `id` DESC LIMIT 1;', [], function(tx, resultSet) {
                 var lastRow = resultSet.rows.item(0);
                 var version_no = lastRow.version_no;
-                console.log("Version Number: " + version_no);
                 callback(version_no);
             }, function(tx, err) {
                 callback(-1);

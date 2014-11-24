@@ -122,8 +122,13 @@ h1 {
     -webkit-animation:fade 3000ms infinite;
 }
 
-.language {
+.list-item {
     margin-bottom: 10px;
+    height: 20px;
+}
+
+.label {
+    display: inline;
 }
 
 #header {

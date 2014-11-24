@@ -42,23 +42,31 @@ var app = {
     onDeviceReady: function() {
         // app.receivedEvent('deviceready');
         db = window.openDatabase("Database", "1.0", "BabelAppDb", 200000);
+        db.transaction(function(tx) {
+            tx.executeSql('SELECT * from LANGUAGE', [],
+                function(tx, result) {
+                    if (result)
+                        alert('DB already exists');
+                }, 
+                function(tx, error) {
+                    database.connectDb(function(dbResult) {
+                        if(dbResult === 0) {
+                             requestApi.doRequest(function(responseValue, updateUrl) {
+                                 if(responseValue === 100) {
+                                     console.log("Update needed");
+                                     console.log("Update URL: " + updateUrl);
+                                 } else if(responseValue === 200) {
+                                     console.log("Update is not needed");
+                                 } else {
+                                     console.log("An error occured, carry on");
+                                 }
+                             });                
+                         }
+                    });
+                });
+            });
 
-        // database.connectDb(function(dbResult) {
-        //     if(dbResult === 0) {
-        //         requestApi.doRequest(function(responseValue, updateUrl) {
-        //             if(responseValue === 100) {
-        //                 console.log("Update needed");
-        //                 console.log("Update URL: " + updateUrl);
-        //             } else if(responseValue === 200) {
-        //                 console.log("Update is not needed");
-        //             } else {
-        //                 console.log("An error occured, carry on");
-        //             }
-        //         });                
-        //     }
-        // });
-
-        controller.listLanguages();
+        //controller.listLanguages();
 
     }
     // ,
@@ -82,18 +90,48 @@ var controller = {
                 for (var i = 0; i < resultSet.rows.length; i++) {
                     var row = resultSet.rows.item(i);
                     var name = resultSet.rows.item(i).name;
-                    $( "#language-list" ).append( "<div class='language'>" + name + "</div>" );
-                    console.log(name);
-                    //console.log(name);
+                    var id = resultSet.rows.item(i).id;
+                    var container = '<div class="list-item" onClick="controller.listExpressions(\'' + id + '\')">';
+                    console.log(container);
+                    var listLabel = '<div class="label">';
+                    var arrowIcon = '<img src="img/arrow-icon.png" alt="Arrow" style="width: 20px; height: 100%; float: right;">';
+                    var divEnd = '</div>';
+                    $( "#language-list" ).append(container +
+                        listLabel + name +
+                        divEnd +
+                        arrowIcon +
+                        divEnd );
                 }
-
             } else {
-                console.log("Error occurred ListLanguages() in controller");
+                console.log("Error occurred: ListLanguages in controller");
+            }
+        });
+    },
+
+    listExpressions: function(languageId) { 
+        database.getExpressions(languageId, function(resultSet) {
+            if(resultSet !== -1) {
+                $( "#language-list" ).empty();
+                for (var i = 0; i < resultSet.rows.length; i++) {
+                    var row = resultSet.rows.item(i);
+                    var english = resultSet.rows.item(i).english;
+                    var translation = resultSet.rows.item(i).translation;
+                    var container = '<div class="list-item">';
+                    var listLabel = '<div class="label">';
+                    var arrowIcon = '<img src="img/arrow-icon.png" alt="Arrow" style="width: 20px; height: 100%; float: right;">';
+                    var divEnd = '</div>';
+                    console.log(english);
+                    $( "#language-list" ).append(container +
+                        listLabel + english + " - " + translation +
+                        divEnd +
+                        arrowIcon +
+                        divEnd );
+                } 
+            } else {
+                console.log("Error occurred: listExpressions in controller");
             }
         });
     }
-
-    // listExpressions: function(languageId) { }
 };
 
 app.initialize();
