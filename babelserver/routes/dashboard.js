@@ -203,10 +203,42 @@ module.exports = function(passport) {
 			});
 		}
 	});
+	
 
-	router.post('/languages/:lang_id/ready', function(req, res) {
-		// TODO
-		// This is where the language will change from draft to ready
+	// Update/add expressions within a language
+	router.post('/languages/expressions/update', function(req, res) {
+		// Expression has an ID, it's being updated
+		if (req.body.exprId) {
+			res.json({ message: 'UPDATE EXPRESSION' });
+
+		// Add new expression	
+		} else {
+			if (!req.body.english || !req.body.translation || !req.files.audio) {
+				res.json({ 'error': 'Error. Missing a field.' });
+			} else if (req.files.audio.extension !== 'mp3') {
+				res.json({ 'error': 'Audio file not mp3.' });
+			} else {
+				var expression = new Expression();
+				expression.english = req.body.english;
+				expression.translation = req.body.translation;
+				expression.language = req.body.language;
+				var path = './uploads/' + req.files.audio.name;
+				fs.writeFile(path, req.files.audio.buffer, function(err) {
+					if (err) {
+						res.json({ 'error': 'Server error. Try again' });
+					} else {
+						expression.audio = req.protocol + '://' + req.headers.host + '/' + req.files.audio.name;
+						expression.save(function(err, expression) {
+							if (err) {
+								res.json({ 'error': 'Server error. Try again' });
+							} else {
+								res.json({ expression: expression });
+							}
+						});
+					}
+				});
+			}
+		}
 	});
 
 

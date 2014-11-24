@@ -1,6 +1,29 @@
 var newFormCount = 0;
 
-function addExpression (languageId) {
+function addExpression(languageId) {
+  var newForm = 
+    '<form class="form-expr">' +
+    '<input type="hidden" name="language" value="' + languageId + '">' +
+    '<input type="hidden" name="exprId" value="">' +
+    '<div class="form-group">' +
+    '<label for="english">English</label>' +
+    '<input type="text" class="form-control" name="english" value="">' +
+    '</div>' +
+    '<div class="form-group">' +
+    '<label for="translation">Translation</label>' +
+    '<input type="text" class="form-control" name="translation" value="">' +
+    '</div>' +
+    '<div class="form-group">' +
+    '<label for="audioFile">Upload audio file</label>' +
+    '<input type="file" name="audio" id="audio">' +
+    '<p class="help-block">Please enter the expression audio in mp3 format</p>' +
+    '</div>' +
+    '<input type="submit" class="btn btn-primary" value="Update" style="margin-top: 10px;">' +
+    '</form>';
+  $('#expression-list').prepend(newForm);
+}
+
+/*function addExpression (languageId) {
 
     newFormCount = newFormCount + 1;
     var newFormId = 'new-expression-' + newFormCount;
@@ -21,7 +44,7 @@ function addExpression (languageId) {
             console.log(newForm);
 
         $('#expression-list').append(newForm);  
-}
+}*/
 
 /*function postExpression (newFormId, languageId) {
     var postURL = "../../api/expressions/";
@@ -77,27 +100,30 @@ function removeExpression (formId) {
 
 // Handle ajax file uploads for audio files and images
 $(document).ready(function() {
-  $('.form-expr').on('submit', function(e) {
+  $(document).on('submit', '.form-expr', function(e) {
     e.preventDefault();
     $.ajax({
-      url: window.location.pathname,  // dashboard/languages/lang_id
+      url: '/dashboard/languages/expressions/update', 
       type: 'POST',
       dataType: 'json',
       data: new FormData(this),
       mimeType: 'multipart/form-data',
       processData: false,
       contentType: false,
+      context: this,
     })
     .done(function(data) {
-      alert('it worked');
+      if (data.error) {
+        $(this).prepend('<div class="alert alert-danger" role="alert">' +
+                      '<p>' + data.error + '</p>' +
+                      '</div>');
+      } else {
+        console.table(data.expression);
+      }
     })
     .fail(function() {
       alert("error");
     });
-  });
-
-  $('.new-expression').click(function(event) {
-    alert('IT WORKED');
   });
 
   /*$('.form-lang').on('submit', function(e) {
@@ -123,5 +149,6 @@ $(document).ready(function() {
     });
   });*/
 });
+
 
 
