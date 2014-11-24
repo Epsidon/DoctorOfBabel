@@ -43,6 +43,7 @@ $(document).ready(function() {
                       '<p>' + data.error + '</p>' +
                       '</div>');
       } else {
+        $(this).next().remove();
         $(this).remove();
         var formUpdate = 
           '<form class="form-expr-update" method="post" enctype="multipart/form-data">' +
@@ -62,7 +63,7 @@ $(document).ready(function() {
           '<p class="help-block">Please enter the expression audio in mp3 format</p>' +
           '</div>' +
           '<input type="submit" class="btn btn-primary" value="Modify">' +
-          '<input type="submit" class="btn btn-danger" name="action" value="Remove">' +
+          '<input type="submit" class="btn btn-danger" name="action" value="Remove" style="margin-left: 4px;">' +
           '</form>';
         $('#expression-list-update').prepend(formUpdate);
       }
