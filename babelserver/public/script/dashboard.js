@@ -1,8 +1,6 @@
-var newFormCount = 0;
-
 function addExpression(languageId) {
   var newForm = 
-    '<form class="form-expr">' +
+    '<form class="form-expr-new">' +
     '<input type="hidden" name="language" value="' + languageId + '">' +
     '<input type="hidden" name="exprId" value="">' +
     '<div class="form-group">' +
@@ -18,9 +16,9 @@ function addExpression(languageId) {
     '<input type="file" name="audio" id="audio">' +
     '<p class="help-block">Please enter the expression audio in mp3 format</p>' +
     '</div>' +
-    '<input type="submit" class="btn btn-primary" value="Update" style="margin-top: 10px;">' +
+    '<input type="submit" class="btn btn-primary" value="Add" style="margin: 10px 0px;">' +
     '</form>';
-  $('#expression-list').prepend(newForm);
+  $('#expression-list-new').prepend(newForm);
 }
 
 /*function addExpression (languageId) {
@@ -100,7 +98,33 @@ function removeExpression (formId) {
 
 // Handle ajax file uploads for audio files and images
 $(document).ready(function() {
-  $(document).on('submit', '.form-expr', function(e) {
+  $(document).on('submit', '.form-expr-new', function(e) {
+    e.preventDefault();
+    $.ajax({
+      url: '/dashboard/languages/expressions/new', 
+      type: 'POST',
+      dataType: 'json',
+      data: new FormData(this),
+      mimeType: 'multipart/form-data',
+      processData: false,
+      contentType: false,
+      context: this,
+    })
+    .done(function(data) {
+      if (data.error) {
+        $(this).prepend('<div class="alert alert-danger" role="alert">' +
+                      '<p>' + data.error + '</p>' +
+                      '</div>');
+      } else {
+        console.table(data.expression);
+      }
+    })
+    .fail(function() {
+      alert("error");
+    });
+  });
+
+  $(document).on('submit', '.form-expr-update', function(e) {
     e.preventDefault();
     $.ajax({
       url: '/dashboard/languages/expressions/update', 

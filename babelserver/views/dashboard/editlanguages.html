@@ -55,9 +55,12 @@
       <div class="new-expression">
         <button class="btn btn-primary" onclick=addExpression("{{ language._id}}")>Add New Expression</button>
       </div>
-      <div id="expression-list" class="col-xs-6 col-sm-4  col-md-8 col-lg-8">
+      <div id="expression-list-new" class="col-xs-6 col-sm-4  col-md-8 col-lg-8">
+        
+      </div>
+      <div id="expression-list-update" class="col-xs-6 col-sm-4  col-md-8 col-lg-8">
         {{#each expressions }}
-          <form class="form-expr" id="{{ this._id }}" method="post" enctype="multipart/form-data">
+          <form class="form-expr-update" id="{{ this._id }}" method="post" enctype="multipart/form-data">
             <input type="hidden" name="language" value="{{ language._id }}">
             <input type="hidden" name="exprId" value="{{ this._id }}">
             <div class="form-group">

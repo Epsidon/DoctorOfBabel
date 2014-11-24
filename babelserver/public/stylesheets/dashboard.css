@@ -75,3 +75,12 @@ div.bg-info p {
   padding: 10px;
   text-align: center;
 }
+
+#expression-list-update {
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.form-expr-update {
+  margin-bottom: 25px
+}

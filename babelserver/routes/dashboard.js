@@ -205,40 +205,98 @@ module.exports = function(passport) {
 	});
 	
 
-	// Update/add expressions within a language
-	router.post('/languages/expressions/update', function(req, res) {
-		// Expression has an ID, it's being updated
-		if (req.body.exprId) {
-			res.json({ message: 'UPDATE EXPRESSION' });
-
-		// Add new expression	
+	// Add new expression within a language
+	router.post('/languages/expressions/new', function(req, res) {
+		if (!req.body.english || !req.body.translation || !req.files.audio) {
+			res.json({ 'error': 'Error. Missing a field.' });
+		} else if (req.files.audio.extension !== 'mp3') {
+			res.json({ 'error': 'Audio file not mp3.' });
 		} else {
-			if (!req.body.english || !req.body.translation || !req.files.audio) {
-				res.json({ 'error': 'Error. Missing a field.' });
-			} else if (req.files.audio.extension !== 'mp3') {
-				res.json({ 'error': 'Audio file not mp3.' });
+			var expression = new Expression();
+			expression.english = req.body.english;
+			expression.translation = req.body.translation;
+			expression.language = req.body.language;
+			var path = './uploads/' + req.files.audio.name;
+			fs.writeFile(path, req.files.audio.buffer, function(err) {
+				if (err) {
+					res.json({ 'error': 'Server error. Try again' });
+				} else {
+					expression.audio = req.protocol + '://' + req.headers.host + '/' + req.files.audio.name;
+					Version.findOneAndUpdate({ name: 'global'}, { $inc: {global_version: 1} }, function(err, version) {
+						if (err) {
+							res.json({ 'error': 'Server error. Try again' });
+						} else {
+							expression.version = version.global_version;
+							expression.save(function(err, expression) {
+								if (err) {
+									res.json({ 'error': 'Server error. Try again' });
+								} else {
+									res.json({ expression: expression });
+								}
+							});
+						}
+					});
+				}
+			});
+		}
+	});
+
+
+	// Update existing expression in a language
+	router.post('/languages/expressions/update', function(req, res) {
+		Expression.findOne({ _id: req.body.exprId}, function(err, expression) {
+			if (err) {
+				res.json({'error': 'Server error. Try again.'});
 			} else {
-				var expression = new Expression();
-				expression.english = req.body.english;
-				expression.translation = req.body.translation;
-				expression.language = req.body.language;
-				var path = './uploads/' + req.files.audio.name;
-				fs.writeFile(path, req.files.audio.buffer, function(err) {
-					if (err) {
-						res.json({ 'error': 'Server error. Try again' });
+				if (req.body.english)
+					expression.english = req.body.english;
+				if (req.body.translation)
+					expression.translation = req.body.translation;
+				if (req.files.audio) {
+					if (req.files.audio.extension !== 'mp3') {
+						res.json({'error': 'Audio file not mp3'});
 					} else {
-						expression.audio = req.protocol + '://' + req.headers.host + '/' + req.files.audio.name;
-						expression.save(function(err, expression) {
+						var path = './uploads/' + req.files.audio.name;
+						fs.writeFile(path, req.files.audio.buffer, function(err) {
 							if (err) {
-								res.json({ 'error': 'Server error. Try again' });
+								res.json({'error': 'Server error. Try again.'});
 							} else {
-								res.json({ expression: expression });
+								expression.audio = req.protocol + '://' + req.headers.host + '/' + req.files.audio.name;
+								Version.findOneAndUpdate({name: 'global'}, { $inc: {global_version: 1} }, function(err, version) {
+									if (err) {
+										res.json({'error': 'Server error. Try again.'});
+									} else {
+										expression.version = version.global_version;
+										expression.save(function(err, expression) {
+											if (err) {
+												res.json({'error': 'Server error. Try again.'});
+											} else {
+												res.json({ expression: expression });
+											}
+										});
+									}
+								});
 							}
 						});
 					}
-				});
+				} else {
+					Version.findOneAndUpdate({name: 'global'}, { $inc: {global_version: 1} }, function(err, version) {
+						if (err) {
+							res.json({'error': 'Server error. Try again!'});
+						} else {
+							expression.version = version.global_version;
+							expression.save(function(err, expression) {
+								if (err) {
+									res.json({'error': 'Server error. Try again.'});
+								} else {
+									res.json({ expression: expression});
+								}
+							});
+						}
+					});
+				}
 			}
-		}
+		});
 	});
 
 
@@ -259,10 +317,6 @@ module.exports = function(passport) {
 
 			res.render('dashboard/expressions', { expressions: expressions });
 		});
-	});
-
-	router.get('/sessions', function(req, res) {
-		//TODO
 	});
 
 	return router;
