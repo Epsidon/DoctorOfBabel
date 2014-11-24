@@ -33,7 +33,7 @@ router.route('/expressions')
 
 	// get all the expressions
 	.get(function(req, res) {
-		Expression.find(function(err, expressions) {
+		Expression.find({removed: false}, function(err, expressions) {
 			if (err)
 				res.send(err);
 
@@ -213,6 +213,14 @@ function getUpdates(req, clientVersion, done) {
 		  		var output = fs.createWriteStream('./uploads/' + name + '.zip');
 		  		var archive = archiver('zip');
 		  		archive.pipe(output);
+		  		languages.forEach(function(element) {
+		  			var path = './uploads/' + element.map.split('/')[3];
+		  			archive.append(fs.createReadStream(path), {name: element.map.split('/')[3]})
+		  		});
+		  		expressions.forEach(function(element) {
+		  			var path = './uploads/' + element.audio.split('/')[3];
+		  			archive.append(fs.createReadStream(path), {name: element.audio.split('/')[3]})
+		  		});
 		  		archive.append(JSON.stringify(result), { name: name+'.json' }).finalize();
 		  		var link = req.protocol + '://' + req.hostname + '/download/' + name;
 		  		done(null, link);

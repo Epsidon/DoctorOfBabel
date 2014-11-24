@@ -45,7 +45,7 @@ $(document).ready(function() {
       } else {
         $(this).remove();
         var formUpdate = 
-          '<form class="form-expr-update">' +
+          '<form class="form-expr-update" method="post" enctype="multipart/form-data">' +
           '<input type="hidden" name="language" value="' + data.expression.language + '">' +
           '<input type="hidden" name="exprId" value="' + data.expression._id + '">' +
           '<div class="form-group">' +
@@ -62,7 +62,7 @@ $(document).ready(function() {
           '<p class="help-block">Please enter the expression audio in mp3 format</p>' +
           '</div>' +
           '<input type="submit" class="btn btn-primary" value="Modify">' +
-          '<input type="submit" class="btn btn-danger" name="action" value="Remove">'
+          '<input type="submit" class="btn btn-danger" name="action" value="Remove">' +
           '</form>';
         $('#expression-list-update').prepend(formUpdate);
       }
@@ -101,8 +101,9 @@ $(document).ready(function() {
   });
 
   $(document).on('click', 'button.remove-lang', function(e) {
-    $(this).prev().remove();
+    var parent = $(this).prev();
     $(this).remove();
+    $(parent).remove();
   })
 
   /*$('.form-lang').on('submit', function(e) {

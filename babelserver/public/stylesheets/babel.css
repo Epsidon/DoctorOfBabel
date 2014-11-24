@@ -25,6 +25,11 @@ body {
 	#info-container { display: none; }
 }
 
+#info-container > img {
+	width: 100%;
+	height: auto;
+}
+
 img.title-icon {
 	float:right; 
 	max-height:40px; 

@@ -11,9 +11,9 @@ var bootstrapXsParam = 768;
 
 
 //Captures width resize
-$(window).resize(function() {
+/*$(window).resize(function() {
   isMobileBrowser();
-});
+});*/
 
 function isMobileBrowser(width) {
     if($(window).width() <= bootstrapXsParam) {
