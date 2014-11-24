@@ -64,7 +64,7 @@
   margin-left: 25%;
 }
 
-.edit-lang .bg-warning .bg-success {
+.edit-lang .bg-warning {
   text-align: center;
   line-height: 220%;
   width: 50%;
@@ -77,8 +77,12 @@ div.bg-info p {
 }
 
 #expression-list-update {
-  margin-top: 20px;
+  margin-top: 50px;
   margin-bottom: 30px;
+}
+
+.form-expr-new {
+  margin-bottom: 5px;
 }
 
 .form-expr-update {

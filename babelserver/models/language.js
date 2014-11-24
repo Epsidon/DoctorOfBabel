@@ -10,6 +10,7 @@ var LanguageSchema = new Schema({
 	map: String,
 	version: Number,
 	ready: { type: Boolean, 'default': false },
+	removed: { type: Boolean, 'default': false },
 });
 
 module.exports = mongoose.model('Language', LanguageSchema);

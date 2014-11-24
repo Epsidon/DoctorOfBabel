@@ -11,7 +11,7 @@ var ExpressionSchema = new Schema({
 	language: { type: String, ref: 'Language' },
 	pronunciation: String,
 	version: Number,
-	deleted: { type: Boolean, 'default': false },
+	removed: { type: Boolean, 'default': false },
 });
 
 module.exports = mongoose.model('Expression', ExpressionSchema);

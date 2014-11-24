@@ -16,85 +16,12 @@ function addExpression(languageId) {
     '<input type="file" name="audio" id="audio">' +
     '<p class="help-block">Please enter the expression audio in mp3 format</p>' +
     '</div>' +
-    '<input type="submit" class="btn btn-primary" value="Add" style="margin: 10px 0px;">' +
-    '</form>';
+    '<input type="submit" class="btn btn-primary" value="Add">' +
+    '</form>' +
+    '<button class="btn btn-danger remove-lang">Remove</button>';
   $('#expression-list-new').prepend(newForm);
 }
 
-/*function addExpression (languageId) {
-
-    newFormCount = newFormCount + 1;
-    var newFormId = 'new-expression-' + newFormCount;
-    newForm = '<form class="form-expr" id="' + newFormId +'">' +
-            '<div class="form-group">' +
-            '<label for="english">English</label>' +
-            '<input type="text" class="form-control" id="english" value="">' +
-            '</div>' +
-            '<div class="form-group">' +
-            '<label for="translation">Translation</label>' +
-            '<input type="text" class="form-control" id="translation" value="">' +
-            '</div>' +
-            '<button class="btn btn-primary" onSubmit="return false" onClick="postExpression(\'' + newFormId + '\', \'' + languageId + '\'); return false;" style="margin-top: 10px;">Update</button>' +
-            '</form>';
-
-            console.log("New Form Id: " + newFormId);
-            console.log("New Form: ");
-            console.log(newForm);
-
-        $('#expression-list').append(newForm);  
-}*/
-
-/*function postExpression (newFormId, languageId) {
-    var postURL = "../../api/expressions/";
-    var english = document.forms[newFormId].elements["english"].value;
-    var translation = document.forms[newFormId].elements["translation"].value;
-    $.post( postURL, { language: languageId, english: english, translation: translation }, function( data ) {
-        if(data.numberAffected === 1) {
-            alert('Expression successfully added');
-        } else {
-            alert('An unknown error occured');
-        }
-    });    
-}
-
-function update (formId, languageId) {
-        var postURL = "../../api/expressions/edit/";
-        var english = document.forms[formId].elements["english"].value;
-        var translation = document.forms[formId].elements["translation"].value;
-        var fileupload = document.forms[formId].elements["fileupload"].value;
-
-        if(fileupload.lastIndexOf("mp3")===fileupload.length-3)
-            console.log('A new file is selected. New file should be uploaded and replaced with the former one');
-            //Checks if there is a new mp3 file selected
-            //If there is a new file 
-            //Then update the existing one 
-        else
-            console.log('No new file is added');
-            //Otherwise leave the file as is.
-
-        $.post( postURL, { id: formId, english: english, translation: translation }, function( data ) {
-            if(data.numberAffected === 1) {
-                alert('Expression modified');
-            } else {
-                alert('An unknown error occured');
-            }
-        });
-
-    return false;
-}
-
-function removeExpression (formId) {
-        var postURL = "../../api/expressions/remove/";
-
-        $.post( postURL, { id: formId }, function( data ) {
-            if(data.numberAffected !== null) {
-                alert('Remove Successful');
-                $('#'+formId).remove();
-            }
-        });
-
-    return false;
-}*/
 
 // Handle ajax file uploads for audio files and images
 $(document).ready(function() {
@@ -116,7 +43,28 @@ $(document).ready(function() {
                       '<p>' + data.error + '</p>' +
                       '</div>');
       } else {
-        console.table(data.expression);
+        $(this).remove();
+        var formUpdate = 
+          '<form class="form-expr-update">' +
+          '<input type="hidden" name="language" value="' + data.expression.language + '">' +
+          '<input type="hidden" name="exprId" value="' + data.expression._id + '">' +
+          '<div class="form-group">' +
+          '<label for="english">English</label>' +
+          '<input type="text" class="form-control" name="english" value="' + data.expression.english +'">' +
+          '</div>' +
+          '<div class="form-group">' +
+          '<label for="translation">Translation</label>' +
+          '<input type="text" class="form-control" name="translation" value="' + data.expression.translation +'">' +
+          '</div>' +
+          '<div class="form-group">' +
+          '<label for="audioFile">Upload audio file</label>' +
+          '<input type="file" name="audio" id="audio">' +
+          '<p class="help-block">Please enter the expression audio in mp3 format</p>' +
+          '</div>' +
+          '<input type="submit" class="btn btn-primary" value="Modify">' +
+          '<input type="submit" class="btn btn-danger" name="action" value="Remove">'
+          '</form>';
+        $('#expression-list-update').prepend(formUpdate);
       }
     })
     .fail(function() {
@@ -141,14 +89,21 @@ $(document).ready(function() {
         $(this).prepend('<div class="alert alert-danger" role="alert">' +
                       '<p>' + data.error + '</p>' +
                       '</div>');
+      } else if (data.removed) {
+        $(this).remove();
       } else {
-        console.table(data.expression);
+        console.log(data.message);
       }
     })
     .fail(function() {
       alert("error");
     });
   });
+
+  $(document).on('click', 'button.remove-lang', function(e) {
+    $(this).prev().remove();
+    $(this).remove();
+  })
 
   /*$('.form-lang').on('submit', function(e) {
     e.preventDefault();
