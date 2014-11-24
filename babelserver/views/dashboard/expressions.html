@@ -10,8 +10,11 @@
       </ul>
     </div>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+      <div class="new-language">
+        <a href="expressions/new"><button class="btn btn-primary" type="button">Add New Expression</button></a>
+      </div>
       <div class="table-responsive">
-        <table class="table table-striped">
+        <table class="table table-striped table-bordered">
           <thead>
             <tr>
               <th>ID</th>
@@ -27,8 +30,8 @@
                 <td>{{ this._id }}</td>
                 <td>{{ this.english }}</td>
                 <td>{{ this.translation }}</td>
-                <td>{{ this.audio }}</td>
-                <td><a href="#">Edit</a></td>
+                <td><a href="{{ this.audio }}">Link</a></td>
+                <td><a href="expressions/{{ this._id }}/edit">Edit</a></td>
               </tr>
             {{/each}}
           </tbody>

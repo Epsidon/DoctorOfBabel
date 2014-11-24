@@ -336,6 +336,58 @@ module.exports = function(passport) {
 		});
 	});
 
+
+
+	router.get('/expressions/new', function(req, res) {
+		Language.find({ removed: false }, function(err, languages) {
+			if (err)
+				console.log(err);
+			res.render('dashboard/newexpressions', {
+				languages: languages,
+				english: req.flash('englishError'),
+				translation: req.flash('translationError'),
+				error: req.flash('error'),
+			});
+		});
+	});
+
+	router.post('/expressions/new', function(req, res) {
+		console.log(req.body.language);
+		if (!req.body.english || !req.body.translation || !req.files.audio) {
+			req.flash('englishError', req.body.english);
+			req.flash('translationError', req.body.translation);
+			req.flash('error', 'Error! There are empty fields.');
+			res.redirect(req.originalUrl);
+		} else {
+			var expression = new Expression();
+			expression.english = req.body.english;
+			expression.translation = req.body.translation;
+			expression.language = req.body.language;
+			var path = './uploads/' + req.files.audio.name;
+			fs.writeFile(path, req.files.audio.buffer, function(err) {
+				if (err) {
+					req.flash('englishError', req.body.english);
+					req.flash('translationError', req.body.translation);
+					req.flash('error', 'Error uploading the audio file. Try again.');
+					res.redirect(req.originalUrl);
+				} else {
+					expression.audio = req.protocol + '://' + req.headers.host + '/' + req.files.audio.name;
+					expression.save(function(err, expression) {
+						if (err) {
+							req.flash('englishError', req.body.english);
+							req.flash('translationError', req.body.translation);
+							req.flash('error', 'Error occured creating expression. Submit again.')
+							res.redirect(req.originalUrl);
+						} else {
+							//res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
+							res.redirect(req.baseUrl + '/expressions');
+						}
+					});
+				}
+			});
+		}
+	});
+
 	return router;
 
 };
