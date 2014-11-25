@@ -124,11 +124,23 @@ h1 {
 
 .list-item {
     margin-bottom: 10px;
-    height: 20px;
+    height: 40px;
+    border-bottom: solid #6B6B6D;
 }
+
+.list-item:active {
+  background-color: #AAA;
+}
+
 
 .label {
     display: inline;
+}
+
+.arrow-icon {
+    width: 20px; 
+    height: 20px; 
+    float: right;
 }
 
 #header {

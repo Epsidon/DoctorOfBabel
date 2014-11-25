@@ -114,6 +114,7 @@ var database = {
             // tx.executeSql('INSERT INTO EXPRESSION (id, english, translation, audio, language, pronunciation, version) VALUES ("qq123", "english 6", "translation 6", "/eng2.mp3", "zJzzSgPn", "pronun", 0)');
             // tx.executeSql('INSERT INTO EXPRESSION (id, english, translation, audio, language, pronunciation, version) VALUES ("qq134", "english 7", "translation 7", "/eng3.mp3", "zJzzSgPn", "pronun", 0)');
             // tx.executeSql('INSERT INTO EXPRESSION (id, english, translation, audio, language, pronunciation, version) VALUES ("qq145", "english 8", "translation 4", "/eng4.mp3", "zJzzSgPn", "pronun", 0)');
+            // tx.executeSql('INSERT INTO VERSION (version_no) VALUES (0)');
 
 
         }, 
