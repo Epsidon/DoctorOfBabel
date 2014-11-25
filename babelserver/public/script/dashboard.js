@@ -106,29 +106,6 @@ $(document).ready(function() {
     $(this).remove();
     $(parent).remove();
   })
-
-  /*$('.form-lang').on('submit', function(e) {
-    e.preventDefault();
-    $.ajax({
-      url: window.location.pathname,  // dashboard/languages/new
-      type: 'POST',
-      dataType: 'json',
-      data: new FormData(this),
-      mimeType: 'multipart/form-data',
-      processData: false,
-      contentType: false,
-    })
-    .done(function(data) {
-      if (data.error) {
-        $('#new-lang-error').append('<p>'+ data.error +'</p>').show();
-      } else {
-        $('#new-lang-success').append('<p>'+ data.success +'</p>').show();
-      }
-    })
-    .fail(function() {
-      alert("error");
-    });
-  });*/
 });
 
 
