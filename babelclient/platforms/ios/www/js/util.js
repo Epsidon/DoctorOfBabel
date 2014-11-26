@@ -32,6 +32,7 @@ var requestApi = {
 
     downloadFile: function() {
         console.log('downloadFile');
+        window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
         window.requestFileSystem(
             LocalFileSystem.PERSISTENT,
             0,
