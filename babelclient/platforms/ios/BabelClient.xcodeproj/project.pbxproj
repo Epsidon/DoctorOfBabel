@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		1D3623260D0F684500981E51 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
@@ -55,6 +54,9 @@
 		E73ED1F2965A40B2BF677DE2 /* CDVLocalFilesystem.m in Sources */ = {isa = PBXBuildFile; fileRef = BF3D9546AF4241B6AE17B40B /* CDVLocalFilesystem.m */; };
 		EA88CAC0300B463C8E69CB04 /* CDVDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = D981D4A4920B49268A07508F /* CDVDevice.m */; };
 		FE1BFF02891044139AAB5131 /* CDVFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 125816FC02F845559AB76097 /* CDVFile.m */; };
+		8489A04F7D1240918159A425 /* CDVNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = B266393EF73D4C03A864FC97 /* CDVNotification.m */; };
+		6898F9E892CA440AB3AE2D2E /* CDVNotification.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 75BD89B807B94718B472A47E /* CDVNotification.bundle */; };
+		7CA7BD3066ED4B5688007AE7 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDFEA793E5664B79AA06E22C /* AudioToolbox.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -151,6 +153,10 @@
 		EFB50B1F8242485AAE4E927A /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ioapi.h; path = org.chromium.zip/Plugins/minizip/ioapi.h; sourceTree = "<group>"; };
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = BabelClient/config.xml; sourceTree = "<group>"; };
 		FF62D9137B8B4DF384321BF1 /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = unknown; name = zip.c; path = org.chromium.zip/Plugins/minizip/zip.c; sourceTree = "<group>"; };
+		B266393EF73D4C03A864FC97 /* CDVNotification.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVNotification.m"; path = "org.apache.cordova.dialogs/CDVNotification.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		829B91D9692148E39E1A31C3 /* CDVNotification.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVNotification.h"; path = "org.apache.cordova.dialogs/CDVNotification.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		75BD89B807B94718B472A47E /* CDVNotification.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = "CDVNotification.bundle"; path = "CDVNotification.bundle"; sourceTree = "<group>"; };
+		CDFEA793E5664B79AA06E22C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "AudioToolbox.framework"; path = "System/Library/Frameworks/AudioToolbox.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +170,7 @@
 				305D5FD1115AB8F900A74A75 /* MobileCoreServices.framework in Frameworks */,
 				1DCFC165985C4BAB986BF74A /* SystemConfiguration.framework in Frameworks */,
 				45ADD29237A8457290FE860B /* libz.dylib in Frameworks */,
+				7CA7BD3066ED4B5688007AE7 /* AudioToolbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -245,6 +252,7 @@
 				308D052D1370CCF300D202BF /* icons */,
 				308D05311370CCF300D202BF /* splash */,
 				8D1107310486CEB800E47090 /* BabelClient-Info.plist */,
+				75BD89B807B94718B472A47E /* CDVNotification.bundle */,
 			);
 			name = Resources;
 			path = BabelClient/Resources;
@@ -258,6 +266,7 @@
 				305D5FD0115AB8F900A74A75 /* MobileCoreServices.framework */,
 				3D3398248F3044CAA8949F1E /* SystemConfiguration.framework */,
 				D810A28E6A3C41E0A531E31E /* libz.dylib */,
+				CDFEA793E5664B79AA06E22C /* AudioToolbox.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -304,6 +313,8 @@
 				5B6E72D809604170AF938F5A /* crypt.h */,
 				1BEDC6603A9F4C14A26BAFA0 /* CDVLogger.m */,
 				B9EB9BE9C01B43AE8C048238 /* CDVLogger.h */,
+				B266393EF73D4C03A864FC97 /* CDVNotification.m */,
+				829B91D9692148E39E1A31C3 /* CDVNotification.h */,
 			);
 			name = Plugins;
 			path = BabelClient/Plugins;
@@ -472,6 +483,7 @@
 				7E7966E11810823500FA85AD /* icon-50@2x.png in Resources */,
 				7E7966E51810823500FA85AD /* icon-76@2x.png in Resources */,
 				30FC414916E50CA1004E6F35 /* icon-72@2x.png in Resources */,
+				6898F9E892CA440AB3AE2D2E /* CDVNotification.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -518,6 +530,7 @@
 				6D5F0CF0D5544CB4B3F19DC6 /* mztools.c in Sources */,
 				E5E2C625D65A4275823704BD /* ioapi.c in Sources */,
 				2D396204A74240B1B008128C /* CDVLogger.m in Sources */,
+				8489A04F7D1240918159A425 /* CDVNotification.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -216,6 +216,13 @@ module.exports = [
         "clobbers": [
             "cordova.logger"
         ]
+    },
+    {
+        "file": "plugins/org.apache.cordova.dialogs/www/notification.js",
+        "id": "org.apache.cordova.dialogs.notification",
+        "merges": [
+            "navigator.notification"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -227,7 +234,8 @@ module.exports.metadata =
     "org.apache.cordova.media": "0.2.14",
     "org.apache.cordova.network-information": "0.2.13",
     "org.chromium.zip": "2.1.0",
-    "org.apache.cordova.console": "0.2.11"
+    "org.apache.cordova.console": "0.2.11",
+    "org.apache.cordova.dialogs": "0.2.10"
 }
 // BOTTOM OF METADATA
 });

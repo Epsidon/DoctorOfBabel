@@ -27,6 +27,10 @@
                         {
                             "xml": "<feature name=\"NetworkStatus\"><param name=\"android-package\" value=\"org.apache.cordova.networkinformation.NetworkManager\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Notification\"><param name=\"android-package\" value=\"org.apache.cordova.dialogs.Notification\" /></feature>",
+                            "count": 1
                         }
                     ],
                     "/widget": [
@@ -85,6 +89,9 @@
             "PACKAGE_NAME": "com.gvj.babelclient"
         },
         "org.chromium.zip": {
+            "PACKAGE_NAME": "com.gvj.babelclient"
+        },
+        "org.apache.cordova.dialogs": {
             "PACKAGE_NAME": "com.gvj.babelclient"
         }
     },
