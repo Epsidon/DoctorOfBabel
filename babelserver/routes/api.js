@@ -222,7 +222,7 @@ function getUpdates(req, clientVersion, done) {
 		  			archive.append(fs.createReadStream(path), {name: element.audio.split('/')[3]})
 		  		});
 		  		archive.append(JSON.stringify(result), { name: name+'.json' }).finalize();
-		  		var link = req.protocol + '://' + req.hostname + '/download/' + name;
+		  		var link = req.protocol + '://' + req.get('host') + '/download/' + name;
 		  		done(null, link);
 		  	}
 		 });		

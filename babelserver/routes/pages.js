@@ -6,6 +6,7 @@ var Expression = require('../models/expression');
 var Resources = require('../resources/resources');
 
 module.exports = function(passport) {
+
 	router.get('/', function(req, res) {
 		Language.find({removed: false}, null, {sort: {name: 1}}, function(err, langs) {
 			if (err)
@@ -45,6 +46,23 @@ module.exports = function(passport) {
 		});
 		
 		zipArchive.pipe(res);
+	});
+
+
+	router.get('/audio/:name', function(req, res) {
+		Expression.findOne({ audioName: req.params.name }, 'audioBin audioMime', function(err, audio) {
+			res.status(200);
+			res.set('Content-Type', audio.audioMime);
+			res.send(audio.audioBin);
+		})
+	});
+
+	router.get('/maps/:name', function(req, res) {
+		Language.findOne({ mapName: req.params.name }, 'mapBin mapMime', function(err, map) {
+			res.status(200);
+			res.set('Content-Type', map.mapMime);
+			res.send(map.mapBin);
+		});
 	});
 
 	return router;
