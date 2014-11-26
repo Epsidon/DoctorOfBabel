@@ -40,6 +40,7 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
+        console.log(cordova.file.dataDirectory);
         // app.receivedEvent('deviceready');
         $('body').bind('touchstart', function() {});
         db = window.openDatabase("Database", "1.0", "BabelAppDb", 200000);
