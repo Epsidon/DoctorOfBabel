@@ -152,11 +152,11 @@ router.get('/version', function(req, res) {
 router.get('/version/:client_version', function(req, res) {
 	var clientVersion = req.params.client_version;
 	Version.findOne({name: 'global'}, function(err, version) {
-		if (err)
+		if (err) {
 			res.json({ status: 300,
 							   message: 'Error encountered. Please try again.' });
-		if (version - clientVersion <= 0) {
-			res.json({ status: 200,
+		} else if (version.global_version - clientVersion <= 0) {
+				res.json({ status: 200,
 								 message: 'No new updates.' });
 		} else {
 			getUpdates(req, clientVersion, function(err, download) {
@@ -165,11 +165,23 @@ router.get('/version/:client_version', function(req, res) {
 									   message: 'Error encountered. Please try again.' });
 				} else {
 					res.json({ status: 100,
-										 link: download });
+										version: version.global_version,
+										link: download });
 				}
 			});
 		}
 	});
+});
+
+	// Download the temp ZIP files
+router.get('/download/:file_id', function(req, res) {
+	var zipArchive = fs.createReadStream('./uploads/' + req.params.file_id + '.zip');
+
+	res.writeHead(200, {
+		'Content-Type': 'application/zip',
+	});
+		
+	zipArchive.pipe(res);
 });
 
 router.post('/version/delete', function(req, res) {
@@ -215,14 +227,14 @@ function getUpdates(req, clientVersion, done) {
 		  		archive.pipe(output);
 		  		languages.forEach(function(element) {
 		  			var path = './uploads/' + element.map.split('/')[3];
-		  			archive.append(fs.createReadStream(path), {name: element.map.split('/')[3]})
+		  			archive.append(fs.createReadStream(path), {name: element.map.split('/')[3]});
 		  		});
 		  		expressions.forEach(function(element) {
 		  			var path = './uploads/' + element.audio.split('/')[3];
-		  			archive.append(fs.createReadStream(path), {name: element.audio.split('/')[3]})
+		  			archive.append(fs.createReadStream(path), {name: element.audio.split('/')[3]});
 		  		});
 		  		archive.append(JSON.stringify(result), { name: name+'.json' }).finalize();
-		  		var link = req.protocol + '://' + req.get('host') + '/download/' + name;
+		  		var link = req.protocol + '://' + req.get('host') + '/api/download/' + name;
 		  		done(null, link);
 		  	}
 		 });		

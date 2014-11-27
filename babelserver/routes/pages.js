@@ -5,7 +5,7 @@ var Language = require('../models/language');
 var Expression = require('../models/expression');
 var Resources = require('../resources/resources');
 
-module.exports = function(passport) {
+module.exports = function(passport, s3) {
 
 	router.get('/', function(req, res) {
 		Language.find({removed: false}, null, {sort: {name: 1}}, function(err, langs) {
@@ -35,34 +35,6 @@ module.exports = function(passport) {
 		} else {
 			res.redirect('/login');
 		}	
-	});
-
-	// Download the temp ZIP files
-	router.get('/download/:file_id', function(req, res) {
-		var zipArchive = fs.createReadStream('./uploads/' + req.params.file_id + '.zip');
-
-		res.writeHead(200, {
-			'Content-Type': 'application/zip',
-		});
-		
-		zipArchive.pipe(res);
-	});
-
-
-	router.get('/audio/:name', function(req, res) {
-		Expression.findOne({ audioName: req.params.name }, 'audioBin audioMime', function(err, audio) {
-			res.status(200);
-			res.set('Content-Type', audio.audioMime);
-			res.send(audio.audioBin);
-		})
-	});
-
-	router.get('/maps/:name', function(req, res) {
-		Language.findOne({ mapName: req.params.name }, 'mapBin mapMime', function(err, map) {
-			res.status(200);
-			res.set('Content-Type', map.mapMime);
-			res.send(map.mapBin);
-		});
 	});
 
 	return router;

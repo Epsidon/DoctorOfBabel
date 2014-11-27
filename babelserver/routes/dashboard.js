@@ -5,8 +5,9 @@ var Expression = require('../models/expression');
 var User = require('../models/user')
 var Version = require('../models/version');
 var fs = require('fs');
+var path = require('path');
 
-module.exports = function(passport) {
+module.exports = function(passport, s3) {
 
 	// Ensure user is authenticated before processing
 	// request to /dashboard
@@ -93,7 +94,6 @@ module.exports = function(passport) {
 
 	// Page to modify a language
 	router.get('/languages/:lang_id/edit', function(req, res) {
-		console.log(req.params.lang_id);
 		Language.findOne({ _id: req.params.lang_id, removed: false }, function(err, language) {
 			if (err) {
 				console.log(err);
@@ -110,6 +110,7 @@ module.exports = function(passport) {
 	});
 
 
+	// Edit the individual language page
 	router.post('/languages/:lang_id/edit', function(req, res) {
 		// Either publishing language or continuing as draft
 		if (req.body.action === 'Save as Draft') {
@@ -352,7 +353,6 @@ module.exports = function(passport) {
 	});
 
 	router.post('/expressions/new', function(req, res) {
-		console.log(req.body.language);
 		if (!req.body.english || !req.body.translation || !req.files.audio) {
 			req.flash('englishError', req.body.english);
 			req.flash('translationError', req.body.translation);
