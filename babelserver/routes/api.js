@@ -174,11 +174,17 @@ router.get('/version/:client_version', function(req, res) {
 });
 
 	// Download the temp ZIP files
-router.get('/download/:file_id', function(req, res) {
+router.get('/download/:file_id', function(req, res, next) {
 	var zipArchive = fs.createReadStream('./uploads/' + req.params.file_id + '.zip');
+	zipArchive.on('error', function(err) {
+		console.log(err);
+		next(err);
+	});
 
-	res.writeHead(200, {
-		'Content-Type': 'application/zip',
+	zipArchive.on('close', function() {
+		res.writeHead(200, {
+			'Content-Type': 'application/zip',
+		});
 	});
 		
 	zipArchive.pipe(res);
@@ -210,13 +216,13 @@ function getUpdates(req, clientVersion, done) {
 	var result = {};
 	// Get the languages first
 	Language.find({ version: { $gt: clientVersion } }, 
-		'_id name info map', function(err, languages) {
+		'_id name info map removed', function(err, languages) {
   	if (err) {
   		done(err, null);
   	} else {
   		result.languages = languages;
   		Expression.find({ version: { $gt: clientVersion } }, 
-  			'_id english translation audio languages', function(err, expressions) {
+  			'_id english translation audio languages removed', function(err, expressions) {
 		  	if (err) {
 		  		done(err, null);
 		  	} else {
@@ -225,17 +231,34 @@ function getUpdates(req, clientVersion, done) {
 		  		var output = fs.createWriteStream('./uploads/' + name + '.zip');
 		  		var archive = archiver('zip');
 		  		archive.pipe(output);
+
+		  		var langStream;
 		  		languages.forEach(function(element) {
 		  			var path = './uploads/' + element.map.split('/')[3];
-		  			archive.append(fs.createReadStream(path), {name: element.map.split('/')[3]});
+		  			langStream = fs.createReadStream(path);
+		  			langStream.on('error', function(err) {
+		  				console.log(err);
+		  				done(err, null);
+		  			});
+		  			archive.append(langStream, {name: element.map.split('/')[3]});
 		  		});
+
+		  		var exprStream;
 		  		expressions.forEach(function(element) {
 		  			var path = './uploads/' + element.audio.split('/')[3];
-		  			archive.append(fs.createReadStream(path), {name: element.audio.split('/')[3]});
+		  			exprStream = fs.createReadStream(path);
+		  			exprStream.on('error', function(err) {
+		  				console.log(err);
+		  				done(err, null);
+		  			});
+		  			archive.append(exprStream, {name: element.audio.split('/')[3]});
 		  		});
+
 		  		archive.append(JSON.stringify(result), { name: name+'.json' }).finalize();
-		  		var link = req.protocol + '://' + req.get('host') + '/api/download/' + name;
-		  		done(null, link);
+		  		output.on('close', function() {
+		  			var link = req.protocol + '://' + req.get('host') + '/api/download/' + name;
+		  			done(null, link);
+		  		});
 		  	}
 		 });		
   	}
