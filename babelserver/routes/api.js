@@ -144,6 +144,25 @@ router.get('/version', function(req, res) {
 	});
 });
 
+router.post('/version', function(req, res) {
+	var version = new Version();
+	version.save(function(err) {
+		if (err)
+			console.log(err);
+		res.json({ message: 'Created' });
+	});
+});
+
+
+router.post('/version/delete', function(req, res) {
+	var uuid = req.body.name;
+	fs.unlink('./uploads/' + uuid + '.zip', function(err) {
+		if (err) {
+			console.log(err);
+		}
+	});
+	res.json({ message: 'Deleted' });
+});
 
 // This will reply back to the client sending a status code
 // 100: updates found, get ready to download
@@ -190,20 +209,6 @@ router.get('/download/:file_id', function(req, res, next) {
 	zipArchive.pipe(res);
 });
 
-router.post('/version/delete', function(req, res) {
-	var uuid = req.body.name;
-	fs.unlink('./uploads/' + uuid + '.zip');
-	res.json({ message: 'Deleted' });
-});
-
-router.post('/version', function(req, res) {
-	var version = new Version();
-	version.save(function(err) {
-		if (err)
-			console.log(err);
-		res.json({ message: 'Created' });
-	});
-});
 
 module.exports = router;
 
