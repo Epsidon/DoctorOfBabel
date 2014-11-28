@@ -372,15 +372,24 @@ module.exports = function(passport, s3) {
 					res.redirect(req.originalUrl);
 				} else {
 					expression.audio = req.protocol + '://' + req.headers.host + '/' + req.files.audio.name;
-					expression.save(function(err, expression) {
+					Version.findOneAndUpdate({name: 'global'}, { $inc: {global_version: 1} }, function(err, version) {
 						if (err) {
 							req.flash('englishError', req.body.english);
 							req.flash('translationError', req.body.translation);
 							req.flash('error', 'Error occured creating expression. Submit again.')
 							res.redirect(req.originalUrl);
 						} else {
-							//res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
-							res.redirect(req.baseUrl + '/expressions');
+							expression.save(function(err, expression) {
+								if (err) {
+									req.flash('englishError', req.body.english);
+									req.flash('translationError', req.body.translation);
+									req.flash('error', 'Error occured creating expression. Submit again.')
+									res.redirect(req.originalUrl);
+								} else {
+									//res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
+									res.redirect(req.baseUrl + '/expressions');
+								}
+							});
 						}
 					});
 				}
