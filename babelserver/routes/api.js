@@ -199,12 +199,6 @@ router.get('/download/:file_id', function(req, res, next) {
 		console.log(err);
 		next(err);
 	});
-
-	zipArchive.on('close', function() {
-		res.writeHead(200, {
-			'Content-Type': 'application/zip',
-		});
-	});
 		
 	zipArchive.pipe(res);
 });
