@@ -34,8 +34,8 @@
             <label for="map">Upload your map</label>
             <input type="file" name="map" id="map">
             <p class="help-block">Upload a map to change the current one.</p>
-            <p class="help-block">Current Map: <a href="{{ language.map }}">{{language.map }}</a></p>
-            <img src="{{ language.map }}">
+            <p class="help-block">Current Map: <a href="/{{ language.map }}">{{language.map }}</a></p>
+            <img src="/{{ language.map }}">
           </div>
           {{#if language.ready }}
             <input type="submit" class="btn btn-primary" name="action" value="Update Language">
