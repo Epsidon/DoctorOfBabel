@@ -194,18 +194,14 @@ router.get('/version/:client_version', function(req, res) {
 
 	// Download the temp ZIP files
 router.get('/download/:file_id', function(req, res, next) {
-	/*var zipArchive = fs.createReadStream('./uploads/' + req.params.file_id + '.zip');
+	var zipArchive = fs.createReadStream('./uploads/' + req.params.file_id + '.zip');
 	zipArchive.on('error', function(err) {
 		console.log(err);
 		next(err);
 	});
-	res.writeHead(200, {
-		'Content-Type': 'application/zip'
-	})
 		
-	zipArchive.pipe(res);*/
-	var zipArchive = fs.readFileSync('./uploads/' + req.params.file_id + '.zip');
-	res.send(zipArchive)
+	zipArchive.pipe(res);
+
 	
 });
 
@@ -245,7 +241,8 @@ function getUpdates(req, clientVersion, done) {
 		  				console.log(err);
 		  				done(err, null);
 		  			});
-		  			archive.append(langStream, {name: element.map});
+
+		  			archive.append(langStream, {name: element.map});;
 		  		});
 
 		  		var exprStream;
@@ -258,6 +255,7 @@ function getUpdates(req, clientVersion, done) {
 		  			});
 		  			archive.append(exprStream, {name: element.audio});
 		  		});
+
 
 		  		archive.append(JSON.stringify(result), { name: name+'.json' }).finalize();
 		  		output.on('close', function() {
