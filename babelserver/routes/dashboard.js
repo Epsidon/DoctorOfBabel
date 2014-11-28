@@ -75,7 +75,7 @@ module.exports = function(passport, s3) {
 					req.flash('error', 'Error uploading the image. Try again.');
 					res.redirect(req.originalUrl);
 				} else {
-					language.map = req.protocol + '://' + req.headers.host + '/' + req.files.map.name;
+					language.map = req.files.map.name;
 					language.save(function(err, lang) {
 						if (err) {
 							req.flash('nameError', req.body.name);
@@ -128,7 +128,7 @@ module.exports = function(passport, s3) {
 							if (err) {
 								console.log(err);
 							} else {
-								language.map = req.protocol + '://' + req.headers.host + '/' + req.files.map.name;
+								language.map = req.files.map.name;
 								language.save(function(err, lang) {
 									if (err) {
 										console.log(err);
@@ -165,7 +165,7 @@ module.exports = function(passport, s3) {
 							if (err) {
 								console.log(err);
 							} else {
-								language.map = req.protocol + '://' + req.headers.host + '/' + req.files.map.name;
+								language.map = req.files.map.name;
 								language.ready = true;
 								Version.findOneAndUpdate({ name: 'global'}, { $inc: {global_version: 1} }, function(err, version) {
 									if (err) {
@@ -222,7 +222,7 @@ module.exports = function(passport, s3) {
 				if (err) {
 					res.json({ 'error': 'Server error. Try again' });
 				} else {
-					expression.audio = req.protocol + '://' + req.headers.host + '/' + req.files.audio.name;
+					expression.audio = req.files.audio.name;
 					Version.findOneAndUpdate({ name: 'global'}, { $inc: {global_version: 1} }, function(err, version) {
 						if (err) {
 							res.json({ 'error': 'Server error. Try again' });
@@ -278,7 +278,7 @@ module.exports = function(passport, s3) {
 								if (err) {
 									res.json({'error': 'Server error. Try again.'});
 								} else {
-									expression.audio = req.protocol + '://' + req.headers.host + '/' + req.files.audio.name;
+									expression.audio = req.files.audio.name;
 									Version.findOneAndUpdate({name: 'global'}, { $inc: {global_version: 1} }, function(err, version) {
 										if (err) {
 											res.json({'error': 'Server error. Try again.'});
@@ -371,7 +371,7 @@ module.exports = function(passport, s3) {
 					req.flash('error', 'Error uploading the audio file. Try again.');
 					res.redirect(req.originalUrl);
 				} else {
-					expression.audio = req.protocol + '://' + req.headers.host + '/' + req.files.audio.name;
+					expression.audio = req.files.audio.name;
 					Version.findOneAndUpdate({name: 'global'}, { $inc: {global_version: 1} }, function(err, version) {
 						if (err) {
 							req.flash('englishError', req.body.english);

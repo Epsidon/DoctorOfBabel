@@ -221,7 +221,7 @@ function getUpdates(req, clientVersion, done) {
   	} else {
   		result.languages = languages;
   		Expression.find({ version: { $gt: clientVersion } }, 
-  			'_id english translation audio languages removed', function(err, expressions) {
+  			'_id english translation audio language removed', function(err, expressions) {
 		  	if (err) {
 		  		done(err, null);
 		  	} else {
@@ -233,24 +233,24 @@ function getUpdates(req, clientVersion, done) {
 
 		  		var langStream;
 		  		languages.forEach(function(element) {
-		  			var path = './uploads/' + element.map.split('/')[3];
+		  			var path = './uploads/' + element.map;
 		  			langStream = fs.createReadStream(path);
 		  			langStream.on('error', function(err) {
 		  				console.log(err);
 		  				done(err, null);
 		  			});
-		  			archive.append(langStream, {name: element.map.split('/')[3]});
+		  			archive.append(langStream, {name: element.map});
 		  		});
 
 		  		var exprStream;
 		  		expressions.forEach(function(element) {
-		  			var path = './uploads/' + element.audio.split('/')[3];
+		  			var path = './uploads/' + element.audio;
 		  			exprStream = fs.createReadStream(path);
 		  			exprStream.on('error', function(err) {
 		  				console.log(err);
 		  				done(err, null);
 		  			});
-		  			archive.append(exprStream, {name: element.audio.split('/')[3]});
+		  			archive.append(exprStream, {name: element.audio});
 		  		});
 
 		  		archive.append(JSON.stringify(result), { name: name+'.json' }).finalize();
