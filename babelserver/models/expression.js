@@ -7,7 +7,7 @@ var ExpressionSchema = new Schema({
 	_id: { type: String, unique: true, 'default': shortid.generate },
 	english: String,
 	translation: String,
-	language: { type: String, ref: 'Language' },
+	language: String,
 	audio: String,
 	pronunciation: String,
 	version: Number,
