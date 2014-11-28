@@ -195,10 +195,13 @@ router.get('/version/:client_version', function(req, res) {
 	// Download the temp ZIP files
 router.get('/download/:file_id', function(req, res, next) {
 	var zipArchive = fs.createReadStream('./uploads/' + req.params.file_id + '.zip');
-	zipArchive.on('error', function(err) {
+	/*zipArchive.on('error', function(err) {
 		console.log(err);
 		next(err);
-	});
+	});*/
+	res.writeHead(200, {
+		'Content-Type': 'application/zip'
+	})
 		
 	zipArchive.pipe(res);
 });
