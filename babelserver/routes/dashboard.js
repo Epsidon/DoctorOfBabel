@@ -379,6 +379,7 @@ module.exports = function(passport, s3) {
 							req.flash('error', 'Error occured creating expression. Submit again.')
 							res.redirect(req.originalUrl);
 						} else {
+							expression.version = version.global_version;
 							expression.save(function(err, expression) {
 								if (err) {
 									req.flash('englishError', req.body.english);
