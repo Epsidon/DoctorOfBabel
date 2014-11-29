@@ -1,0 +1,37 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3 col-md-2 sidebar">
+      <ul class="nav nav-sidebar">
+        <li><a href="/dashboard">Overview</a></li>
+        <li><a href="/dashboard/languages">Languages</a></li>
+        <li class="active"><a href="/dashboard/expressions">Expressions</a></li>
+        <li><a href="/dashboard/users">Users</a></li>
+        <li><a href="sessions">Sessions</a></li>
+      </ul>
+    </div>
+    <div class="col-sm-9 col-sm-offset-3 col-md-8 col-md-offset-3 main">
+      <div class="new-expression">
+        <a href="/dashboard/expressions"><button class="btn btn-primary">Back</button></a>
+      </div>
+      <div class="add-expression">
+      	<h1>Add a new default expression.</h1>
+      	<p class="help-block">This will be a default expression added to the database. This
+        will be part of the expressions that will automatically be visible to the users
+        when they are creating a new language.</p>
+      	<hr>
+        {{#if error}}
+          <div class="alert alert-danger" id="new-lang-error" role="alert">
+            <p>{{ error }}</p>
+          </div>
+        {{/if}}
+      	<form class="form-expr" id="new-default-lang" method="post" enctype="multipart/form-data">
+      		<div class="form-group">
+      			<label for="english">English</label>
+            <input type="text" class="form-control" value="{{ english }}" name="english">
+      		</div>
+          <input type="submit" class="btn btn-primary" value="Send">
+      	</form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var Language = require('../models/language');
 var Expression = require('../models/expression');
+var DefaultExpression = require('../models/defaultexpression');
 var User = require('../models/user')
 var Version = require('../models/version');
 var fs = require('fs');
@@ -396,6 +397,32 @@ module.exports = function(passport, s3) {
 				}
 			});
 		}
+	});
+	
+
+
+	router.get('/expressions/default', function(req, res) {
+		res.render('dashboard/defaultexpressions');
+	});
+
+	router.get('/expressions/default/new', function(req, res) {
+		res.render('dashboard/newdefaultexpressions', {
+			error: req.flash('error'),
+		});
+	});
+
+	router.post('/expressions/default/new', function(req, res) {
+		var defaultExpression = new DefaultExpression();
+		defaultExpression.english = req.body.english;
+		defaultExpression.save(function(err, expression) {
+			if (err) {
+				console.log(err);
+				req.flash('error', 'Error occured creating expression. Submit again.')
+				res.redirect(req.originalUrl);
+			} else {
+				res.render('dashboard/expressions');
+			}
+		});
 	});
 
 	return router;
