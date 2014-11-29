@@ -43,7 +43,13 @@ var requestApi = {
                 zip.unzip(zipPath, cordova.file.dataDirectory, function(result) {
                     if (result === 0 ) {
                         $.getJSON(cordova.file.dataDirectory + 'scheme.json', function(json) {
-                            console.log(json["languages"]);
+                            database.addLanguages(json["languages"], function(result) {
+                                if(result === 0) {
+                                    database.setLocalVersion();
+                                    database.addExpressions(json["expressions"]);
+                                    console.log("pushed the language properly!");
+                                }
+                            });
                         });
                         alert('zip extraction complete');
                     } else if (result === -1) {
