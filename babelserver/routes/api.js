@@ -7,6 +7,7 @@ var Expression = require('../models/expression');
 var Language = require('../models/language');
 var User = require('../models/user');
 var Version = require('../models/version');
+var async = require('async');
 
 
 /* Expressions */
@@ -233,35 +234,44 @@ function getUpdates(req, clientVersion, done) {
 		  		var archive = archiver('zip');
 		  		archive.pipe(output);
 
-		  		var langStream;
-		  		languages.forEach(function(element) {
-		  			var path = './uploads/' + element.map;
-		  			langStream = fs.createReadStream(path);
+  				async.eachSeries(languages, function(element, callback1) {
+  					console.log('LANGUAGES');
+  					var path = './uploads/' + element.map;
+		  			var langStream = fs.createReadStream(path);
 		  			langStream.on('error', function(err) {
 		  				console.log(err);
-		  				done(err, null);
+		  				callback1(err, null);
 		  			});
+		  			archive.append(langStream, {name: element.map});
+		  			callback1();
+  				}, function(err) {
+  					if (err) {
+  						done(err, null);
+  					} else {
+  						async.eachSeries(expressions, function(element, callback2) {
+  							console.log('EXPRESSIONS');
+  							var path = './uploads/' + element.audio;
+				  			var exprStream = fs.createReadStream(path);
+				  			exprStream.on('error', function(err) {
+				  				console.log(err);
+				  				callback2(err, null);
+				  			});
+				  			archive.append(exprStream, {name: element.audio});
+				  			callback2();
+  						}, function(err) {
+  							if (err) {
+  								done(err, null);
+  							} else {
+  								archive.append(JSON.stringify(result), { name: name+'.json' }).finalize();
+						  		output.on('close', function() {
+						  			var link = req.protocol + '://' + req.get('host') + '/api/download/' + name;
+						  			done(null, link);
+						  		});
+  							}
+  						});
+  					}
+  				});
 
-		  			archive.append(langStream, {name: element.map});;
-		  		});
-
-		  		var exprStream;
-		  		expressions.forEach(function(element) {
-		  			var path = './uploads/' + element.audio;
-		  			exprStream = fs.createReadStream(path);
-		  			exprStream.on('error', function(err) {
-		  				console.log(err);
-		  				done(err, null);
-		  			});
-		  			archive.append(exprStream, {name: element.audio});
-		  		});
-
-
-		  		archive.append(JSON.stringify(result), { name: name+'.json' }).finalize();
-		  		output.on('close', function() {
-		  			var link = req.protocol + '://' + req.get('host') + '/api/download/' + name;
-		  			done(null, link);
-		  		});
 		  	}
 		 });		
   	}
