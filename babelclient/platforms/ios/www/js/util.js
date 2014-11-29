@@ -45,9 +45,12 @@ var requestApi = {
                         $.getJSON(cordova.file.dataDirectory + 'scheme.json', function(json) {
                             database.addLanguages(json["languages"], function(result) {
                                 if(result === 0) {
-                                    database.setLocalVersion();
-                                    database.addExpressions(json["expressions"]);
-                                    console.log("pushed the language properly!");
+                                    database.addExpressions(json["expressions"], function(result) {
+                                        if(result === 0) {
+                                            database.setLocalVersion();
+                                            console.log("pushed the language properly!");
+                                        }
+                                    });
                                 }
                             });
                         });
@@ -233,7 +236,7 @@ var database = {
         });
     },
 
-    addExpressions: function(expressions) {
+    addExpressions: function(expressions, callback) {
         db.transaction(function(tx) {
             for (var i = expressions.length - 1; i >= 0; i--) {
                 var isRemoved = 0;
@@ -247,9 +250,11 @@ var database = {
                     },
                     function(er, err) {
                         console.log("expressions unsuccess: " + err.message);
+                        callback(-1);
                     }
                 );
             };
+            callback(0);
         });
     },
 };

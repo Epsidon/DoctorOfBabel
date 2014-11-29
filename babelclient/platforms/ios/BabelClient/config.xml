@@ -38,6 +38,9 @@
     <feature name="Console">
         <param name="ios-package" value="CDVLogger" />
     </feature>
+    <feature name="Notification">
+        <param name="ios-package" value="CDVNotification" />
+    </feature>
     <feature name="Zip">
         <param name="ios-package" value="Zip" />
     </feature>
@@ -49,8 +52,7 @@
         Apache Cordova Team
     </author>
     <content src="index.html" />
+    <preference name="AndroidPersistentFileLocation" value="Internal" />
+    <preference name="iosPersistentFileLocation" value="Library" />
     <access origin="*" />
-    <feature name="Notification">
-        <param name="ios-package" value="CDVNotification" />
-    </feature>
 </widget>

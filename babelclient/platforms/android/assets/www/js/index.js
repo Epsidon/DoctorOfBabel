@@ -42,9 +42,28 @@ var app = {
             // app.receivedEvent('deviceready');
             $('body').bind('touchstart', function() {});
             db = window.openDatabase("Database", "1.0", "BabelAppDb", 200000);
-
-            database.connectDb(function(dbResult) {
-                if (dbResult === 0) {
+            database.getLocalVersion(function(result) {
+                if (result === -1) {
+                    database.createDb(function(result) {
+                        if(result === -1) {
+                            alert("Database crashed! Please restart the BabelApp");
+                        } else {
+                            requestApi.doRequest(function(responseValue, updateUrl, versionNo) {
+                                if (responseValue === 100) {
+                                    console.log("Update needed");
+                                    console.log("Update URL: " + updateUrl);
+                                    console.log("Update URL: " + versionNo);
+                                    requestApi.downloadFile();
+                                    controller.displayUpdateScreen();
+                                } else if (responseValue === 200) {
+                                    console.log("Update is not needed");
+                                } else {
+                                    console.log("An error occured, carry on");
+                                }
+                            });
+                        }
+                    });
+                } else {
                     requestApi.doRequest(function(responseValue, updateUrl, versionNo) {
                         if (responseValue === 100) {
                             console.log("Update needed");
@@ -54,9 +73,9 @@ var app = {
                             controller.displayUpdateScreen();
                         } else if (responseValue === 200) {
                             console.log("Update is not needed");
-                        } else {
+                            } else {
                             console.log("An error occured, carry on");
-                        }
+                            }
                     });
                 }
             });
@@ -88,18 +107,19 @@ var controller = {
                 $("#title").text("Languages");
                 for (var i = 0; i < resultSet.rows.length; i++) {
                     var row = resultSet.rows.item(i);
-                    var name = resultSet.rows.item(i).name;
-                    var id = resultSet.rows.item(i).id;
-                    var container = '<div class="list-item" ontouchend="controller.listExpressions(\'' + id + '\', \'' + name + '\')">';
-                    console.log(container);
-                    var listLabel = '<div class="label">';
-                    var arrowIcon = '<img src="img/arrow-icon.png" class="arrow-icon" alt="Arrow">';
-                    var divEnd = '</div>';
-                    $("#language-list").append(container +
-                        listLabel + name +
-                        divEnd +
-                        arrowIcon +
-                        divEnd);
+                    console.log("Removed? " + resultSet.rows.item(i).removed);
+                        var name = resultSet.rows.item(i).name;
+                        var id = resultSet.rows.item(i).id;
+                        var container = '<div class="list-item" ontouchend="controller.listExpressions(\'' + id + '\', \'' + name + '\')">';
+                        console.log(container);
+                        var listLabel = '<div class="label">';
+                        var arrowIcon = '<img src="img/arrow-icon.png" class="arrow-icon" alt="Arrow">';
+                        var divEnd = '</div>';
+                        $("#language-list").append(container +
+                            listLabel + name +
+                            divEnd +
+                            arrowIcon +
+                            divEnd);
                 }
             } else {
                 console.log("Error occurred: ListLanguages in controller");

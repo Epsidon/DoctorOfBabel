@@ -45,9 +45,12 @@ var requestApi = {
                         $.getJSON(cordova.file.dataDirectory + 'scheme.json', function(json) {
                             database.addLanguages(json["languages"], function(result) {
                                 if(result === 0) {
-                                    database.setLocalVersion();
-                                    database.addExpressions(json["expressions"]);
-                                    console.log("pushed the language properly!");
+                                    database.addExpressions(json["expressions"], function(result) {
+                                        if(result === 0) {
+                                            database.setLocalVersion();
+                                            console.log("pushed the language properly!");
+                                        }
+                                    });
                                 }
                             });
                         });
@@ -214,8 +217,12 @@ var database = {
         var success = true;
         db.transaction(function(tx) {
             for (var i = languages.length - 1; i >= 0; i--) {
+                var isRemoved = 0;
+                if(languages[i]["removed"] === true) {
+                    isRemoved = 1;
+                }
                 tx.executeSql(
-                    'INSERT OR REPLACE INTO LANGUAGE (id, name, info, map, removed) VALUES (?, ?, ?, ?, ?)', [languages[i]["_id"], languages[i]["name"], languages[i]["info"], languages[i]["map"], languages[i]["removed"]],
+                    'INSERT OR REPLACE INTO LANGUAGE (id, name, info, map, removed) VALUES (?, ?, ?, ?, ?)', [languages[i]["_id"], languages[i]["name"], languages[i]["info"], languages[i]["map"], isRemoved],
                     function() {
                         console.log("success adding expressions");
                     },
@@ -229,19 +236,25 @@ var database = {
         });
     },
 
-    addExpressions: function(expressions) {
+    addExpressions: function(expressions, callback) {
         db.transaction(function(tx) {
             for (var i = expressions.length - 1; i >= 0; i--) {
+                var isRemoved = 0;
+                if(expressions[i]["removed"] === true) {
+                    isRemoved = 1;
+                }
                 tx.executeSql(
-                    'INSERT OR REPLACE INTO EXPRESSION (id, english, translation, audio, language, pronunciation, removed) VALUES (?, ?, ?, ?, ?, ?, ?)', [expressions[i]["_id"], expressions[i]["english"], expressions[i]["translation"], expressions[i]["audio"], expressions[i]["language"], expressions[i]["pronunciation"], expressions[i]["removed"]],
+                    'INSERT OR REPLACE INTO EXPRESSION (id, english, translation, audio, language, pronunciation, removed) VALUES (?, ?, ?, ?, ?, ?, ?)', [expressions[i]["_id"], expressions[i]["english"], expressions[i]["translation"], expressions[i]["audio"], expressions[i]["language"], expressions[i]["pronunciation"], isRemoved],
                     function() {
                         console.log("expressions success");
                     },
                     function(er, err) {
                         console.log("expressions unsuccess: " + err.message);
+                        callback(-1);
                     }
                 );
             };
+            callback(0);
         });
     },
 };
