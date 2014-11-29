@@ -262,7 +262,7 @@ function getUpdates(req, clientVersion, done) {
   							if (err) {
   								done(err, null);
   							} else {
-  								archive.append(JSON.stringify(result), { name: name+'.json' }).finalize();
+  								archive.append(JSON.stringify(result), { name: 'scheme.json' }).finalize();
 						  		output.on('close', function() {
 						  			var link = req.protocol + '://' + req.get('host') + '/api/download/' + name;
 						  			done(null, link);
