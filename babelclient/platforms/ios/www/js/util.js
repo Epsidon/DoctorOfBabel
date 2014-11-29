@@ -1,6 +1,7 @@
 var downloadUri;
 var jsonScheme;
 var downloadPath;
+var recentVersion;
 
 var requestApi = {
 
@@ -16,8 +17,9 @@ var requestApi = {
                 if (status === 'success') {
                     if (data["status"] === 100) {
                         callback(data["status"], data["link"], data["version"]);
-                        // downloadUri = "http://alazgulec.net/scheme.zip";
-                        downloadUri = url;
+                        recentVersion = data["version"];
+                        database.setLocalVersion();
+                        downloadUri = data["link"];
                         requestApi.downloadFile();
                     } else {
                         callback(data["status"], null);
@@ -70,14 +72,14 @@ var requestApi = {
             function(file) {
                 zip.unzip(zipPath, path, function(result) {
                     if (result === 0) {
-                        // $.getJSON(path + 'scheme.json', function(json) {
-                        //     database.addLanguages(json["languages"], function(result) {
-                        //         if(result === 0) {
-                        //             // database.addExpressions(json["expressions"]);
-                        //             console.log("pushed the language properly!");
-                        //         }
-                        //     });
-                        // });
+                        $.getJSON(path + 'scheme.json', function(json) {
+                            database.addLanguages(json["languages"], function(result) {
+                                if(result === 0) {
+                                    database.addExpressions(json["expressions"]);
+                                    console.log("pushed the language properly!");
+                                }
+                            });
+                        });
                         alert("zip extraction is COMPLETE!");
                     } else if (result === -1) {
                         alert("zip extraction failed");
@@ -197,20 +199,30 @@ var database = {
         });
     },
 
-    //TBD
-    setLocalVersion: function(callback) {
-        callback(true);
+    // Final method. This method will finalize the process of update.
+    setLocalVersion: function() {
+        db.transaction(function(tx) {
+                tx.executeSql(
+                    'INSERT INTO VERSION (version_no) VALUES (?)', [recentVersion],
+                    function() {
+                        console.log("version number updated succesfully");
+                    },
+                    function(er, err) {
+                        console.log("version number update unsuccesful: " + err.message);
+                    }
+                );
+        });
     },
 
     // version attribute is missing
     addLanguages: function(languages, callback) {
+        var success = true;
         db.transaction(function(tx) {
             for (var i = languages.length - 1; i >= 0; i--) {
                 tx.executeSql(
                     'INSERT INTO LANGUAGE (id, name, info, map) VALUES (?, ?, ?, ?)', [languages[i]["_id"], languages[i]["name"], languages[i]["info"], languages[i]["map"]],
                     function() {
-                        console.log("success");
-                        callback(0);
+                        console.log("success adding expressions");
                     },
                     function(er, err) {
                         console.log("unsuccess: " + err.message);
@@ -218,6 +230,7 @@ var database = {
                     }
                 );
             };
+            callback(0);
         });
     },
 

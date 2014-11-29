@@ -133,6 +133,16 @@ var controller = {
                 console.log("Error occurred: listExpressions in controller");
             }
         });
+    },
+
+    displayUpdateScreen: function() {
+        $("#language-list").empty();
+        $("#back-button").hide();
+        $("#title").text("Updating...");
+    },
+
+    hideUpdateScreen: function() {
+        controller.listLanguages();
     }
 };
 
