@@ -39,6 +39,9 @@ $(document).ready(function() {
     })
     .done(function(data) {
       if (data.error) {
+        var alert = $(this).children('.alert-danger');
+        if (alert)
+          alert.remove();
         $(this).prepend('<div class="alert alert-danger" role="alert">' +
                       '<p>' + data.error + '</p>' +
                       '</div>');

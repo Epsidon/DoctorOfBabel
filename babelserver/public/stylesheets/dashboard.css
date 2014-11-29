@@ -39,8 +39,23 @@
   padding: 20px;
 }
 
+/* Button to add new language */
 .new-language {
   padding: 20px;
+}
+
+.buttons-container {
+  display: block;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.new-expression {
+}
+
+.new-default-expression {
 }
 
 .lang-panel:first-child {
