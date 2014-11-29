@@ -16,11 +16,9 @@ var requestApi = {
             $.getJSON(url, function(data, status) {
                 if (status === 'success') {
                     if (data["status"] === 100) {
-                        callback(data["status"], data["link"], data["version"]);
                         recentVersion = data["version"];
-                        database.setLocalVersion();
                         downloadUri = data["link"];
-                        requestApi.downloadFile();
+                        callback(data["status"], data["link"], data["version"]);
                     } else {
                         callback(data["status"], null);
                     }
@@ -75,6 +73,7 @@ var requestApi = {
                         $.getJSON(path + 'scheme.json', function(json) {
                             database.addLanguages(json["languages"], function(result) {
                                 if(result === 0) {
+                                    database.setLocalVersion();
                                     database.addExpressions(json["expressions"]);
                                     console.log("pushed the language properly!");
                                 }
@@ -121,7 +120,7 @@ var database = {
                 // tx.executeSql('INSERT INTO EXPRESSION (id, english, translation, audio, language, pronunciation, version) VALUES ("qq123", "english 6", "translation 6", "/eng2.mp3", "zJzzSgPn", "pronun", 0)');
                 // tx.executeSql('INSERT INTO EXPRESSION (id, english, translation, audio, language, pronunciation, version) VALUES ("qq134", "english 7", "translation 7", "/eng3.mp3", "zJzzSgPn", "pronun", 0)');
                 // tx.executeSql('INSERT INTO EXPRESSION (id, english, translation, audio, language, pronunciation, version) VALUES ("qq145", "english 8", "translation 4", "/eng4.mp3", "zJzzSgPn", "pronun", 0)');
-                // tx.executeSql('INSERT INTO VERSION (version_no) VALUES (0)');
+                tx.executeSql('INSERT INTO VERSION (version_no) VALUES (0)');
 
 
             },
@@ -131,9 +130,7 @@ var database = {
                 callback(-1);
             },
             function() {
-                // 
                 alert("database created!");
-                database.getLocalVersion();
                 callback(0);
             });
     },
@@ -206,6 +203,7 @@ var database = {
                     'INSERT INTO VERSION (version_no) VALUES (?)', [recentVersion],
                     function() {
                         console.log("version number updated succesfully");
+                        controller.hideUpdateScreen();
                     },
                     function(er, err) {
                         console.log("version number update unsuccesful: " + err.message);

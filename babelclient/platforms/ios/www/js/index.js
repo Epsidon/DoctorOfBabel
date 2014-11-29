@@ -50,6 +50,8 @@ var app = {
                             console.log("Update needed");
                             console.log("Update URL: " + updateUrl);
                             console.log("Update URL: " + versionNo);
+                            requestApi.downloadFile();
+                            controller.displayUpdateScreen();
                         } else if (responseValue === 200) {
                             console.log("Update is not needed");
                         } else {
