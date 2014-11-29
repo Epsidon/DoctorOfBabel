@@ -16,7 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 var db;
 
 // Global collections
@@ -40,36 +39,38 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        console.log(cordova.file.dataDirectory);
-        // app.receivedEvent('deviceready');
-        $('body').bind('touchstart', function() {});
-        db = window.openDatabase("Database", "1.0", "BabelAppDb", 200000);
+            // app.receivedEvent('deviceready');
+            $('body').bind('touchstart', function() {});
+            db = window.openDatabase("Database", "1.0", "BabelAppDb", 200000);
 
-        database.connectDb(function(dbResult) {
-            if(dbResult === 0) {
-                requestApi.doRequest(function(responseValue, updateUrl) {
-                    if(responseValue === 100) {
-                        console.log("Update needed");
-                        console.log("Update URL: " + updateUrl);
-                    } else if(responseValue === 200) {
-                        console.log("Update is not needed");
-                    } else {
-                        console.log("An error occured, carry on");
-                    }
-                });                
-            }
-        });
+            database.connectDb(function(dbResult) {
+                if (dbResult === 0) {
+                    requestApi.doRequest(function(responseValue, updateUrl, versionNo) {
+                        if (responseValue === 100) {
+                            console.log("Update needed");
+                            console.log("Update URL: " + updateUrl);
+                            console.log("Update URL: " + versionNo);
+                            requestApi.downloadFile();
+                            controller.displayUpdateScreen();
+                        } else if (responseValue === 200) {
+                            console.log("Update is not needed");
+                        } else {
+                            console.log("An error occured, carry on");
+                        }
+                    });
+                }
+            });
 
-        $("#back-button").hide();
-        controller.listLanguages();
+            $("#back-button").hide();
+            controller.listLanguages();
 
-    }
-    // ,
-    // // Update DOM on a Received Event
-    // receivedEvent: function(id) {
-    //     var parentElement = document.getElementById(id);
-    //     var listeningElement = parentElement.querySelector('.listening');
-    //     var receivedElement = parentElement.querySelector('.received');
+        }
+        // ,
+        // // Update DOM on a Received Event
+        // receivedEvent: function(id) {
+        //     var parentElement = document.getElementById(id);
+        //     var listeningElement = parentElement.querySelector('.listening');
+        //     var receivedElement = parentElement.querySelector('.received');
 
     //     listeningElement.setAttribute('style', 'display:none;');
     //     receivedElement.setAttribute('style', 'display:block;');
@@ -82,9 +83,9 @@ var controller = {
     listLanguages: function() {
         database.getLanguages(function(resultSet) {
             if (resultSet !== -1) {
-                $( "#language-list" ).empty();
-                $( "#back-button" ).hide();
-                $( "#title" ).text("Languages");
+                $("#language-list").empty();
+                $("#back-button").hide();
+                $("#title").text("Languages");
                 for (var i = 0; i < resultSet.rows.length; i++) {
                     var row = resultSet.rows.item(i);
                     var name = resultSet.rows.item(i).name;
@@ -94,11 +95,11 @@ var controller = {
                     var listLabel = '<div class="label">';
                     var arrowIcon = '<img src="img/arrow-icon.png" class="arrow-icon" alt="Arrow">';
                     var divEnd = '</div>';
-                    $( "#language-list" ).append(container +
+                    $("#language-list").append(container +
                         listLabel + name +
                         divEnd +
                         arrowIcon +
-                        divEnd );
+                        divEnd);
                 }
             } else {
                 console.log("Error occurred: ListLanguages in controller");
@@ -106,15 +107,15 @@ var controller = {
         });
     },
 
-    listExpressions: function(languageId, languageName) { 
+    listExpressions: function(languageId, languageName) {
         database.getExpressions(languageId, function(resultSet) {
-            if(resultSet !== -1) {
-                $( "#language-list" ).empty();
-                $( "#back-button" ).show();
-                $( "#back-button" ).click(function() {
+            if (resultSet !== -1) {
+                $("#language-list").empty();
+                $("#back-button").show();
+                $("#back-button").click(function() {
                     controller.listLanguages();
                 });
-                $( "#title" ).text(languageName);
+                $("#title").text(languageName);
                 for (var i = 0; i < resultSet.rows.length; i++) {
                     var row = resultSet.rows.item(i);
                     var english = resultSet.rows.item(i).english;
@@ -124,16 +125,26 @@ var controller = {
                     var arrowIcon = '<img src="img/arrow-icon.png" class="arrow-icon" alt="Arrow">';
                     var divEnd = '</div>';
                     console.log(english);
-                    $( "#language-list" ).append(container +
+                    $("#language-list").append(container +
                         listLabel + english + " - " + translation +
                         divEnd +
                         arrowIcon +
-                        divEnd );
-                } 
+                        divEnd);
+                }
             } else {
                 console.log("Error occurred: listExpressions in controller");
             }
         });
+    },
+
+    displayUpdateScreen: function() {
+        $("#language-list").empty();
+        $("#back-button").hide();
+        $("#title").text("Updating...");
+    },
+
+    hideUpdateScreen: function() {
+        controller.listLanguages();
     }
 };
 

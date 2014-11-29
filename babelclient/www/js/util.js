@@ -32,68 +32,35 @@ var requestApi = {
         });
     },
 
+
     downloadFile: function() {
-        console.log('downloadFile');
-        window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
-        window.requestFileSystem(
-            LocalFileSystem.PERSISTENT,
-            0,
-            requestApi.onRequestFileSystemSuccess,
-            requestApi.fail
-        );
-    },
-
-    onRequestFileSystemSuccess: function(fileSystem) {
-        console.log('onRequestFileSystemSuccess');
-        fileSystem.root.getFile(
-            'dummy.html', {
-                create: true,
-                exclusive: false
-            },
-            requestApi.onGetFileSuccess,
-            requestApi.fail
-        );
-    },
-
-    onGetFileSuccess: function(fileEntry) {
-        console.log('onGetFileSuccess!');
-        //    var path = fileEntry.toURL().replace('dummy.html', '');
-        var path = 'cdvfile://localhost/persistent' + '/BabelClientFiles/';
-        var zipPath = path + 'scheme2'
-        console.log(zipPath);
-        var fileTransfer = new FileTransfer();
-        fileEntry.remove();
-
-        fileTransfer.download(
-            downloadUri,
-            zipPath,
-            function(file) {
-                zip.unzip(zipPath, path, function(result) {
-                    if (result === 0) {
-                        $.getJSON(path + 'scheme.json', function(json) {
-                            database.addLanguages(json["languages"], function(result) {
-                                if(result === 0) {
-                                    database.setLocalVersion();
-                                    database.addExpressions(json["expressions"]);
-                                    console.log("pushed the language properly!");
-                                }
-                            });
+        window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(dir) {
+            var zipPath = dir.toInternalURL() + 'scheme.zip';
+            console.log('ZIP PATH' + zipPath);
+            var fileTransfer = new FileTransfer();
+            fileTransfer.download(downloadUri, zipPath, function(file) {
+                console.log(file.toInternalURL());
+                zip.unzip(zipPath, cordova.file.dataDirectory, function(result) {
+                    if (result === 0 ) {
+                        $.getJSON(cordova.file.dataDirectory + 'scheme.json', function(json) {
+                            console.log(json["languages"]);
                         });
-                        alert("zip extraction is COMPLETE!");
+                        alert('zip extraction complete');
                     } else if (result === -1) {
-                        alert("zip extraction failed");
+                        alert('zip extraction failed');
                     }
                 });
-                alert('download complete: ' + file.toURL());
-            },
-            function(error) {
+                alert('DOWNLOAD COMPLETE ' + file.toURL());
+            }, function(error) {
                 alert('download error source ' + error.source);
                 alert('download error target ' + error.target);
                 alert('upload error code: ' + error.code);
-            }
-        );
-
+            });     
+        }, function(error) {
+            console.log('SYSTEM ERROR');
+        });
     },
+
 
 
     fail: function(evt) {
@@ -109,9 +76,9 @@ var database = {
 
     connectDb: function(callback) {
         db.transaction(function(tx) {
-                // tx.executeSql('DROP TABLE LANGUAGE');
-                // tx.executeSql('DROP TABLE EXPRESSION');
-                // tx.executeSql('DROP TABLE VERSION');
+                //tx.executeSql('DROP TABLE LANGUAGE');
+                //tx.executeSql('DROP TABLE EXPRESSION');
+                //tx.executeSql('DROP TABLE VERSION');
 
                 tx.executeSql('CREATE TABLE IF NOT EXISTS LANGUAGE (id TEXT NOT NULL PRIMARY KEY, name TEXT NOT NULL, info TEXT, map TEXT, version INTEGER)');
                 tx.executeSql('CREATE TABLE IF NOT EXISTS EXPRESSION (id TEXT NOT NULL PRIMARY KEY, english TEXT NOT NULL, translation TEXT NOT NULL, audio TEXT, language TEXT NOT NULL, pronunciation TEXT, version INTEGER)');

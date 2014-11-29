@@ -8,5 +8,7 @@
         Apache Cordova Team
     </author>
     <content src="index.html" />
+    <preference name="AndroidPersistentFileLocation" value="Internal" />
+	<preference name="iosPersistentFileLocation" value="Library" />
     <access origin="*" />
 </widget>
