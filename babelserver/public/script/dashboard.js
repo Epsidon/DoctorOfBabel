@@ -13,8 +13,8 @@ function addExpression(languageId) {
     '</div>' +
     '<div class="form-group">' +
     '<label for="audioFile">Upload audio file</label>' +
-    '<input type="file" name="audio" id="audio">' +
     '<p class="help-block">Please enter the expression audio in mp3 format</p>' +
+    '<input type="file" name="audio" id="audio">' +
     '</div>' +
     '<input type="submit" class="btn btn-primary" value="Add">' +
     '</form>' +
@@ -63,8 +63,8 @@ $(document).ready(function() {
           '</div>' +
           '<div class="form-group">' +
           '<label for="audioFile">Upload audio file</label>' +
-          '<input type="file" name="audio" id="audio">' +
           '<p class="help-block">Please enter the expression audio in mp3 format</p>' +
+          '<input type="file" name="audio" id="audio">' +
           '</div>' +
           '<input type="submit" class="btn btn-primary" value="Modify">' +
           '<input type="submit" class="btn btn-danger" name="action" value="Remove" style="margin-left: 4px;">' +

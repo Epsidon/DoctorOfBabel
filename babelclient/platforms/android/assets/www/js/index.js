@@ -41,6 +41,8 @@ var app = {
     onDeviceReady: function() {
             // app.receivedEvent('deviceready');
             $('body').bind('touchstart', function() {});
+            $("#info-screen").hide();
+
             db = window.openDatabase("Database", "1.0", "BabelAppDb", 200000);
             database.getLocalVersion(function(result) {
                 if (result === -1) {
@@ -135,6 +137,9 @@ var controller = {
                 $("#back-button").click(function() {
                     controller.listLanguages();
                 });
+                $("#info-button").click(function() {
+                    controller.displayInfoScreen(languageId, languageName);
+                });
                 $("#title").text(languageName);
                 for (var i = 0; i < resultSet.rows.length; i++) {
                     var row = resultSet.rows.item(i);
@@ -165,6 +170,19 @@ var controller = {
 
     hideUpdateScreen: function() {
         controller.listLanguages();
+    },
+
+    displayInfoScreen: function(languageId, languageName) {
+        $("#language-list").hide();
+        $("#info-screen").text(languageName);
+        $("#info-screen").show();
+        $("#back-button").show();
+        $( "#back-button").unbind( "click" );
+        $("#back-button").click(function() {
+            $("#info-screen").hide();
+            $("#language-list").show();
+        });
+        $("#info-button").hide();
     }
 };
 
