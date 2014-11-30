@@ -11,7 +11,7 @@
     </div>
     <div class="col-sm-9 col-sm-offset-3 col-md-8 col-md-offset-3 main">
       <div class="new-expression">
-        <a href="/dashboard/expressions"><button class="btn btn-primary">Back</button></a>
+        <a href="/dashboard/expressions/default"><button class="btn btn-primary">Back</button></a>
       </div>
       <div class="add-expression">
       	<h1>Add a new default expression.</h1>
@@ -20,7 +20,7 @@
         when they are creating a new language.</p>
       	<hr>
         {{#if error}}
-          <div class="alert alert-danger" id="new-lang-error" role="alert">
+          <div class="alert alert-danger" id="new-default-expr-error" role="alert">
             <p>{{ error }}</p>
           </div>
         {{/if}}

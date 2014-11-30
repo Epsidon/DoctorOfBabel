@@ -32,6 +32,9 @@ module.exports = function(passport, s3) {
 	});
 
 
+
+	// LANGUAGES ROUTES
+
 	// List the languages as tabular data to edit them
 	router.get('/languages', function(req, res, next) {
 		Language.find({ removed: false }, function(err, languages) {
@@ -54,7 +57,6 @@ module.exports = function(passport, s3) {
 			error: req.flash('error'),
 		});
 	});
-
 
 	// Form submission for a new language. 
 	router.post('/languages/new', function(req, res) {
@@ -124,7 +126,6 @@ module.exports = function(passport, s3) {
 			}
 		});
 	});
-
 
 	// Edit the individual language page
 	router.post('/languages/:lang_id/edit', function(req, res, next) {
@@ -251,7 +252,6 @@ module.exports = function(passport, s3) {
 		}
 	});
 	
-
 	// Add new expression within a language
 	router.post('/languages/expressions/new', function(req, res) {
 		if (!req.body.english || !req.body.translation || !req.files.audio) {
@@ -290,7 +290,6 @@ module.exports = function(passport, s3) {
 			});
 		}
 	});
-
 
 	// Update existing expression in a language
 	router.post('/languages/expressions/update', function(req, res) {
@@ -367,17 +366,8 @@ module.exports = function(passport, s3) {
 	});
 
 
-	router.get('/users', function(req, res, next) {
-		User.find(function(err, users) {
-			if (err) {
-				console.log(err)
-				next(err);
-			} else {
-				res.render('dashboard/users', { users: users });
-			}
-		});
-	});
 
+	// EXPRESSIONS ROUTES
 
 	router.get('/expressions', function(req, res, next) {
 		Expression.find({ removed: false }, function(err, expressions) {
@@ -389,7 +379,6 @@ module.exports = function(passport, s3) {
 			}
 		});
 	});
-
 
 
 	router.get('/expressions/new', function(req, res, next) {
@@ -541,9 +530,19 @@ module.exports = function(passport, s3) {
 	
 
 
+	// DEFAULT EXPRESSIONS ROUTE
+
 	router.get('/expressions/default', function(req, res) {
-		res.render('dashboard/defaultexpressions');
+		DefaultExpression.find({}, function(err, expressions) {
+			if (err) {
+				console.log(err);
+				next(err);
+			} else {
+				res.render('dashboard/defaultexpressions', { expressions: expressions });
+			}
+		});
 	});
+
 
 	router.get('/expressions/default/new', function(req, res) {
 		res.render('dashboard/newdefaultexpressions', {
@@ -552,18 +551,54 @@ module.exports = function(passport, s3) {
 	});
 
 	router.post('/expressions/default/new', function(req, res) {
-		var defaultExpression = new DefaultExpression();
-		defaultExpression.english = req.body.english;
-		defaultExpression.save(function(err, expression) {
+		if (!req.body.english) {
+			req.flash('error', 'Error! Empty field');
+			res.redirect(req.originalUrl);
+		} else {
+			var defaultExpression = new DefaultExpression();
+			defaultExpression.english = req.body.english;
+			defaultExpression.save(function(err, expression) {
+				if (err) {
+					console.log(err);
+					req.flash('error', 'Error occured creating expression. Please try again.');
+					res.redirect(req.originalUrl);
+				} else {
+					res.redirect(req.baseUrl + '/expressions/default/' + expression._id + '/edit');
+				}
+			});
+		}
+	});
+
+
+	router.get('/expressions/default/:expr_id/edit', function(req, res) {
+		DefaultExpression.findOne({_id: req.params.expr_id}, function(err, expression) {
 			if (err) {
 				console.log(err);
-				req.flash('error', 'Error occured creating expression. Submit again.')
-				res.redirect(req.originalUrl);
+				next(err);
 			} else {
-				res.render('dashboard/expressions');
+				res.render('dashboard/editdefaultexpressions', { 
+					expression: expression,
+					error: req.flash('error'), 
+				});
 			}
 		});
 	});
+
+
+
+	// USERS ROUTES
+
+	router.get('/users', function(req, res, next) {
+		User.find(function(err, users) {
+			if (err) {
+				console.log(err)
+				next(err);
+			} else {
+				res.render('dashboard/users', { users: users });
+			}
+		});
+	});
+
 
 	return router;
 

@@ -53,13 +53,16 @@
   margin-bottom: 40px;
 }
 
+/* Edit the headers in the panel for editing expressions or languages */
 .expr-panel:first-child,
+.default-expr-panel:first-child,
 .lang-panel:first-child {
   text-align: center;
   font-size: 18px;
 }
 
 .edit-expr .form-expr,
+.edit-default-expr .form-default-expr,
 .edit-lang .form-lang {
   padding: 30px;
 }
@@ -70,6 +73,7 @@
 }
 
 .edit-expr .big-success,
+.edit-default-expr .big-success,
 .edit-lang .bg-success {
   text-align: center;
   line-height: 220%;
@@ -78,6 +82,7 @@
 }
 
 .edit-expr .bg-warning,
+.edit-default-expr .bg-warning,
 .edit-lang .bg-warning {
   text-align: center;
   line-height: 220%;
@@ -106,7 +111,15 @@ div.bg-info p {
 /* Edit the view of the tables in dashboard */
 .users-table th,
 .expressions-table th,
+.default-expressions-table th,
 .languages-table th {
+  text-align: center;
+}
+
+.users-table td,
+.expressions-table td,
+.default-expressions-table td,
+.languages-table td {
   text-align: center;
 }
 

@@ -1,0 +1,30 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3 col-md-2 sidebar">
+      <ul class="nav nav-sidebar">
+        <li><a href="/dashboard">Overview</a></li>
+        <li><a href="/dashboard/languages">Languages</a></li>
+        <li class="active"><a href="/dashboard/expressions">Expressions</a></li>
+        <li><a href="/dashboard/users">Users</a></li>
+        <li><a href="/dashboard/sessions">Sessions</a></li>
+      </ul>
+    </div>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+      {{#if error}}
+        <div class="alert alert-danger" id="default-expr-error" role="alert">
+          <p>{{ error }}</p>
+        </div>
+      {{/if}}
+      <div class="edit-default-expr panel panel-primary">
+        <div class="panel-heading default-expr-panel">Edit Default Expression</div>
+        <form class="form-default-expr" id="new-default-expr" method="post" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="english">English</label>
+            <input type="text" class="form-control" value="{{ expression.english }}" name="english">
+          </div>
+          <input type="submit" class="btn btn-primary" name="action" value="Update Expressions">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

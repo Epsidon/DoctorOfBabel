@@ -10,6 +10,11 @@
       </ul>
     </div>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+      {{#if error}}
+        <div class="alert alert-danger" id="lang-error" role="alert">
+          <p>{{ error }}</p>
+        </div>
+      {{/if}}
       <div class="edit-lang panel panel-primary">
         <div class="panel-heading lang-panel">Edit Language</div>
         <form class="form-lang" id="new-lang" method="post" enctype="multipart/form-data">

@@ -12,7 +12,7 @@
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
       <div class="buttons-container">
 
-        <a class="new-expression" href="expressions/new"><button class="btn btn-primary" type="button">Add New Default Expression</button></a>
+        <a class="new-expression" href="default/new"><button class="btn btn-primary" type="button">Add New Default Expression</button></a>
       </div>
 
       <div class="bg-info">
@@ -21,7 +21,7 @@
           This does not directly modify the expressions in each language, you have to add that manually.</p>
       </div>
  
-      <div class="table-responsive">
+      <div class="table-responsive default-expressions-table">
         <table class="table table-striped table-bordered">
           <colgroup>
            <col span="1" style="width: 15%;">
@@ -40,7 +40,7 @@
               <tr>
                 <td>{{ this._id }}</td>
                 <td>{{ this.english }}</td>
-                <td><a href="expressions/default/{{ this._id }}/edit">Edit</a></td>
+                <td><a href="/dashboard/expressions/default/{{ this._id }}/edit">Edit</a></td>
               </tr>
             {{/each}}
           </tbody>
