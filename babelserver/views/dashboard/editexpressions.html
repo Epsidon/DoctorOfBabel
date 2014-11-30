@@ -26,10 +26,9 @@
             <p class="help-block">Upload an audio file to change the current one.</p>
             <input type="file" name="audio" id="audio">
             <div class="expr-play">
-              <p class="help-block">Play current audio file.
-               <a href="/{{ expression.audio }}">{{ expression.audio }}</a> 
-              </p>
+              <p class="help-block">Play current audio file.</p>
               <span class="glyphicon glyphicon-play-circle" style="font-size:30px;" onclick="document.getElementById('expr-audio').play()"></span>
+              <a href="/{{ expression.audio }}">{{ expression.audio }}</a>
             </div> 
             <audio src="/{{ expression.audio }}" id="expr-audio"></audio>
           </div>
