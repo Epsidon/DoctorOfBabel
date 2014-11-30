@@ -25,6 +25,7 @@ function addExpression(languageId) {
 
 // Handle ajax file uploads for audio files and images
 $(document).ready(function() {
+
   $(document).on('submit', '.form-expr-new', function(e) {
     e.preventDefault();
     $.ajax({
@@ -108,7 +109,7 @@ $(document).ready(function() {
     var parent = $(this).prev();
     $(this).remove();
     $(parent).remove();
-  })
+  });
 });
 
 

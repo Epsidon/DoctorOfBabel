@@ -389,7 +389,7 @@ module.exports = function(passport, s3) {
 									res.redirect(req.originalUrl);
 								} else {
 									//res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
-									res.redirect(req.baseUrl + '/expressions');
+									res.redirect(req.baseUrl + '/expressions', {});
 								}
 							});
 						}
@@ -397,6 +397,17 @@ module.exports = function(passport, s3) {
 				}
 			});
 		}
+	});
+
+
+	router.get('/expressions/:expr_id/edit', function(req, res) {
+		Expression.findOne({_id: req.params.expr_id}, function(err, expression) {
+			if (err) {
+				console.log(err);
+			} else {
+				res.render('dashboard/editexpressions', { expression: expression });
+			}
+		});
 	});
 	
 
