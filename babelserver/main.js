@@ -27,7 +27,21 @@ require('./config/auth')(passport);
 
 
 // Use .html extention name for handlebars files
-app.engine('html', exphbs({ extname: 'html', defaultLayout: 'main' }));
+app.engine('html', exphbs(
+  { extname: 'html', 
+  defaultLayout: 'main',
+  helpers: {
+    select: function(value, options) {
+      return options.fn(this)
+            .split('\n')
+            .map(function(v) {
+              var t = 'value="' + value + '"'
+              return ! RegExp(t).test(v) ? v : v.replace(t, t + ' selected="selected"')
+            })
+            .join('\n') 
+    }
+  } 
+}));
 app.set('view engine', 'html');
 // Prettify the json objects returned by setting the spaces
 app.set('json spaces', 4);

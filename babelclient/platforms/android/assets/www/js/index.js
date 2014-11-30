@@ -42,6 +42,7 @@ var app = {
             // app.receivedEvent('deviceready');
             $('body').bind('touchstart', function() {});
             $("#info-screen").hide();
+            $("#expression-list").hide();
 
             db = window.openDatabase("Database", "1.0", "BabelAppDb", 200000);
             database.getLocalVersion(function(result) {
@@ -104,7 +105,7 @@ var controller = {
     listLanguages: function() {
         database.getLanguages(function(resultSet) {
             if (resultSet !== -1) {
-                $("#language-list").empty();
+                $("#language-list").html('');
                 $("#back-button").hide();
                 $("#title").text("Languages");
                 for (var i = 0; i < resultSet.rows.length; i++) {
@@ -132,15 +133,25 @@ var controller = {
     listExpressions: function(languageId, languageName) {
         database.getExpressions(languageId, function(resultSet) {
             if (resultSet !== -1) {
-                $("#language-list").empty();
-                $("#back-button").show();
+                $("#expression-list").html('');
+                $("#language-list").hide();
+                $("#info-screen").hide();
+                $("#expression-list").show();
+
+                $("#back-button").unbind( "click" );
                 $("#back-button").click(function() {
                     controller.listLanguages();
+                    $("#expression-list").hide();
+                    $("#language-list").show();
                 });
+                $("#back-button").show();
+
+                $("#info-button").show();
                 $("#info-button").click(function() {
                     controller.displayInfoScreen(languageId, languageName);
                 });
                 $("#title").text(languageName);
+
                 for (var i = 0; i < resultSet.rows.length; i++) {
                     var row = resultSet.rows.item(i);
                     var english = resultSet.rows.item(i).english;
@@ -150,12 +161,13 @@ var controller = {
                     var arrowIcon = '<img src="img/arrow-icon.png" class="arrow-icon" alt="Arrow">';
                     var divEnd = '</div>';
                     console.log(english);
-                    $("#language-list").append(container +
+                    $("#expression-list").append(container +
                         listLabel + english + " - " + translation +
                         divEnd +
                         arrowIcon +
                         divEnd);
                 }
+                $("#expression-list").show();
             } else {
                 console.log("Error occurred: listExpressions in controller");
             }
@@ -163,7 +175,7 @@ var controller = {
     },
 
     displayUpdateScreen: function() {
-        $("#language-list").empty();
+        $("#language-list").html('');
         $("#back-button").hide();
         $("#title").text("Updating...");
     },
@@ -174,13 +186,13 @@ var controller = {
 
     displayInfoScreen: function(languageId, languageName) {
         $("#language-list").hide();
-        $("#info-screen").text(languageName);
+        $("#expression-list").hide();
+        $("#info-screen").text("Info about " + languageName);
         $("#info-screen").show();
         $("#back-button").show();
         $( "#back-button").unbind( "click" );
         $("#back-button").click(function() {
-            $("#info-screen").hide();
-            $("#language-list").show();
+            controller.listExpressions(languageId, languageName);
         });
         $("#info-button").hide();
     }

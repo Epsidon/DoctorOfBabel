@@ -405,6 +405,7 @@ module.exports = function(passport, s3) {
 					languages: languages,
 					english: req.flash('englishError'),
 					translation: req.flash('translationError'),
+					language: req.flash('languageError'),
 					error: req.flash('error'),
 				});
 			}
@@ -415,11 +416,13 @@ module.exports = function(passport, s3) {
 		if (!req.body.english || !req.body.translation || !req.files.audio) {
 			req.flash('englishError', req.body.english);
 			req.flash('translationError', req.body.translation);
+			req.flash('languageError', req.body.language);
 			req.flash('error', 'Error! There are empty fields.');
 			res.redirect(req.originalUrl);
 		}	else if (req.files.audio.extension !== 'mp3') {
 			req.flash('englishError', req.body.english);
 			req.flash('translationError', req.body.translation);
+			req.flash('languageError', req.body.language);
 			req.flash('error', 'Audio file not mp3 format.');
 			res.redirect(req.originalUrl);
 		} else {
@@ -433,6 +436,7 @@ module.exports = function(passport, s3) {
 					console.log(err);
 					req.flash('englishError', req.body.english);
 					req.flash('translationError', req.body.translation);
+					req.flash('languageError', req.body.language);
 					req.flash('error', 'Error uploading the audio file. Try again.');
 					res.redirect(req.originalUrl);
 				} else {
@@ -442,6 +446,7 @@ module.exports = function(passport, s3) {
 							console.log(err);
 							req.flash('englishError', req.body.english);
 							req.flash('translationError', req.body.translation);
+							req.flash('languageError', req.body.language);
 							req.flash('error', 'Error occured creating expression. Submit again.')
 							res.redirect(req.originalUrl);
 						} else {
@@ -451,6 +456,7 @@ module.exports = function(passport, s3) {
 									console.log(err);
 									req.flash('englishError', req.body.english);
 									req.flash('translationError', req.body.translation);
+									req.flash('languageError', req.body.language);
 									req.flash('error', 'Error occured creating expression. Submit again.')
 									res.redirect(req.originalUrl);
 								} else {
@@ -649,6 +655,8 @@ module.exports = function(passport, s3) {
 
 	router.get('/users/new', function(req, res) {
 		res.render('dashboard/newusers', {
+			username: req.flash('usernameError'),
+			role: req.flash('roleError'),
 			error: req.flash('error'),
 		});
 	});

@@ -6,7 +6,6 @@
         <li><a href="/dashboard/languages">Languages</a></li>
         <li class="active"><a href="/dashboard/expressions">Expressions</a></li>
         <li><a href="/dashboard/users">Users</a></li>
-        <li><a href="sessions">Sessions</a></li>
       </ul>
     </div>
     <div class="col-sm-9 col-sm-offset-3 col-md-8 col-md-offset-3 main">
@@ -40,9 +39,11 @@
           <div class="form-group">
             <label for="language">Select language</label>
             <select name="language">
+              {{#select language}}
               {{#each languages }}
                 <option value="{{ this._id }}">{{ this.name }}</option>
               {{/each}}
+              {{/select}}
             </select>
           </div>
           <input type="submit" class="btn btn-primary" value="Send">

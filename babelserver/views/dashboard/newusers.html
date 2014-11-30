@@ -6,12 +6,11 @@
         <li><a href="/dashboard/languages">Languages</a></li>
         <li class="active"><a href="/dashboard/expressions">Expressions</a></li>
         <li><a href="/dashboard/users">Users</a></li>
-        <li><a href="sessions">Sessions</a></li>
       </ul>
     </div>
     <div class="col-sm-9 col-sm-offset-3 col-md-8 col-md-offset-3 main">
       <div class="new-expression">
-        <a href="/dashboard/expressions"><button class="btn btn-primary">Back</button></a>
+        <a href="/dashboard/users"><button class="btn btn-primary">Back</button></a>
       </div>
       <div class="add-expression">
       	<h1>Add a new user</h1>
@@ -35,8 +34,10 @@
           <div class="form-group">
             <label for="role">Select the role of the user</label>
             <select name="role">
+              {{#select role}}
               <option value="admin">Admin</option>
               <option value="staff">Staff</option>
+              {{/select}}
             </select>
             <p class="help-block">
               Admin gets complete access to everything in the dashboard.
