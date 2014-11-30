@@ -65,6 +65,12 @@ module.exports = function(passport, s3) {
 			req.flash('infoError', req.body.info);
 			req.flash('error', 'Error! There are empty fields.');
 			res.redirect(req.originalUrl);
+		} else if (req.files.map.extension !== 'jpg' && req.files.map.extension !== 'jpeg' &&
+				req.files.map.extension !== 'png') {
+			req.flash('nameError', req.body.name);
+			req.flash('infoError', req.body.info);
+			req.flash('error', 'Error! Image uploaded not jpg or png format.');
+			res.redirect(req.originalUrl);
 		} else {
 			var language = new Language();
 			language.name = req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1);
@@ -108,7 +114,11 @@ module.exports = function(passport, s3) {
 						console.log(err);
 						next(err);
 					} else {
-						res.render('dashboard/editlanguages', { expressions: expressions, language: language} );
+						res.render('dashboard/editlanguages', { 
+							expressions: expressions, 
+							language: language,
+							error: req.flash('error'),
+						});
 					}
 				});
 			}
@@ -130,35 +140,45 @@ module.exports = function(passport, s3) {
 					if (req.body.info)
 						language.info = req.body.info;
 					if (req.files.map) {
-						var path = './uploads/' + req.files.map.name;
-						fs.writeFile(path, req.files.map.buffer, function(err) {
-							if (err) {
-								console.log(err);
-								next(err);
-							} else {
-								language.map = req.files.map.name;
-								language.save(function(err, lang) {
-									if (err) {
-										console.log(err);
-										next(err);
-									} else {
-										res.redirect(req.baseUrl + '/languages/' + lang._id + '/edit');
-									}
-								});
-							}
-						});
-					} else {
+						if (req.files.map.extension !== 'jpeg' && req.files.map.extension !== 'jpg' &&
+							req.files.map.name !== 'png') {
+							req.flash('error', 'Error! Image uploaded not jpg or png format.');
+							res.redirect(req.baseUrl + '/languages/' + language._id + '/edit');
+						} else {
+							var path = './uploads/' + req.files.map.name;
+							fs.writeFile(path, req.files.map.buffer, function(err) {
+								if (err) {
+									console.log(err);
+									req.flash('error', 'Server error. Please try again.');
+									res.redirect(req.baseUrl + '/languages/' + language._id + '/edit');
+								} else {
+									language.map = req.files.map.name;
+									language.save(function(err, lang) {
+										if (err) {
+											console.log(err);
+											req.flash('error', 'Server error. Please try again.');
+											res.redirect(req.baseUrl + '/languages/' + language._id + '/edit');
+										} else {
+											res.redirect(req.baseUrl + '/languages/' + language._id + '/edit');
+										}
+									});
+								}
+							});	
+						}
+					} else { // No image uploaded
 						language.save(function(err, lang) {
 							if (err) {
 								console.log(err);
+								req.flash('error', 'Server error. Please try again.');
+								res.redirect(req.baseUrl + '/languages/' + language._id + '/edit');
 							} else {
-								res.redirect(req.baseUrl + '/languages/' + lang._id + '/edit');
+								res.redirect(req.baseUrl + '/languages/' + language._id + '/edit');
 							}
 						});		
 					}
 				}
 			});
-		// Publishing a language	
+		// Publishing or updating a language	
 		} else {
 			Language.findOne({ _id: req.params.lang_id }, function(err, language) {
 				if (err) {
@@ -170,46 +190,57 @@ module.exports = function(passport, s3) {
 					if (req.body.info)
 						language.info = req.body.info;
 					if (req.files.map) {
-						var path = './uploads/' + req.files.map.name;
-						fs.writeFile(path, req.files.map.buffer, function(err) {
-							if (err) {
-								console.log(err);
-								next(err);
-							} else {
-								language.map = req.files.map.name;
-								language.ready = true;
-								Version.findOneAndUpdate({ name: 'global'}, { $inc: {global_version: 1} }, function(err, version) {
-									if (err) {
-										console.log(err);
-										next(err);
-									} else {
-										language.version = version.global_version;
-										language.save(function(err, lang) {
-											if (err) {
-												console.log(err);
-												next(err);
-											} else {
-												res.redirect(req.baseUrl + '/languages/' + lang._id + '/edit');
-											}
-										});
-									}	
-								});
-							}
-						});
+						if (req.files.map.extension !== 'jpeg' && req.files.map.extension !== 'jpg' &&
+							req.files.map.name !== 'png') {
+							req.flash('error', 'Error! Image uploaded not jpg or png format.');
+							res.redirect(req.baseUrl + '/languages/' + language._id + '/edit');
+						} else {
+							var path = './uploads/' + req.files.map.name;
+							fs.writeFile(path, req.files.map.buffer, function(err) {
+								if (err) {
+									console.log(err);
+									req.flash('error', 'Server error. Please try again.');
+									res.redirect(req.baseUrl + '/languages/' + language._id + '/edit');
+								} else {
+									language.map = req.files.map.name;
+									language.ready = true;
+									Version.findOneAndUpdate({ name: 'global'}, { $inc: {global_version: 1} }, function(err, version) {
+										if (err) {
+											console.log(err);
+											req.flash('error', 'Server error. Please try again.');
+											res.redirect(req.baseUrl + '/languages/' + language._id + '/edit');
+										} else {
+											language.version = version.global_version;
+											language.save(function(err, lang) {
+												if (err) {
+													console.log(err);
+													req.flash('error', 'Server error. Please try again.');
+													res.redirect(req.baseUrl + '/languages/' + language._id + '/edit');
+												} else {
+													res.redirect(req.baseUrl + '/languages/' + language._id + '/edit');
+												}
+											});
+										}	
+									});
+								}
+							});	
+						}
 					} else { // No map uploaded
 						language.ready = true;
 						Version.findOneAndUpdate({ name: 'global'}, { $inc: {global_version: 1} }, function(err, version) {
 							if (err) {
 								console.log(err);
-								next(err);
+								req.flash('error', 'Server error. Please try again.');
+								res.redirect(req.baseUrl + '/languages/' + language._id + '/edit');
 							} else {
 								language.version = version.global_version;
 								language.save(function(err, lang) {
 									if (err) {
 										console.log(err);
-										next(err);
+										req.flash('error', 'Server error. Please try again.');
+										res.redirect(req.baseUrl + '/languages/' + language._id + '/edit');
 									} else {
-										res.redirect(req.baseUrl + '/languages/' + lang._id + '/edit');
+										res.redirect(req.baseUrl + '/languages/' + language._id + '/edit');
 									}
 								});
 							}	
@@ -235,16 +266,19 @@ module.exports = function(passport, s3) {
 			var path = './uploads/' + req.files.audio.name;
 			fs.writeFile(path, req.files.audio.buffer, function(err) {
 				if (err) {
+					console.log(err);
 					res.json({ 'error': 'Server error. Try again' });
 				} else {
 					expression.audio = req.files.audio.name;
 					Version.findOneAndUpdate({ name: 'global'}, { $inc: {global_version: 1} }, function(err, version) {
 						if (err) {
+							console.log(err);
 							res.json({ 'error': 'Server error. Try again' });
 						} else {
 							expression.version = version.global_version;
 							expression.save(function(err, expression) {
 								if (err) {
+									console.log(err);
 									res.json({ 'error': 'Server error. Try again' });
 								} else {
 									res.json({ expression: expression });
@@ -441,8 +475,7 @@ module.exports = function(passport, s3) {
 		Expression.findOne({_id: req.params.expr_id}, function(err, expression) {
 			if (err) {
 				console.log(err);
-				req.flash('error', 'Error in the server. Please try again.');
-				res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
+				next(err);
 			} else {
 				if (req.body.english)
 					expression.english = req.body.english;
