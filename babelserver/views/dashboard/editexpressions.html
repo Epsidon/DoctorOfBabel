@@ -15,6 +15,11 @@
           <p>{{ error }}</p>
         </div>
       {{/if}}
+      {{#if success}}
+        <div class="alert alert-success" id="expr-success" role="alert">
+          <p>{{ success }}</p>
+        </div>
+      {{/if}}
       <div class="edit-expr panel panel-primary">
         <div class="panel-heading expr-panel">Edit Expression</div>
         <form class="form-expr" id="new-expr" method="post" enctype="multipart/form-data">

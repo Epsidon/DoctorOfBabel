@@ -1,0 +1,39 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3 col-md-2 sidebar">
+      <ul class="nav nav-sidebar">
+        <li><a href="/dashboard">Overview</a></li>
+        <li><a href="/dashboard/languages">Languages</a></li>
+        <li><a href="/dashboard/expressions">Expressions</a></li>
+        <li class="active"><a href="/dashboard/users">Users</a></li>
+        <li><a href="/dashboard/sessions">Sessions</a></li>
+      </ul>
+    </div>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+      {{#if error}}
+        <div class="alert alert-danger" id="user-error" role="alert">
+          <p>{{ error }}</p>
+        </div>
+      {{/if}}
+      {{#if success}}
+        <div class="alert alert-success" id="user-success" role="alert">
+          <p>{{ success }}</p>
+        </div>
+      {{/if}}
+      <div class="edit-user panel panel-primary">
+        <div class="panel-heading expr-panel">Edit User</div>
+        <form class="form-user" id="new-user" method="post" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" value="{{ user.username }}" name="username">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="text" class="form-control" name="password" value="{{ user.password }}">
+          </div>
+            <input type="submit" class="btn btn-primary" name="action" value="Update User">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

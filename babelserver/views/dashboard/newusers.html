@@ -1,0 +1,53 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3 col-md-2 sidebar">
+      <ul class="nav nav-sidebar">
+        <li><a href="/dashboard">Overview</a></li>
+        <li><a href="/dashboard/languages">Languages</a></li>
+        <li class="active"><a href="/dashboard/expressions">Expressions</a></li>
+        <li><a href="/dashboard/users">Users</a></li>
+        <li><a href="sessions">Sessions</a></li>
+      </ul>
+    </div>
+    <div class="col-sm-9 col-sm-offset-3 col-md-8 col-md-offset-3 main">
+      <div class="new-expression">
+        <a href="/dashboard/expressions"><button class="btn btn-primary">Back</button></a>
+      </div>
+      <div class="add-expression">
+      	<h1>Add a new user</h1>
+      	<p class="help-block">After the newly created user is saved, you will be redirected to
+        the user edit page.</p>
+      	<hr>
+        {{#if error}}
+          <div class="alert alert-danger" id="new-user-error" role="alert">
+            <p>{{ error }}</p>
+          </div>
+        {{/if}}
+      	<form class="form-user" id="new-user" method="post" enctype="multipart/form-data">
+      		<div class="form-group">
+      			<label for="username">Username</label>
+            <input type="text" class="form-control" value="{{ username }}" name="username">
+      		</div>
+      		<div class="form-group">
+      			<label for="translation">Password</label>
+            <input type="password" class="form-control" name="password">
+      		</div>
+          <div class="form-group">
+            <label for="role">Select the role of the user</label>
+            <select name="role">
+              <option value="admin">Admin</option>
+              <option value="staff">Staff</option>
+            </select>
+            <p class="help-block">
+              Admin gets complete access to everything in the dashboard.
+            </p>
+            <p class="help-block">
+              Staff gets the same access as admin with the expetion of adding/removing users
+            </p>
+          </div>
+          <input type="submit" class="btn btn-primary" value="Add User">
+      	</form>
+      </div>
+    </div>
+  </div>
+</div>

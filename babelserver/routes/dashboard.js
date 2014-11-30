@@ -95,6 +95,7 @@ module.exports = function(passport, s3) {
 							req.flash('error', 'Error occured creating language. Submit again.')
 							res.redirect(req.originalUrl);
 						} else {
+							req.flash('success', 'Language added successfully');
 							res.redirect(req.baseUrl + '/languages/' + lang._id + '/edit');
 						}
 					});
@@ -119,6 +120,7 @@ module.exports = function(passport, s3) {
 						res.render('dashboard/editlanguages', { 
 							expressions: expressions, 
 							language: language,
+							success: req.flash('success'),
 							error: req.flash('error'),
 						});
 					}
@@ -160,6 +162,7 @@ module.exports = function(passport, s3) {
 											req.flash('error', 'Server error. Please try again.');
 											res.redirect(req.baseUrl + '/languages/' + language._id + '/edit');
 										} else {
+											req.flash('success', 'Language updated successfully');
 											res.redirect(req.baseUrl + '/languages/' + language._id + '/edit');
 										}
 									});
@@ -173,6 +176,7 @@ module.exports = function(passport, s3) {
 								req.flash('error', 'Server error. Please try again.');
 								res.redirect(req.baseUrl + '/languages/' + language._id + '/edit');
 							} else {
+								req.flash('success', 'Language updated successfully');
 								res.redirect(req.baseUrl + '/languages/' + language._id + '/edit');
 							}
 						});		
@@ -218,6 +222,7 @@ module.exports = function(passport, s3) {
 													req.flash('error', 'Server error. Please try again.');
 													res.redirect(req.baseUrl + '/languages/' + language._id + '/edit');
 												} else {
+													req.flash('success', 'Language updated successfully');
 													res.redirect(req.baseUrl + '/languages/' + language._id + '/edit');
 												}
 											});
@@ -241,6 +246,7 @@ module.exports = function(passport, s3) {
 										req.flash('error', 'Server error. Please try again.');
 										res.redirect(req.baseUrl + '/languages/' + language._id + '/edit');
 									} else {
+										req.flash('success', 'Language updated successfully');
 										res.redirect(req.baseUrl + '/languages/' + language._id + '/edit');
 									}
 								});
@@ -257,7 +263,7 @@ module.exports = function(passport, s3) {
 		if (!req.body.english || !req.body.translation || !req.files.audio) {
 			res.json({ 'error': 'Error. Missing a field.' });
 		} else if (req.files.audio.extension !== 'mp3') {
-			res.json({ 'error': 'Audio file not mp3.' });
+			res.json({ 'error': 'Audio file not mp3 format.' });
 		} else {
 			var expression = new Expression();
 			expression.english = req.body.english;
@@ -296,11 +302,13 @@ module.exports = function(passport, s3) {
 		if (req.body.action === 'Remove') {
 			Version.findOneAndUpdate({name: 'global'}, {$inc: {global_version: 1}}, function(err, version) {
 				if (err) {
+					console.log(err);
 					res.json({'error': 'Server error. Try again'});
 				} else {
 					Expression.findOneAndUpdate({_id: req.body.exprId}, 
 						{ $set: {removed: true, version: version.global_version}}, function(err, expression) {
 						if (err) {
+							console.log(err);
 							res.json({'error': 'Server error. Try again.'});
 						} else {
 							res.json({removed: 'Expression removed'});
@@ -308,9 +316,10 @@ module.exports = function(passport, s3) {
 					});
 				}
 			});
-		} else {
+		} else { // Updating expression
 			Expression.findOne({ _id: req.body.exprId}, function(err, expression) {
 				if (err) {
+					console.log(err);
 					res.json({'error': 'Server error. Try again.'});
 				} else {
 					if (req.body.english)
@@ -319,21 +328,24 @@ module.exports = function(passport, s3) {
 						expression.translation = req.body.translation;
 					if (req.files.audio) {
 						if (req.files.audio.extension !== 'mp3') {
-							res.json({'error': 'Audio file not mp3'});
+							res.json({'error': 'Audio file not mp3 format.'});
 						} else {
 							var path = './uploads/' + req.files.audio.name;
 							fs.writeFile(path, req.files.audio.buffer, function(err) {
 								if (err) {
+									console.log(err);
 									res.json({'error': 'Server error. Try again.'});
 								} else {
 									expression.audio = req.files.audio.name;
 									Version.findOneAndUpdate({name: 'global'}, { $inc: {global_version: 1} }, function(err, version) {
 										if (err) {
+											console.log(err);
 											res.json({'error': 'Server error. Try again.'});
 										} else {
 											expression.version = version.global_version;
 											expression.save(function(err, expression) {
 												if (err) {
+													console.log(err);
 													res.json({'error': 'Server error. Try again.'});
 												} else {
 													res.json({ expression: expression });
@@ -347,11 +359,13 @@ module.exports = function(passport, s3) {
 					} else {
 						Version.findOneAndUpdate({name: 'global'}, { $inc: {global_version: 1} }, function(err, version) {
 							if (err) {
+								console.log(err);
 								res.json({'error': 'Server error. Try again!'});
 							} else {
 								expression.version = version.global_version;
 								expression.save(function(err, expression) {
 									if (err) {
+										console.log(err);
 										res.json({'error': 'Server error. Try again.'});
 									} else {
 										res.json({ expression: expression});
@@ -403,6 +417,11 @@ module.exports = function(passport, s3) {
 			req.flash('translationError', req.body.translation);
 			req.flash('error', 'Error! There are empty fields.');
 			res.redirect(req.originalUrl);
+		}	else if (req.files.audio.extension !== 'mp3') {
+			req.flash('englishError', req.body.english);
+			req.flash('translationError', req.body.translation);
+			req.flash('error', 'Audio file not mp3 format.');
+			res.redirect(req.originalUrl);
 		} else {
 			var expression = new Expression();
 			expression.english = req.body.english;
@@ -435,6 +454,7 @@ module.exports = function(passport, s3) {
 									req.flash('error', 'Error occured creating expression. Submit again.')
 									res.redirect(req.originalUrl);
 								} else {
+									req.flash('success', 'Expression added successfully');
 									res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
 								}
 							});
@@ -454,6 +474,7 @@ module.exports = function(passport, s3) {
 			} else {
 				res.render('dashboard/editexpressions', { 
 					expression: expression,
+					success: req.flash('success'),
 					error: req.flash('error'), 
 				});
 			}
@@ -479,7 +500,7 @@ module.exports = function(passport, s3) {
 						fs.writeFile(path, req.files.audio.buffer, function(err) {
 							if (err) {
 								console.log(err);
-								req.flash('error', 'Error in the server. Please try again.');
+								req.flash('error', 'Server error. Please try again.');
 								res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
 							} else {
 								expression.audio = req.files.audio.name;
@@ -496,6 +517,7 @@ module.exports = function(passport, s3) {
 												req.flash('error', 'Error in the server. Please try again.');
 												res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
 											} else {
+												req.flash('success', 'Expression updated successfully');
 												res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
 											}
 										});
@@ -515,9 +537,10 @@ module.exports = function(passport, s3) {
 							expression.save(function(err, expr) {
 								if (err) {
 									console.log(err);
-									req.flash('error', 'Error in the server. Please try again.');
+									req.flash('error', 'Server error. Please try again.');
 									res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
 								} else {
+									req.flash('success', 'Expression updated successfully');
 									res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
 								}
 							});
@@ -563,6 +586,7 @@ module.exports = function(passport, s3) {
 					req.flash('error', 'Error occured creating expression. Please try again.');
 					res.redirect(req.originalUrl);
 				} else {
+					req.flash('success', 'Default expression added successfully');
 					res.redirect(req.baseUrl + '/expressions/default/' + expression._id + '/edit');
 				}
 			});
@@ -578,7 +602,30 @@ module.exports = function(passport, s3) {
 			} else {
 				res.render('dashboard/editdefaultexpressions', { 
 					expression: expression,
+					success: req.flash('success'),
 					error: req.flash('error'), 
+				});
+			}
+		});
+	});
+
+	router.post('/expressions/default/:expr_id/edit', function(req, res) {
+		DefaultExpression.findOne({ _id: req.params.expr_id}, function(err, expression) {
+			if (err) {
+				console.log(err);
+				next(err);
+			} else {
+				if (req.body.english)
+					expression.english = req.body.english;
+				expression.save(function(err, expr) {
+					if (err) {
+						console.log(err);
+						req.flash('error', 'Error in the server. Please try again.');
+						res.redirect(req.baseUrl + '/expressions/default/' + expression._id + '/edit');
+					} else {
+						req.flash('success', 'Default expression added successfully');
+						res.redirect(req.baseUrl + '/expressions/default/' + expression._id + '/edit');
+					}
 				});
 			}
 		});
@@ -595,6 +642,70 @@ module.exports = function(passport, s3) {
 				next(err);
 			} else {
 				res.render('dashboard/users', { users: users });
+			}
+		});
+	});
+
+
+	router.get('/users/new', function(req, res) {
+		res.render('dashboard/newusers', {
+			error: req.flash('error'),
+		});
+	});
+
+	router.post('/users/new', function(req, res) {
+		if (!req.body.username || !req.body.password || !req.body.role) {
+			req.flash('usernameError', req.body.username);
+			req.flash('roleError', req.body.role);
+			req.flash('error', 'Error! There are empty fields.');
+			res.redirect(req.originalUrl);
+		} else {
+			User.findOne({ username: req.body.username}, function(err, user) {
+				if (err) {
+					console.log(err);
+					req.flash('usernameError', req.body.username);
+					req.flash('roleError', req.body.role);
+					req.flash('error', 'Server error. Please try again');
+					res.redirect(req.originalUrl);
+				} else if (user) {
+					req.flash('usernameError', req.body.username);
+					req.flash('roleError', req.body.role);
+					req.flash('error', 'Username already exists. Please try again.');
+					res.redirect(req.originalUrl);
+				} else {
+					user = new User();
+					user.username = req.body.username;
+					user.password = req.body.password;
+					user.role = req.body.role;
+					user.save(function(err, user) {
+						if (err) {
+							console.log(err);
+							req.flash('usernameError', req.body.username);
+							req.flash('roleError', req.body.role);
+							req.flash('error', 'Server error. Please try again');
+							res.redirect(req.originalUrl);
+						} else {
+							req.flash('success', 'User added successfully');
+							res.redirect(req.baseUrl + '/users/' + user.username + '/edit');
+						}
+					});
+				}
+			});
+		}
+	});
+
+
+	router.get('/users/:username/edit', function(req, res) {
+		User.findOne({ username: req.params.username}, function(err, user) {
+			if (err) {
+				console.log(err);
+				next(err);
+			} else {
+				res.render('dashboard/editusers', {
+					user: user,
+					success: req.flash('success'),
+					error: req.flash('error'),
+				})
 			}
 		});
 	});
