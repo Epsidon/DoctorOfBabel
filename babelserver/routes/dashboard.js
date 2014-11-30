@@ -647,6 +647,70 @@ module.exports = function(passport, s3) {
 	});
 
 
+	router.get('/users/new', function(req, res) {
+		res.render('dashboard/newusers', {
+			error: req.flash('error'),
+		});
+	});
+
+	router.post('/users/new', function(req, res) {
+		if (!req.body.username || !req.body.password || !req.body.role) {
+			req.flash('usernameError', req.body.username);
+			req.flash('roleError', req.body.role);
+			req.flash('error', 'Error! There are empty fields.');
+			res.redirect(req.originalUrl);
+		} else {
+			User.findOne({ username: req.body.username}, function(err, user) {
+				if (err) {
+					console.log(err);
+					req.flash('usernameError', req.body.username);
+					req.flash('roleError', req.body.role);
+					req.flash('error', 'Server error. Please try again');
+					res.redirect(req.originalUrl);
+				} else if (user) {
+					req.flash('usernameError', req.body.username);
+					req.flash('roleError', req.body.role);
+					req.flash('error', 'Username already exists. Please try again.');
+					res.redirect(req.originalUrl);
+				} else {
+					user = new User();
+					user.username = req.body.username;
+					user.password = req.body.password;
+					user.role = req.body.role;
+					user.save(function(err, user) {
+						if (err) {
+							console.log(err);
+							req.flash('usernameError', req.body.username);
+							req.flash('roleError', req.body.role);
+							req.flash('error', 'Server error. Please try again');
+							res.redirect(req.originalUrl);
+						} else {
+							req.flash('success', 'User added successfully');
+							res.redirect(req.baseUrl + '/users/' + user.username + '/edit');
+						}
+					});
+				}
+			});
+		}
+	});
+
+
+	router.get('/users/:username/edit', function(req, res) {
+		User.findOne({ username: req.params.username}, function(err, user) {
+			if (err) {
+				console.log(err);
+				next(err);
+			} else {
+				res.render('dashboard/editusers', {
+					user: user,
+					success: req.flash('success'),
+					error: req.flash('error'),
+				})
+			}
+		});
+	});
+
+
 	return router;
 
 };
