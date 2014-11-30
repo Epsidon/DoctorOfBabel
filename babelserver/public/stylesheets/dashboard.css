@@ -69,6 +69,12 @@
   padding: 30px;
 }
 
+/* expressions form in edit languages */
+.expr-panel-edit {
+  padding: 10px;
+  margin-bottom: 5px;
+}
+
 .edit-lang img {
   width: 80%;
   height: auto;
@@ -104,12 +110,16 @@ div.bg-info p {
   margin-bottom: 30px;
 }
 
+#expression-list-update h1 {
+  margin-bottom: 30px;
+}
+
 .form-expr-new {
   margin-bottom: 5px;
 }
 
 .form-expr-update {
-  margin-bottom: 25px
+  margin-bottom: 30px
 }
 
 /* Edit the view of the tables in dashboard */
@@ -129,4 +139,8 @@ div.bg-info p {
 
 .expr-play {
   padding-top: 20px;
+}
+
+.lang-expr-play {
+  margin-top: 15px;
 }
