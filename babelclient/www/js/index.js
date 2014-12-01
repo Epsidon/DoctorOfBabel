@@ -21,6 +21,7 @@ var db;
 // Global collections
 var languageList = [];
 var expressionList = [];
+var audioElement = document.createElement('audio');
 
 var app = {
     // Application Constructor
@@ -156,7 +157,8 @@ var controller = {
                     var row = resultSet.rows.item(i);
                     var english = resultSet.rows.item(i).english;
                     var translation = resultSet.rows.item(i).translation;
-                    var container = '<div class="list-item">';
+                    var audio = resultSet.rows.item(i).audio;
+                    var container = '<div class="list-item" onClick="controller.playSound(\'' + audio + '\')">';
                     var listLabel = '<div class="label">';
                     var arrowIcon = '<img src="img/arrow-icon.png" class="arrow-icon" alt="Arrow">';
                     var divEnd = '</div>';
@@ -195,6 +197,13 @@ var controller = {
             controller.listExpressions(languageId, languageName);
         });
         $("#info-button").hide();
+    },
+
+    playSound: function(fileName) {
+        audioElement.pause();
+        audioElement = document.createElement('audio');
+        audioElement.setAttribute('src', cordova.file.dataDirectory + fileName);
+        audioElement.play();
     }
 };
 
