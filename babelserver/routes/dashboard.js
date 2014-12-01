@@ -8,7 +8,7 @@ var Version = require('../models/version');
 var fs = require('fs');
 var path = require('path');
 
-module.exports = function(passport, s3) {
+module.exports = function(passport) {
 
 	// Ensure user is authenticated before processing
 	// request to /dashboard
@@ -117,11 +117,24 @@ module.exports = function(passport, s3) {
 						console.log(err);
 						next(err);
 					} else {
-						res.render('dashboard/editlanguages', { 
-							expressions: expressions, 
-							language: language,
-							success: req.flash('success'),
-							error: req.flash('error'),
+						var excludeExpressions = new Array();
+						expressions.forEach(function(element) {
+							excludeExpressions.push(element.english);
+						});
+						DefaultExpression.find({ english: {$nin: excludeExpressions }}, function(err, defaultExpressions) {
+							if (err) {
+								console.log(err);
+								next(err);
+							} else {
+								console.log(language);
+								res.render('dashboard/editlanguages', { 
+									expressions: expressions,
+									defaultExpressions: defaultExpressions, 
+									language: language,
+									success: req.flash('success'),
+									error: req.flash('error'),
+								});
+							}
 						});
 					}
 				});

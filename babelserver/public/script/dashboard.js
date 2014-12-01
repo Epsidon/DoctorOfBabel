@@ -1,6 +1,6 @@
 function addExpression(languageId) {
   var newForm = 
-    '<form class="form-expr-new">' +
+    '<form class="form-expr-new" method="post" enctype="multipart/form-data">' +
     '<input type="hidden" name="language" value="' + languageId + '">' +
     '<input type="hidden" name="exprId" value="">' +
     '<div class="form-group">' +
@@ -78,7 +78,7 @@ $(document).ready(function() {
           '<input type="submit" class="btn btn-primary" value="Modify">' +
           '<input type="submit" class="btn btn-danger" name="action" value="Remove" style="margin-left: 4px;">' +
           '</form>';
-        $('#expression-list-update').prepend(formUpdate);
+        $('#expression-list-update').children('h1').after(formUpdate);
       }
     })
     .fail(function() {
