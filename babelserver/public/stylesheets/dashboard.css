@@ -31,6 +31,11 @@
   background-color: #428bca;
 }
 
+.nav-sidebar > li > a:hover {
+  color: #fff;
+  background-color: #428bca; 
+}
+
 .form-expr {
 	margin-bottom: 30px;
 }
