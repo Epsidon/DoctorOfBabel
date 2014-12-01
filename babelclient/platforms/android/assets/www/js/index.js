@@ -21,6 +21,7 @@ var db;
 // Global collections
 var languageList = [];
 var expressionList = [];
+var audioElement = document.createElement('audio');
 
 var app = {
     // Application Constructor
@@ -109,11 +110,13 @@ var controller = {
                 $("#back-button").hide();
                 $("#title").text("Languages");
                 for (var i = 0; i < resultSet.rows.length; i++) {
-                    var row = resultSet.rows.item(i);
-                    console.log("Removed? " + resultSet.rows.item(i).removed);
                         var name = resultSet.rows.item(i).name;
                         var id = resultSet.rows.item(i).id;
-                        var container = '<div class="list-item" ontouchend="controller.listExpressions(\'' + id + '\', \'' + name + '\')">';
+                        var info = resultSet.rows.item(i).info;
+                        info = btoa(info);
+                        var map = resultSet.rows.item(i).map;
+
+                        var container = '<div class="list-item" ontouchend="controller.listExpressions(\'' + id + '\', \'' + name + '\', \'' + info + '\', \'' + map + '\')">';
                         console.log(container);
                         var listLabel = '<div class="label">';
                         var arrowIcon = '<img src="img/arrow-icon.png" class="arrow-icon" alt="Arrow">';
@@ -130,7 +133,7 @@ var controller = {
         });
     },
 
-    listExpressions: function(languageId, languageName) {
+    listExpressions: function(languageId, languageName, info, map) {
         database.getExpressions(languageId, function(resultSet) {
             if (resultSet !== -1) {
                 $("#expression-list").html('');
@@ -148,7 +151,7 @@ var controller = {
 
                 $("#info-button").show();
                 $("#info-button").click(function() {
-                    controller.displayInfoScreen(languageId, languageName);
+                    controller.displayInfoScreen(languageId, languageName, info, map);
                 });
                 $("#title").text(languageName);
 
@@ -156,7 +159,8 @@ var controller = {
                     var row = resultSet.rows.item(i);
                     var english = resultSet.rows.item(i).english;
                     var translation = resultSet.rows.item(i).translation;
-                    var container = '<div class="list-item">';
+                    var audio = resultSet.rows.item(i).audio;
+                    var container = '<div class="list-item" onClick="controller.playSound(\'' + audio + '\')">';
                     var listLabel = '<div class="label">';
                     var arrowIcon = '<img src="img/arrow-icon.png" class="arrow-icon" alt="Arrow">';
                     var divEnd = '</div>';
@@ -184,17 +188,26 @@ var controller = {
         controller.listLanguages();
     },
 
-    displayInfoScreen: function(languageId, languageName) {
+    displayInfoScreen: function(languageId, languageName, info, map) {
+        $("#info-screen").html('');
+        $("#info-button").hide();
         $("#language-list").hide();
         $("#expression-list").hide();
-        $("#info-screen").text("Info about " + languageName);
+        $("#info-screen").append('<div class="info-text">' + atob(info) + '</div>' +
+            '<img src="' + cordova.file.dataDirectory + map + '" style="width: 80%; height: auto; display: block; margin-left: auto; margin-right: auto; margin-top: 10px;">');
         $("#info-screen").show();
         $("#back-button").show();
         $( "#back-button").unbind( "click" );
         $("#back-button").click(function() {
-            controller.listExpressions(languageId, languageName);
+            controller.listExpressions(languageId, languageName, info, map);
         });
-        $("#info-button").hide();
+    },
+
+    playSound: function(fileName) {
+        audioElement.pause();
+        audioElement = document.createElement('audio');
+        audioElement.setAttribute('src', cordova.file.dataDirectory + fileName);
+        audioElement.play();
     }
 };
 

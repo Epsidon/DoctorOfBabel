@@ -144,8 +144,86 @@ module.exports = function(passport) {
 
 	// Edit the individual language page
 	router.post('/languages/:lang_id/edit', function(req, res, next) {
-		// Either publishing language or continuing as draft
-		if (req.body.action === 'Save as Draft') {
+		// Either publishing language or continuing as draft or removing
+		if (req.body.action === 'Remove') {
+			Language.findOne({ _id: req.params.lang_id}, function(err, language) {
+				if (err) {
+					console.log(err);
+					req.flash('error', 'Server error. Please try again.');
+					res.redirect(req.originalUrl);
+				} else {
+					if (language.ready === false) { // Language is draft, just delete it
+						Version.findOneAndUpdate({ name: 'global'}, { $inc: {global_version: 1} }, function(err, version) {
+							if (err) {
+								console.log(err);
+								req.flash('error', 'Server error. Please try again.');
+								res.redirect(req.originalUrl);
+							} else {
+								Expression.update({language: language._id}, {$set: {removed: true, version: version.global_version}}, {multi: true}, function(err, numberEffected, raw) {
+									if (err) {
+										console.log(err);
+										req.flash('error', 'Server error. Please try again.');
+										res.redirect(req.originalUrl);
+									} else {
+										Language.findOneAndRemove({_id: language._id}, function(err, removedLanguage) {
+											if (err) {
+												console.log(err);
+												req.flash('error', 'Server error. Please try again.');
+												res.redirect(req.originalUrl);
+											} else {
+												fs.unlink('./uploads/' + removedLanguage.map, function(err) {
+													if (err) {
+														console.log(err);
+														res.redirect(req.baseUrl + '/languages');	
+													} else {
+														res.redirect(req.baseUrl + '/languages');
+													}
+												});
+											}
+										});
+									}
+								});
+							}
+						});
+					} else { // Language is published, set removed to true
+						Version.findOneAndUpdate({ name: 'global'}, { $inc: {global_version: 1} }, function(err, version) {
+							if (err) {
+								console.log(err);
+								req.flash('error', 'Server error. Please try again.');
+								res.redirect(req.originalUrl);
+							} else {
+								Expression.update({language: language._id}, {$set: {removed: true, version: version.global_version}}, {multi: true}, function(err, numberEffected, raw) {
+									if (err) {
+										console.log(err);
+										req.flash('error', 'Server error. Please try again.');
+										res.redirect(req.originalUrl);
+									} else {
+										language.version = version.global_version;
+										language.removed = true;
+										language.save(function(err, remmovedLanguage) {
+											if (err) {
+												console.log(err);
+												req.flash('error', 'Server error. Please try again.');
+												res.redirect(req.originalUrl);	
+											} else {
+												fs.unlink('./uploads/' + language.map, function(err) {
+													if (err) {
+														console.log(err);
+														res.redirect(req.baseUrl + '/languages');
+													} else {
+														res.redirect(req.baseUrl + '/languages');
+													}
+												});
+											}
+										});
+									}
+								});
+							}
+						});
+					}
+				}
+			});
+		} else if (req.body.action === 'Save as Draft') {
 			Language.findOne({ _id: req.params.lang_id }, function(err, language) {
 				if (err) {
 					console.log(err);
@@ -501,73 +579,100 @@ module.exports = function(passport) {
 	});
 
 	router.post('/expressions/:expr_id/edit', function(req, res) {
-		Expression.findOne({_id: req.params.expr_id}, function(err, expression) {
-			if (err) {
-				console.log(err);
-				next(err);
-			} else {
-				if (req.body.english)
-					expression.english = req.body.english;
-				if (req.body.translation)
-					expression.translation = req.body.translation;
-				if (req.files.audio) {
-					if (req.files.audio.extension !== 'mp3') {
-						req.flash('error', 'Audio file not mp3 format.');
-						res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
-					} else {
-						var path = './uploads/' + req.files.audio.name;
-						fs.writeFile(path, req.files.audio.buffer, function(err) {
-							if (err) {
-								console.log(err);
-								req.flash('error', 'Server error. Please try again.');
-								res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
-							} else {
-								expression.audio = req.files.audio.name;
-								Version.findOneAndUpdate({name: 'global'}, { $inc: {global_version: 1} }, function(err, version) {
-									if (err) {
-										console.log(err);
-										req.flash('error', 'Error in the server. Please try again.');
-										res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
-									} else {
-										expression.version = version.global_version;
-										expression.save(function(err, expr) {
-											if (err) {
-												console.log(err);
-												req.flash('error', 'Error in the server. Please try again.');
-												res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
-											} else {
-												req.flash('success', 'Expression updated successfully');
-												res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
-											}
-										});
-									}
-								});
-							}
-						});
-					}
-				} else { // Didnt upload audio file
-					Version.findOneAndUpdate({name: 'global'}, { $inc: {global_version: 1} }, function(err, version) {
+		if (req.body.action === 'Remove') {
+			Version.findOneAndUpdate({name: 'global'}, { $inc: {global_version: 1} }, function(err, version) {
+				if (err) {
+					console.log(err);
+					req.flash('error', 'Server error. Please try again.');
+					res.redirect(req.originalUrl);
+				} else {
+					Expression.findOneAndUpdate({_id: req.params.expr_id}, {$set: {removed: true, version: version.global_version }}, function(err, removedExpression) {
 						if (err) {
 							console.log(err);
-							req.flash('error', 'Error in the server. Please try again.');
-							res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
+							req.flash('error', 'Server error. Please try again.');
+							res.redirect(req.originalUrl);
 						} else {
-							expression.version = version.global_version;
-							expression.save(function(err, expr) {
+							fs.unlink('./uploads/' + removedExpression.audio, function(err) {
 								if (err) {
 									console.log(err);
-									req.flash('error', 'Server error. Please try again.');
-									res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
+									res.redirect(req.baseUrl + '/expressions');
 								} else {
-									req.flash('success', 'Expression updated successfully');
-									res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
+									res.redirect(req.baseUrl + '/expressions');
 								}
 							});
 						}
 					});
 				}
-			}
-		});
+			});			
+		} else { // Update expression
+			Expression.findOne({_id: req.params.expr_id}, function(err, expression) {
+				if (err) {
+					console.log(err);
+					next(err);
+				} else {
+					if (req.body.english)
+						expression.english = req.body.english;
+					if (req.body.translation)
+						expression.translation = req.body.translation;
+					if (req.files.audio) {
+						if (req.files.audio.extension !== 'mp3') {
+							req.flash('error', 'Audio file not mp3 format.');
+							res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
+						} else {
+							var path = './uploads/' + req.files.audio.name;
+							fs.writeFile(path, req.files.audio.buffer, function(err) {
+								if (err) {
+									console.log(err);
+									req.flash('error', 'Server error. Please try again.');
+									res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
+								} else {
+									expression.audio = req.files.audio.name;
+									Version.findOneAndUpdate({name: 'global'}, { $inc: {global_version: 1} }, function(err, version) {
+										if (err) {
+											console.log(err);
+											req.flash('error', 'Error in the server. Please try again.');
+											res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
+										} else {
+											expression.version = version.global_version;
+											expression.save(function(err, expr) {
+												if (err) {
+													console.log(err);
+													req.flash('error', 'Error in the server. Please try again.');
+													res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
+												} else {
+													req.flash('success', 'Expression updated successfully');
+													res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
+												}
+											});
+										}
+									});
+								}
+							});
+						}
+					} else { // Didnt upload audio file
+						Version.findOneAndUpdate({name: 'global'}, { $inc: {global_version: 1} }, function(err, version) {
+							if (err) {
+								console.log(err);
+								req.flash('error', 'Error in the server. Please try again.');
+								res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
+							} else {
+								expression.version = version.global_version;
+								expression.save(function(err, expr) {
+									if (err) {
+										console.log(err);
+										req.flash('error', 'Server error. Please try again.');
+										res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
+									} else {
+										req.flash('success', 'Expression updated successfully');
+										res.redirect(req.baseUrl + '/expressions/' + expression._id + '/edit');
+									}
+								});
+							}
+						});
+					}
+				}
+			});
+		}
 	});
 	
 
@@ -629,25 +734,37 @@ module.exports = function(passport) {
 	});
 
 	router.post('/expressions/default/:expr_id/edit', function(req, res) {
-		DefaultExpression.findOne({ _id: req.params.expr_id}, function(err, expression) {
-			if (err) {
-				console.log(err);
-				next(err);
-			} else {
-				if (req.body.english)
-					expression.english = req.body.english;
-				expression.save(function(err, expr) {
-					if (err) {
-						console.log(err);
-						req.flash('error', 'Error in the server. Please try again.');
-						res.redirect(req.baseUrl + '/expressions/default/' + expression._id + '/edit');
-					} else {
-						req.flash('success', 'Default expression added successfully');
-						res.redirect(req.baseUrl + '/expressions/default/' + expression._id + '/edit');
-					}
-				});
-			}
-		});
+		if (req.body.action === 'Remove') {
+			DefaultExpression.findOneAndRemove({ _id: req.params.expr_id}, function(err) {
+				if (err) {
+					console.log(err);
+					req.flash('error', 'Server error. Please try again.');
+					res.redirect(req.originalUrl);
+				} else {
+					res.redirect(req.baseUrl + '/expressions/default');
+				}
+			});
+		} else {
+			DefaultExpression.findOne({ _id: req.params.expr_id}, function(err, expression) {
+				if (err) {
+					console.log(err);
+					next(err);
+				} else {
+					if (req.body.english)
+						expression.english = req.body.english;
+					expression.save(function(err, expr) {
+						if (err) {
+							console.log(err);
+							req.flash('error', 'Error in the server. Please try again.');
+							res.redirect(req.baseUrl + '/expressions/default/' + expression._id + '/edit');
+						} else {
+							req.flash('success', 'Default expression added successfully');
+							res.redirect(req.baseUrl + '/expressions/default/' + expression._id + '/edit');
+						}
+					});
+				}
+			});
+		}
 	});
 
 
@@ -729,6 +846,43 @@ module.exports = function(passport) {
 				})
 			}
 		});
+	});
+
+	router.post('/users/:username/edit', function(req, res, next) {
+		if (req.body.action === 'Remove') {
+			User.findOneAndRemove({username: req.params.username}, function(err) {
+				if (err) {
+					console.log(err);
+					next(err);
+				} else {
+					res.redirect(req.baseUrl + '/users');
+				}
+			});
+		} else { // Modify user
+			User.findOne({ username: req.params.username }, function(err, user) {
+				if (err) {
+					console.log(err);
+					req.flash('error', 'Server error. Please try again.');
+					res.redirect(req.originalUrl);
+				} else { // Got existing user
+					if (user.username !== req.body.username)
+						user.username = req.body.username;
+					if (user.password !== req.body.password)
+						user.password = req.body.password;
+					if (user.role !== req.body.role)
+						user.role = req.body.role;
+					user.save(function(err, updatedUser) {
+						if (err) {
+							console.log(err);
+							req.flash('error', 'Server error. Please try again.');
+							res.redirect(req.originalUrl);
+						} else {
+							res.redirect(req.baseUrl + '/users');
+						}
+					});
+				}
+			});
+		}
 	});
 
 
