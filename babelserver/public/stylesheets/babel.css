@@ -38,6 +38,12 @@ body {
   background-color: #3e50b4;
 }
 
+#info-container,
+#language-list,
+#expression-list {
+	padding-top: 20px;
+}
+
 @media screen and (max-width: 768px) {  
 	#expr-title { display: none; }
 	#info-title { display: none; }
@@ -62,13 +68,27 @@ body {
 	#info-container { display: none; }
 }
 
+
 #info-container > img {
 	width: 100%;
 	height: auto;
 }
 
+#info-container .alert-info {
+	text-align: center;
+	margin-top: 20px;
+}
+
+#display-title > img {
+	width: 100%;
+	height: auto;
+}
+
+#display-title > h1 {
+	text-align: center;
+}
+
 img.title-icon {
-	float:right; 
 	max-height:40px; 
 	max-width:40px; 
 	height:60%; 
@@ -103,7 +123,7 @@ img.title-icon {
 
 .language:hover {
 	color: #fff;
-  background-color: #3e50b4;
+  	background-color: #3e50b4;
 }
 
 .language:focus {
@@ -118,6 +138,10 @@ img.title-icon {
 
 .expression-text {
 	padding-bottom: 25px;
+}
+
+.expression {
+	margin-bottom: 20px; 
 }
 
 .form-login .form-control {
