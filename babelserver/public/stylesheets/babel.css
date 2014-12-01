@@ -144,6 +144,22 @@ img.title-icon {
 	margin-bottom: 20px; 
 }
 
+.exprs-container {
+	display: inline;
+}
+
+.english-expr {
+	display: inline;
+	float: left;
+	font-size: 1.3em;
+}
+
+.translation-expr {
+	display: inline;
+	float: right;
+	font-size: 1.3em;
+}
+
 .form-login .form-control {
 	margin-bottom: 10px;
 }

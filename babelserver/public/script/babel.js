@@ -50,13 +50,15 @@ function populateExpressions(langId, name, info, mapPath) {
     if (exprs.length != 0) {
       exprs.forEach(function(expr) {
         var outerCover = '<div id="' + expr._id + '" class="expression">' 
-                + '<div>';
+                + '<div class="exprs-container">';
         var innerCover = '</div><audio controls style="width:100%;"><source src="/' + expr.audio + '" type="audio/mpeg">' 
         + 'Your browser does not support the audio element.' 
         + '</audio>' 
         + '</div>';
+        englishExpr = '<div class="english-expr">'+expr.english+'</div>';
+        translationExpr = '<div class="translation-expr">'+expr.translation+'</div>';
         contextBuilder = contextBuilder +
-            outerCover + expr.english + " - " + expr.translation + innerCover;
+            outerCover + englishExpr + " " + translationExpr + innerCover;
             $("#expression-list").html(contextBuilder);
       });
       if(isMobileBrowser()) {
@@ -65,4 +67,16 @@ function populateExpressions(langId, name, info, mapPath) {
     }
   });
 }
+
+//var outerCover = '<div id="' + expr._id + '" class="expression">' 
+        //         + '<div>';
+        
+        // var innerCover = '</div><audio src="/' + expr.audio + '" id="expr-audio-' + expr._id + '"' +
+        // '</audio>' +
+        // '</div>';
+        // var audioButton = '<span class="glyphicon glyphicon-play-circle pull-right" style="font-size:30px;"' +
+        //  'onclick=document.getElementById("expr-audio-'+expr._id+'"'+').play()'+'></span>';
+        // contextBuilder = contextBuilder +
+        //     outerCover + expr.english + " - " + expr.translation + audioButton + innerCover;
+        //     $("#expression-list").html(contextBuilder);
 
