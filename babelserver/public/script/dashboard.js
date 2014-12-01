@@ -69,7 +69,7 @@ $(document).ready(function() {
           '<input type="file" name="audio" id="audio">' +
           '<div class="lang-expr-play">' +
           '<p class="help-block">Play current audio file.</p>' +
-          '<span class="glyphicon glyphicon-play-circle" style="font-size:30px;" onclick="document.getElementById("expr-audio-'+data.expression._id+'").play()"></span>' +
+          '<span class="glyphicon glyphicon-play-circle" style="font-size:30px;" onclick=document.getElementById("expr-audio-'+data.expression._id+'"'+').play()'+'></span>' +
           '<a href="/'+data.expression.audio+'">'+data.expression.audio+'</a>' +
           '<audio src="/'+data.expression.audio+'" id="expr-audio-'+data.expression._id+'"></audio>' +
           '</div>' +
@@ -123,6 +123,7 @@ $(document).ready(function() {
     $(this).remove();
     $(parent).remove();
   });
+
 });
 
 
