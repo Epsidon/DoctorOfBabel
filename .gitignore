@@ -18,3 +18,8 @@ babelserver/.DS_Store
 babelclient/.DS_Store
 babelclient/www/.DS_Store
 babelclient/platforms/.DS_Store
+
+# Xcode files
+babelclient/platforms/ios/BabelClient.xcodeproj/
+babelclient/platforms/ios/CordovaLib/CordovaLib.xcodeproj/
+
