@@ -36,8 +36,8 @@
     <content src="index.html" />
     <preference name="AndroidPersistentFileLocation" value="Internal" />
     <preference name="iosPersistentFileLocation" value="Library" />
-    <preference name="StatusBarOverlaysWebView" value="true" />
-    <preference name="StatusBarBackgroundColor" value="#000000" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#536dfe" />
     <preference name="StatusBarStyle" value="blackopaque" />
     <access origin="*" />
 </widget>

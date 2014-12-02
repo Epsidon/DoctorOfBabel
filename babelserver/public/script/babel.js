@@ -32,20 +32,20 @@ function closeModal() {
   el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
 }
 
-function populateExpressions(langId, name, info, mapPath) {
+function populateExpressions(language) {
   $('#display-title').remove();
   $('#expr-title').removeClass('hidden');
   $('#info-title').removeClass('hidden');
   $('#expression-list').removeClass('hidden');
   $('#info-container').removeClass('hidden');
-  $("#info").text(info);
-  $("#map").attr('src', mapPath);
+  $("#info").text(language.info);
+  $("#map").attr('src', language.map);
   var hiddenHeader = '<div id="hidden-header">' +
   '<img style="float:left;"id="back-icon" src="/images/back-icon.png" onClick="closeModal();">' + 
-  '<h4 style="text-align: center;">' + name + '</h4>' +
+  '<h4 style="text-align: center;">' + language.name + '</h4>' +
   '</div>';
   var contextBuilder = hiddenHeader;
-  var requestURI = "/api/languages/" + langId;
+  var requestURI = "/api/languages/" + language._id;
   $.get(requestURI, function(exprs, status) {
     if (exprs.length != 0) {
       exprs.forEach(function(expr) {
