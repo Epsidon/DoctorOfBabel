@@ -43,7 +43,7 @@ var app = {
             // app.receivedEvent('deviceready');
             $('body').bind('touchstart', function() {});
             $(function() {
-             FastClick.attach(document.body);
+                FastClick.attach(document.body);
             });
             $("#info-screen").hide();
             $("#expression-list").hide();
@@ -146,6 +146,7 @@ var controller = {
 
                 $("#back-button").unbind( "click" );
                 $("#back-button").click(function() {
+                    audioElement.pause();
                     controller.listLanguages();
                     $("#expression-list").hide();
                     $("#language-list").show();
