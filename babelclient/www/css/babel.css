@@ -173,7 +173,7 @@ span.glyphicon-globe {
 /* Phonegap CSS */
 
 .container #title {
-  padding-top: 5px;
+  padding-top: 10px;
   text-align: center; 
   font-size: large;
   color: #fff;
@@ -182,13 +182,13 @@ span.glyphicon-globe {
 
 
 span.glyphicon-circle-arrow-left {
-  padding-top: 0.6em;
+  padding-top: 0.4em;
   font-size: 2em;
   color: #fff;
 }
 
 span.glyphicon-info-sign {
-  padding-top: 0.6em;
+  padding-top: 0.4em;
   font-size: 2em;
   color: #fff;
 }
@@ -203,4 +203,6 @@ span.glyphicon-play {
   font-size: 1.3em;
 }
 
-
+#info-content p {
+  text-transform: none;
+}
