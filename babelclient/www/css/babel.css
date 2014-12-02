@@ -179,22 +179,26 @@ span.glyphicon-globe {
   color: #fff;
 }
 
+
+
 span.glyphicon-circle-arrow-left {
-  padding-top: 15px;
-  font-size: 20px;
+  padding-top: 0.4em;
+  font-size: 2em;
   color: #fff;
 }
 
 span.glyphicon-info-sign {
-  padding-top: 15px;
-  font-size: 20px;
+  padding-top: 0.4em;
+  font-size: 2em;
   color: #fff;
 }
 
-span.glyphicon-arrow-right {
+span.glyphicon-circle-arrow-right {
+  font-size: 1.3em;
   color: #fff;
 }
+
 
 span.glyphicon-play {
-  
+  font-size: 1.3em;
 }

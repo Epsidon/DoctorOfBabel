@@ -42,6 +42,9 @@ var app = {
     onDeviceReady: function() {
             // app.receivedEvent('deviceready');
             $('body').bind('touchstart', function() {});
+            $(function() {
+             FastClick.attach(document.body);
+            });
             $("#info-screen").hide();
             $("#expression-list").hide();
 
