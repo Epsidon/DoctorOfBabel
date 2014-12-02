@@ -41,6 +41,11 @@
     <feature name="Notification">
         <param name="ios-package" value="CDVNotification" />
     </feature>
+    <feature name="StatusBar">
+        <param name="ios-package" onload="true" value="CDVStatusBar" />
+    </feature>
+    <preference name="StatusBarOverlaysWebView" value="true" />
+    <preference name="StatusBarStyle" value="lightcontent" />
     <feature name="Zip">
         <param name="ios-package" value="Zip" />
     </feature>
@@ -54,5 +59,8 @@
     <content src="index.html" />
     <preference name="AndroidPersistentFileLocation" value="Internal" />
     <preference name="iosPersistentFileLocation" value="Library" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#536dfe" />
+    <preference name="StatusBarStyle" value="blackopaque" />
     <access origin="*" />
 </widget>

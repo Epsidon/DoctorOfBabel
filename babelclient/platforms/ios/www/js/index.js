@@ -42,6 +42,9 @@ var app = {
     onDeviceReady: function() {
             // app.receivedEvent('deviceready');
             $('body').bind('touchstart', function() {});
+            $(function() {
+             FastClick.attach(document.body);
+            });
             $("#info-screen").hide();
             $("#expression-list").hide();
 
@@ -108,7 +111,7 @@ var controller = {
             if (resultSet !== -1) {
                 $("#language-list").html('');
                 $("#back-button").hide();
-                $("#title").text("Languages");
+                $("#title").text("Doctor of Babel");
                 for (var i = 0; i < resultSet.rows.length; i++) {
                         var name = resultSet.rows.item(i).name;
                         var id = resultSet.rows.item(i).id;
@@ -116,10 +119,10 @@ var controller = {
                         info = btoa(info);
                         var map = resultSet.rows.item(i).map;
 
-                        var container = '<div class="list-item" ontouchend="controller.listExpressions(\'' + id + '\', \'' + name + '\', \'' + info + '\', \'' + map + '\')">';
+                        var container = '<div class="list-item language" ontouchend="controller.listExpressions(\'' + id + '\', \'' + name + '\', \'' + info + '\', \'' + map + '\')">';
                         console.log(container);
-                        var listLabel = '<div class="label">';
-                        var arrowIcon = '<img src="img/arrow-icon.png" class="arrow-icon" alt="Arrow">';
+                        var listLabel = '<div class="lang-label">';
+                        var arrowIcon = '<span class="glyphicon glyphicon-circle-arrow-right pull-right"></span>';
                         var divEnd = '</div>';
                         $("#language-list").append(container +
                             listLabel + name +
@@ -160,9 +163,9 @@ var controller = {
                     var english = resultSet.rows.item(i).english;
                     var translation = resultSet.rows.item(i).translation;
                     var audio = resultSet.rows.item(i).audio;
-                    var container = '<div class="list-item" onClick="controller.playSound(\'' + audio + '\')">';
-                    var listLabel = '<div class="label">';
-                    var arrowIcon = '<img src="img/arrow-icon.png" class="arrow-icon" alt="Arrow">';
+                    var container = '<div class="list-item expression" onClick="controller.playSound(\'' + audio + '\')">';
+                    var listLabel = '<div class="expr-label">';
+                    var arrowIcon = '<span class="glyphicon glyphicon-play pull-right"></span>';
                     var divEnd = '</div>';
                     console.log(english);
                     $("#expression-list").append(container +
@@ -170,7 +173,7 @@ var controller = {
                         divEnd +
                         arrowIcon +
                         divEnd);
-                }
+                } 
                 $("#expression-list").show();
             } else {
                 console.log("Error occurred: listExpressions in controller");

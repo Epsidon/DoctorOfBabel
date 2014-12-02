@@ -223,6 +223,13 @@ module.exports = [
         "merges": [
             "navigator.notification"
         ]
+    },
+    {
+        "file": "plugins/org.apache.cordova.statusbar/www/statusbar.js",
+        "id": "org.apache.cordova.statusbar.statusbar",
+        "clobbers": [
+            "window.StatusBar"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -235,7 +242,8 @@ module.exports.metadata =
     "org.apache.cordova.network-information": "0.2.13",
     "org.chromium.zip": "2.1.0",
     "org.apache.cordova.console": "0.2.11",
-    "org.apache.cordova.dialogs": "0.2.10"
+    "org.apache.cordova.dialogs": "0.2.10",
+    "org.apache.cordova.statusbar": "0.1.8"
 }
 // BOTTOM OF METADATA
 });

@@ -3,6 +3,7 @@ body {
 }
 
 .navbar-default {
+  line-height: 3;
   background-color: #536dfe;
 }
 
@@ -173,7 +174,7 @@ span.glyphicon-globe {
 /* Phonegap CSS */
 
 .container #title {
-  padding-top: 10px;
+  padding-top: 5px;
   text-align: center; 
   font-size: large;
   color: #fff;
@@ -182,13 +183,13 @@ span.glyphicon-globe {
 
 
 span.glyphicon-circle-arrow-left {
-  padding-top: 0.4em;
+  padding-top: 0.6em;
   font-size: 2em;
   color: #fff;
 }
 
 span.glyphicon-info-sign {
-  padding-top: 0.4em;
+  padding-top: 0.6em;
   font-size: 2em;
   color: #fff;
 }
@@ -202,3 +203,5 @@ span.glyphicon-circle-arrow-right {
 span.glyphicon-play {
   font-size: 1.3em;
 }
+
+

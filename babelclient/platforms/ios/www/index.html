@@ -25,29 +25,33 @@
         <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/babel.css" />
         <title>Doctor of Babel</title>
     </head>
     <body>
-        <div class="app" style="margin-top: 20px;">
-            <div class="header" id="header">
-                <div id="back-button">
-                <img src="img/backbutton.png" id="back-button" alt="Back Button" style="width: 100%; height: 100%;">
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div id="back-button" class="clearfix col-xs-2">
+                    <span class="glyphicon glyphicon-circle-arrow-left pull-left"></span>
                 </div>
-                <div id="title">
-                Languages
+                <div id="title" class="center-block col-xs-8 col-xs-offset-2">
+                    Doctor of Babel
                 </div>
-                <div id="info">
-                <img src="img/infoicon.png" id="info-button" alt="Info Button" style="width: 100%; height: 100%;">
-                </div>    
-            </div>
-            <div class="list" style="padding-left: 10px; padding-right: 10px;" id="language-list"></div>
-            <div class="list" style="padding-left: 10px; padding-right: 10px;" id="expression-list"></div>
-            <div class="content" style="padding-left: 10px; padding-right: 10px;" id="info-screen"></div>
-            </div>
+                <div id="info-button">
+                    <span class="glyphicon glyphicon-info-sign col-xs-2 pull-right"></span>
+                </div>
+            </div>            
         </div>
+
+        <div class="list" style="padding-left: 10px; padding-right: 10px;" id="language-list"></div>
+        <div class="list" style="padding-left: 10px; padding-right: 10px;" id="expression-list"></div>
+        <div class="content" style="padding-left: 10px; padding-right: 10px;" id="info-screen"></div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
         <script type="text/javascript" src="js/util.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+        <script type='application/javascript' src='js/fastclick.js'></script>
     </body>
 </html>
