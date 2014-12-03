@@ -236,13 +236,16 @@ function getUpdates(req, clientVersion, done) {
 
   				async.eachSeries(languages, function(element, callback1) {
   					console.log('LANGUAGES');
-  					var path = './uploads/' + element.map;
-		  			var langStream = fs.createReadStream(path);
-		  			langStream.on('error', function(err) {
-		  				console.log(err);
-		  				callback1(err, null);
-		  			});
-		  			archive.append(langStream, {name: element.map});
+  					if (element.removed === false) {
+  						var path = './uploads/' + element.map;
+			  			var langStream = fs.createReadStream(path);
+			  			langStream.on('error', function(err) {
+			  				console.log(err);
+			  				callback1(err, null);
+			  			});
+			  			archive.append(langStream, {name: element.map});	
+  					}
+  					
 		  			callback1();
   				}, function(err) {
   					if (err) {
@@ -250,13 +253,15 @@ function getUpdates(req, clientVersion, done) {
   					} else {
   						async.eachSeries(expressions, function(element, callback2) {
   							console.log('EXPRESSIONS');
-  							var path = './uploads/' + element.audio;
-				  			var exprStream = fs.createReadStream(path);
-				  			exprStream.on('error', function(err) {
-				  				console.log(err);
-				  				callback2(err, null);
-				  			});
-				  			archive.append(exprStream, {name: element.audio});
+  							if (element.removed === false) {
+  								var path = './uploads/' + element.audio;
+					  			var exprStream = fs.createReadStream(path);
+					  			exprStream.on('error', function(err) {
+					  				console.log(err);
+					  				callback2(err, null);
+					  			});
+					  			archive.append(exprStream, {name: element.audio});
+  							}  							
 				  			callback2();
   						}, function(err) {
   							if (err) {

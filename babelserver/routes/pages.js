@@ -8,7 +8,7 @@ var Resources = require('../resources/resources');
 module.exports = function(passport, s3) {
 
 	router.get('/', function(req, res) {
-		Language.find({removed: false}, null, {sort: {name: 1}}, function(err, langs) {
+		Language.find({removed: false, ready: true}, null, {sort: {name: 1}}, function(err, langs) {
 			if (err)
 				console.log(err);
 			res.render('home', { languages: langs, 
