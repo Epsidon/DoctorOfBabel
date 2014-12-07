@@ -48,6 +48,7 @@ var app = {
             $("#info-screen").hide();
             $("#expression-list").hide();
 
+
             db = window.openDatabase("Database", "1.0", "BabelAppDb", 200000);
             database.getLocalVersion(function(result) {
                 if (result === -1) {
@@ -144,6 +145,7 @@ var controller = {
             if (resultSet !== -1) {
                 $("#expression-list").html('');
                 $("#language-list").hide();
+                $("#info-screen").html('');
                 $("#info-screen").hide();
                 $("#expression-list").show();
 
@@ -201,7 +203,7 @@ var controller = {
         $("#info-button").hide();
         $("#language-list").hide();
         $("#expression-list").hide();
-        $("#info-screen").append('<div class="info-text">' + atob(info) + '</div>' +
+        $("#info-screen").append('<div class="info-text alert alert-info">' + atob(info) + '</div>' +
             '<img src="' + cordova.file.dataDirectory + map + '" style="width: 80%; height: auto; display: block; margin-left: auto; margin-right: auto; margin-top: 10px;">');
         $("#info-screen").show();
         $("#back-button").show();

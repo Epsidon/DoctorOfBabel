@@ -43,10 +43,11 @@ var app = {
             // app.receivedEvent('deviceready');
             $('body').bind('touchstart', function() {});
             $(function() {
-             FastClick.attach(document.body);
+                FastClick.attach(document.body);
             });
             $("#info-screen").hide();
             $("#expression-list").hide();
+
 
             db = window.openDatabase("Database", "1.0", "BabelAppDb", 200000);
             database.getLocalVersion(function(result) {
@@ -112,6 +113,9 @@ var controller = {
                 $("#language-list").html('');
                 $("#back-button").hide();
                 $("#title").text("Doctor of Babel");
+                $("#info-button").click(function() {
+                    controller.displayMainInfoScreen();
+                });
                 for (var i = 0; i < resultSet.rows.length; i++) {
                         var name = resultSet.rows.item(i).name;
                         var id = resultSet.rows.item(i).id;
@@ -141,11 +145,13 @@ var controller = {
             if (resultSet !== -1) {
                 $("#expression-list").html('');
                 $("#language-list").hide();
+                $("#info-screen").html('');
                 $("#info-screen").hide();
                 $("#expression-list").show();
 
                 $("#back-button").unbind( "click" );
                 $("#back-button").click(function() {
+                    audioElement.pause();
                     controller.listLanguages();
                     $("#expression-list").hide();
                     $("#language-list").show();
@@ -154,6 +160,7 @@ var controller = {
 
                 $("#info-button").show();
                 $("#info-button").click(function() {
+                    audioElement.pause();
                     controller.displayInfoScreen(languageId, languageName, info, map);
                 });
                 $("#title").text(languageName);
@@ -196,14 +203,45 @@ var controller = {
         $("#info-button").hide();
         $("#language-list").hide();
         $("#expression-list").hide();
-        $("#info-screen").append('<div class="info-text">' + atob(info) + '</div>' +
+        $("#info-screen").append('<div class="info-text alert alert-info">' + atob(info) + '</div>' +
             '<img src="' + cordova.file.dataDirectory + map + '" style="width: 80%; height: auto; display: block; margin-left: auto; margin-right: auto; margin-top: 10px;">');
         $("#info-screen").show();
         $("#back-button").show();
-        $( "#back-button").unbind( "click" );
+        $("#back-button").unbind( "click" );
         $("#back-button").click(function() {
             controller.listExpressions(languageId, languageName, info, map);
         });
+    },
+
+    displayMainInfoScreen: function() {
+        $("#info-screen").html('');
+        $("#info-button").hide();
+        $("#language-list").hide();
+        $("#expression-list").hide();
+
+        var output = '<div id="info-content" class="jumbotron">' +
+                    '<h1>The Doctor of Babel</h1>' +
+                    '<p>' +
+                        'Thirteen simple expressions to help health care workers diagnose common problems,' +
+                         'in many different languages.'+
+                    '</p>' +
+                    '<p>' +
+                        'The expressions are given with English phonetic spellings and audio recordings' +
+                         'of native speakers.' +
+                    '</p>';     
+
+        $("#info-screen").append(output);
+
+        $("#info-screen").show();
+        $("#back-button").show();
+        $("#back-button").unbind( "click" );
+        $("#back-button").click(function() {
+            controller.listLanguages();
+            $("#info-screen").hide();
+            $("#info-button").show();
+            $("#language-list").show();
+        });
+
     },
 
     playSound: function(fileName) {

@@ -144,6 +144,7 @@ var controller = {
             if (resultSet !== -1) {
                 $("#expression-list").html('');
                 $("#language-list").hide();
+                $("#info-screen").html('');
                 $("#info-screen").hide();
                 $("#expression-list").show();
 
