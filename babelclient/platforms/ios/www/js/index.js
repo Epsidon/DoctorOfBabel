@@ -22,6 +22,7 @@ var db;
 var languageList = [];
 var expressionList = [];
 var audioElement = document.createElement('audio');
+var localStorage;
 
 var app = {
     // Application Constructor
@@ -48,6 +49,15 @@ var app = {
             $("#info-screen").hide();
             $("#expression-list").hide();
 
+            localStorage = window.localStorage;
+            var checkTimestamp = localStorage.getItem('lastCheckTimestamp');
+            if(checkTimestamp === null) {
+                localStorage.setItem('lastCheckTimestamp', new Date().getTime());
+            }
+
+            console.log("THE TIMESTAMP: " + new Date(parseInt(localStorage.getItem('lastCheckTimestamp'))));
+            var lastSetDate = new Date(parseInt(localStorage.getItem('lastCheckTimestamp'))).getTime();
+            var currentDate = new Date().getTime();
 
             db = window.openDatabase("Database", "1.0", "BabelAppDb", 200000);
             database.getLocalVersion(function(result) {
@@ -73,17 +83,23 @@ var app = {
                     });
                 } else {
                     requestApi.doRequest(function(responseValue, updateUrl, versionNo) {
-                        if (responseValue === 100) {
-                            console.log("Update needed");
-                            console.log("Update URL: " + updateUrl);
-                            console.log("Update URL: " + versionNo);
-                            requestApi.downloadFile();
-                            controller.displayUpdateScreen();
-                        } else if (responseValue === 200) {
-                            console.log("Update is not needed");
-                            } else {
-                            console.log("An error occured, carry on");
+                        //86400000: 24 hours in milliseconds
+
+                        if (currentDate - lastSetDate > 86400000) {
+                            localStorage.setItem('lastCheckTimestamp', new Date().getTime());
+                            if (responseValue === 100) {
+                                console.log("Update needed");
+                                console.log("Update URL: " + updateUrl);
+                                console.log("Update URL: " + versionNo);
+                                requestApi.downloadFile();
+                                controller.displayUpdateScreen();
+                            } else if (responseValue === 200) {
+                                console.log("Update is not needed");
+                                console.log(currentDate - lastSetDate);
+                                } else {
+                                console.log("An error occured, carry on");
                             }
+                        }
                     });
                 }
             });
