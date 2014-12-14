@@ -57,6 +57,7 @@ body {
 		height:100%;
 		z-index: 1000;
 		background-color: white;
+		height: auto;
 	}
 
 	#expression-list #back-icon {
