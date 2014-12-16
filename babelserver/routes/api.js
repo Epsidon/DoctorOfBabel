@@ -231,6 +231,7 @@ function getUpdates(req, clientVersion, serverVersion, done) {
 		  	} else {
 		  		result.expressions = expressions;
 		  		var name = uuid.v4();
+		  		result.zipName = name;
 		  		var output = fs.createWriteStream('./uploads/' + name + '.zip');
 		  		var archive = archiver('zip');
 		  		archive.pipe(output);
