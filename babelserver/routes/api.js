@@ -179,7 +179,7 @@ router.get('/version/:client_version', function(req, res) {
 				res.json({ status: 200,
 								 message: 'No new updates.' });
 		} else {
-			getUpdates(req, clientVersion, function(err, download) {
+			getUpdates(req, clientVersion, version.global_version, function(err, download) {
 				if (err) {
 					res.json({ status: 300,
 									   message: 'Error encountered. Please try again.' });
@@ -214,8 +214,9 @@ module.exports = router;
 
 
 // Helper to construct the updates. Consider moving it somewhere else after
-function getUpdates(req, clientVersion, done) {
+function getUpdates(req, clientVersion, serverVersion, done) {
 	var result = {};
+	result.version = serverVersion;
 	// Get the languages first
 	Language.find({ version: { $gt: clientVersion } }, 
 		'_id name info map removed', function(err, languages) {
@@ -230,6 +231,7 @@ function getUpdates(req, clientVersion, done) {
 		  	} else {
 		  		result.expressions = expressions;
 		  		var name = uuid.v4();
+		  		result.zipName = name;
 		  		var output = fs.createWriteStream('./uploads/' + name + '.zip');
 		  		var archive = archiver('zip');
 		  		archive.pipe(output);
