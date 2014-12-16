@@ -52,27 +52,34 @@ var app = {
 
             db = window.openDatabase("Database", "1.0", "BabelAppDb", 200000);
             database.getLocalVersion(function(result) {
-                if (result === -1) {
+                if (result === -1) { // no DB exists
                     database.createDb(function(result) {
                         if(result === -1) {
                             alert("Database crashed! Please restart the BabelApp");
-                        } else {
-                            // Update before we check for update. In case update fails
-                            // we already have localStorage updated
-                            localStorage.setItem('lastCheckTimestamp', new Date().getTime());
-                            requestApi.doRequest(function(responseValue, updateUrl, versionNo) {
-                                if (responseValue === 100) {
-                                    console.log("Update needed");
-                                    console.log("Update URL: " + updateUrl);
-                                    console.log("Update URL: " + versionNo);
-                                    requestApi.downloadFile();
-                                    controller.displayUpdateScreen();
-                                } else if (responseValue === 200) {
-                                    console.log("Update is not needed");
+                        } else { // Grab initial data from ZIP file
+                            database.init(function(result) {
+                                if (result === -1) {
+                                    alert("Database crashed! Please restart the BabelApp");    
                                 } else {
-                                    console.log("An error occured, carry on");
+                                    // After initialization, request an update from server
+                                    localStorage.setItem('lastCheckTimestamp', new Date().getTime());
+                                    requestApi.doRequest(function(responseValue, updateUrl, versionNo) {
+                                        if (responseValue === 100) {
+                                            console.log("Update needed");
+                                            console.log("Update URL: " + updateUrl);
+                                            console.log("Update URL: " + versionNo);
+                                            requestApi.downloadFile();
+                                            controller.displayUpdateScreen();
+                                        } else if (responseValue === 200) {
+                                            console.log("Update is not needed");
+                                        } else {
+                                            console.log("An error occured, carry on");
+                                        }
+                                        $("#back-button").hide();
+                                        controller.listLanguages();
+                                    });        
                                 }
-                            });
+                            }); 
                         }
                     });
                 } else { // Database exists
@@ -86,15 +93,15 @@ var app = {
                             controller.displayUpdateScreen();
                         } else if (responseValue === 200) {
                             console.log("Update is not needed");
-                            } else {
+                        } else {
                             console.log("An error occured, carry on");
                         }
+                        $("#back-button").hide();
+                        controller.listLanguages();
                     });
                 }
             });
 
-            $("#back-button").hide();
-            controller.listLanguages();
 
         },
 
@@ -114,7 +121,7 @@ var app = {
                         controller.displayUpdateScreen();
                     } else if (responseValue === 200) {
                         console.log("Update is not needed");
-                        } else {
+                    } else {
                         console.log("An error occured, carry on");
                     }
                 });                
@@ -155,7 +162,7 @@ var controller = {
                         var map = resultSet.rows.item(i).map;
 
                         var container = '<div class="list-item language" ontouchend="controller.listExpressions(\'' + id + '\', \'' + name + '\', \'' + info + '\', \'' + map + '\')">';
-                        console.log(container);
+                        //console.log(container);
                         var listLabel = '<div class="lang-label">';
                         var arrowIcon = '<span class="glyphicon glyphicon-circle-arrow-right pull-right"></span>';
                         var divEnd = '</div>';
@@ -205,7 +212,7 @@ var controller = {
                     var listLabel = '<div class="expr-label">';
                     var arrowIcon = '<span class="glyphicon glyphicon-play pull-right"></span>';
                     var divEnd = '</div>';
-                    console.log(english);
+                    //console.log(english);
                     $("#expression-list").append(container +
                         listLabel + english + " - " + translation +
                         divEnd +
