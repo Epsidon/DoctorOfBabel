@@ -43,6 +43,7 @@ var requestApi = {
                 zip.unzip(zipPath, cordova.file.dataDirectory, function(result) {
                     if (result === 0 ) {
                         $.getJSON(cordova.file.dataDirectory + 'scheme.json', function(json) {
+                        $.post( "http://104.131.29.43/api/version/delete", { name: json["zipName"] } );
                             database.addLanguages(json["languages"], function(result) {
                                 if(result === 0) {
                                     database.addExpressions(json["expressions"], function(result) {
