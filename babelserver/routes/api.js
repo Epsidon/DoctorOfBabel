@@ -102,7 +102,7 @@ router.route('/languages/:lang_id')
 
 	// get specific language 
 	.get(function(req, res) {
-		Expression.find({ language: req.param('lang_id') }, function(err, expressions){
+		Expression.find({ language: req.param('lang_id'), removed: false }, function(err, expressions){
 			if (err)
 				console.log(err);
 			res.json(expressions);
