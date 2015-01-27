@@ -3,9 +3,9 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width" initial-scale="1">
-	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css"> 
-	<link rel="stylesheet" type="text/css" href="stylesheets/babel.css"> 
-	<link rel="stylesheet" type="text/css" href="stylesheets/dashboard.css">
+	<link rel="stylesheet" type="text/css" href="{{static}}/bootstrap/css/bootstrap.min.css"> 
+	<link rel="stylesheet" type="text/css" href="{{static}}/stylesheets/babel.css"> 
+	<link rel="stylesheet" type="text/css" href="{{static}}/stylesheets/dashboard.css">
 	<title>Doctor of Babel</title>
 </head>
 <body>
@@ -29,10 +29,10 @@
 	      </ul>
 	      <ul class="nav navbar-nav navbar-right">
 	      	{{#if user}}
-	      		<li><a href="/dashboard">Dashboard</a></li>
-	      		<li><a href="/logout">Log Out</a></li>
+	      		<li><a href="dashboard">Dashboard</a></li>
+	      		<li><a href="logout">Log Out</a></li>
 	      	{{else}}
-	      		<li><a href="/login">Login</a></li>
+	      		<li><a href="login">Login</a></li>
 	      	{{/if}}
 	      </ul>
 	    </div><!-- /.navbar-collapse -->
@@ -42,8 +42,8 @@
 		{{{ body }}}
 	</div>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-	<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="script/babel.js"></script>
-	<script type="text/javascript" src="script/dashboard.js"></script>
+	<script type="text/javascript" src="{{static}}/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="{{static}}/script/babel.js"></script>
+	<script type="text/javascript" src="{{static}}/script/dashboard.js"></script>
 </body>
 </html>
