@@ -110,8 +110,8 @@
                 <div class="lang-expr-play">
                   <p class="help-block">Play current audio file.</p>
                   <span class="glyphicon glyphicon-play-circle" style="font-size:30px;" onclick="document.getElementById('expr-audio-{{ this._id }}').play()"></span>
-                  <a href="/{{ this.audio }}">{{ this.audio }}</a>
-                  <audio src="/{{ this.audio }}" id="expr-audio-{{ this._id }}"></audio>
+                  <a href="{{../static}}/{{ this.audio }}">{{ this.audio }}</a>
+                  <audio src="{{../static}}/{{ this.audio }}" id="expr-audio-{{ this._id }}"></audio>
                 </div> 
               </div>
              </div> 
