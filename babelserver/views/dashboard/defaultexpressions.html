@@ -2,16 +2,16 @@
   <div class="row">
     <div class="col-sm-3 col-md-2 sidebar">
       <ul class="nav nav-sidebar">
-        <li><a href="/dashboard">Overview</a></li>
-        <li><a href="/dashboard/languages">Languages</a></li>
-        <li class="active"><a href="/dashboard/expressions">Expressions</a></li>
-        <li><a href="/dashboard/users">Users</a></li>
+        <li><a href="{{static}}/dashboard">Overview</a></li>
+        <li><a href="{{static}}/dashboard/languages">Languages</a></li>
+        <li class="active"><a href="{{static}}/dashboard/expressions">Expressions</a></li>
+        <li><a href="{{static}}/dashboard/users">Users</a></li>
       </ul>
     </div>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
       <div class="buttons-container">
 
-        <a class="new-expression" href="/dashboard/expressions/default/new"><button class="btn btn-primary" type="button">Add New Default Expression</button></a>
+        <a class="new-expression" href="{{static}}/dashboard/expressions/default/new"><button class="btn btn-primary" type="button">Add New Default Expression</button></a>
       </div>
 
       <div class="bg-info">
@@ -39,7 +39,7 @@
               <tr>
                 <td>{{ this._id }}</td>
                 <td>{{ this.english }}</td>
-                <td><a href="/dashboard/expressions/default/{{ this._id }}/edit">Edit</a></td>
+                <td><a href="{{static}}/dashboard/expressions/default/{{ this._id }}/edit">Edit</a></td>
               </tr>
             {{/each}}
           </tbody>

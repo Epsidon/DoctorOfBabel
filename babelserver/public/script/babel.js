@@ -41,17 +41,17 @@ function populateExpressions(language) {
   $("#info").text(language.info);
   $("#map").attr('src', language.map);
   var hiddenHeader = '<div id="hidden-header">' +
-  '<img style="float:left;"id="back-icon" src="/images/back-icon.png" onClick="closeModal();">' + 
+  '<img style="float:left;"id="back-icon" src="images/back-icon.png" onClick="closeModal();">' + 
   '<h4 style="text-align: center;">' + language.name + '</h4>' +
   '</div>';
   var contextBuilder = hiddenHeader;
-  var requestURI = "/api/languages/" + language._id;
+  var requestURI = "api/languages/" + language._id;
   $.get(requestURI, function(exprs, status) {
     if (exprs.length != 0) {
       exprs.forEach(function(expr) {
         var outerCover = '<div id="' + expr._id + '" class="expression">' 
                 + '<div class="exprs-container">';
-        var innerCover = '</div><audio controls style="width:100%;"><source src="/' + expr.audio + '" type="audio/mpeg">' 
+        var innerCover = '</div><audio controls style="width:100%;"><source src="' + expr.audio + '" type="audio/mpeg">' 
         + 'Your browser does not support the audio element.' 
         + '</audio>' 
         + '</div>';

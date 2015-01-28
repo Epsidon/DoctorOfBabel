@@ -29,10 +29,10 @@
 	      </ul>
 	      <ul class="nav navbar-nav navbar-right">
 	      	{{#if user}}
-	      		<li><a href="dashboard">Dashboard</a></li>
-	      		<li><a href="logout">Log Out</a></li>
+	      		<li><a href="{{static}}/dashboard">Dashboard</a></li>
+	      		<li><a href="{{static}}/logout">Log Out</a></li>
 	      	{{else}}
-	      		<li><a href="login">Login</a></li>
+	      		<li><a href="{{static}}/login">Login</a></li>
 	      	{{/if}}
 	      </ul>
 	    </div><!-- /.navbar-collapse -->

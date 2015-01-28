@@ -2,10 +2,10 @@
   <div class="row">
     <div class="col-sm-3 col-md-2 sidebar">
       <ul class="nav nav-sidebar">
-        <li><a href="/dashboard">Overview</a></li>
-        <li><a href="/dashboard/languages">Languages</a></li>
-        <li class="active"><a href="/dashboard/expressions">Expressions</a></li>
-        <li><a href="/dashboard/users">Users</a></li>
+        <li><a href="{{static}}/dashboard">Overview</a></li>
+        <li><a href="{{static}}/dashboard/languages">Languages</a></li>
+        <li class="active"><a href="{{static}}/dashboard/expressions">Expressions</a></li>
+        <li><a href="{{static}}/dashboard/users">Users</a></li>
       </ul>
     </div>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -37,9 +37,9 @@
             <div class="expr-play">
               <p class="help-block">Play current audio file.</p>
               <span class="glyphicon glyphicon-play-circle" style="font-size:30px;" onclick="document.getElementById('expr-audio').play()"></span>
-              <a href="/{{ expression.audio }}">{{ expression.audio }}</a>
+              <a href="{{static}}/{{ expression.audio }}">{{ expression.audio }}</a>
             </div> 
-            <audio src="/{{ expression.audio }}" id="expr-audio"></audio>
+            <audio src="{{static}}/{{ expression.audio }}" id="expr-audio"></audio>
           </div>
             <input type="submit" class="btn btn-primary" name="action" value="Update Expression">
             <input type="submit" class="btn btn-danger" name="action" value="Remove">

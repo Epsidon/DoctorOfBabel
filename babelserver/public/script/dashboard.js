@@ -30,7 +30,7 @@ $(document).ready(function() {
   $(document).on('submit', '.form-expr-new', function(e) {
     e.preventDefault();
     $.ajax({
-      url: '/dashboard/languages/expressions/new', 
+      url: '../../../dashboard/languages/expressions/new', 
       type: 'POST',
       dataType: 'json',
       data: new FormData(this),
@@ -70,8 +70,8 @@ $(document).ready(function() {
           '<div class="lang-expr-play">' +
           '<p class="help-block">Play current audio file.</p>' +
           '<span class="glyphicon glyphicon-play-circle" style="font-size:30px;" onclick=document.getElementById("expr-audio-'+data.expression._id+'"'+').play()'+'></span>' +
-          '<a href="/'+data.expression.audio+'">'+data.expression.audio+'</a>' +
-          '<audio src="/'+data.expression.audio+'" id="expr-audio-'+data.expression._id+'"></audio>' +
+          '<a href="../../../'+data.expression.audio+'">'+data.expression.audio+'</a>' +
+          '<audio src="../../../'+data.expression.audio+'" id="expr-audio-'+data.expression._id+'"></audio>' +
           '</div>' +
           '</div>' + 
           '</div>' +
@@ -90,7 +90,7 @@ $(document).ready(function() {
   $(document).on('submit', '.form-expr-update', function(e) {
     e.preventDefault();
     $.ajax({
-      url: '/dashboard/languages/expressions/update', 
+      url: '../../../dashboard/languages/expressions/update', 
       type: 'POST',
       dataType: 'json',
       data: new FormData(this),
