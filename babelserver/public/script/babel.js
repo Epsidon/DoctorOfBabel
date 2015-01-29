@@ -39,7 +39,7 @@ function populateExpressions(language, static) {
   $('#expression-list').removeClass('hidden');
   $('#info-container').removeClass('hidden');
   $("#info").text(language.info);
-  $("#map").attr('src', language.map);
+  $("#map").attr('src', static + '/' + language.map);
   var hiddenHeader = '<div id="hidden-header">' +
   '<img style="float:left;"id="back-icon" src="' + static + '/images/back-icon.png" onClick="closeModal();">' + 
   '<h4 style="text-align: center;">' + language.name + '</h4>' +
