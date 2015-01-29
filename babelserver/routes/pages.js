@@ -5,7 +5,7 @@ var Language = require('../models/language');
 var Expression = require('../models/expression');
 var Resources = require('../resources/resources');
 
-module.exports = function(passport, s3) {
+module.exports = function(passport) {
 
 	router.get('/', function(req, res) {
 		Language.find({removed: false, ready: true}, null, {sort: {name: 1}}, function(err, langs) {
@@ -23,17 +23,17 @@ module.exports = function(passport, s3) {
 	});
 
 	router.post('/login', passport.authenticate('login', {
-		successRedirect: '/dashboard',
-		failureRedirect: '/login',
+		successRedirect: (process.env.APP || '') + '/dashboard',
+		failureRedirect: (process.env.APP || '') + '/login',
 		failureFlash: true,
 	}));
 
 	router.get('/logout', function(req, res) {
 		if (req.isAuthenticated()) {
 			req.logout();
-			res.redirect('/');	
+			res.redirect(res.locals.static + '/');	
 		} else {
-			res.redirect('/login');
+			res.redirect(res.locals.static + '/login');
 		}	
 	});
 
