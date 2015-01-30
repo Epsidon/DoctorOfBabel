@@ -12,7 +12,7 @@ var requestApi = {
         // 300: error encountered somewhere, try again
         // 400: request error
         database.getLocalVersion(function(versionNo) {
-            var url = "http://104.131.29.43/api/version/" + versionNo;
+            var url = "http://ssrg.site.uottawa.ca/babel/api/version/" + versionNo;
             $.getJSON(url, function(data, status) {
                 if (status === 'success') {
                     if (data["status"] === 100) {
@@ -43,7 +43,7 @@ var requestApi = {
                 zip.unzip(zipPath, cordova.file.dataDirectory, function(result) {
                     if (result === 0 ) {
                         $.getJSON(cordova.file.dataDirectory + 'scheme.json', function(json) {
-                        $.post( "http://104.131.29.43/api/version/delete", { name: json["zipName"] } );
+                        $.post( "http://ssrg.site.uottawa.ca/babel/api/version/delete", { name: json["zipName"] } );
                             database.addLanguages(json["languages"], function(result) {
                                 if(result === 0) {
                                     database.addExpressions(json["expressions"], function(result) {
