@@ -34,6 +34,7 @@ var app = {
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
+        document.addEventListener('resume', this.onResume, false);
     },
     // deviceready Event Handler
     //
@@ -48,30 +49,42 @@ var app = {
             $("#info-screen").hide();
             $("#expression-list").hide();
 
+
             db = window.openDatabase("Database", "1.0", "BabelAppDb", 200000);
             database.getLocalVersion(function(result) {
-                if (result === -1) {
+                if (result === -1) { // no DB exists
                     database.createDb(function(result) {
                         if(result === -1) {
                             alert("Database crashed! Please restart the BabelApp");
-                        } else {
-                            requestApi.doRequest(function(responseValue, updateUrl, versionNo) {
-                                if (responseValue === 100) {
-                                    console.log("Update needed");
-                                    console.log("Update URL: " + updateUrl);
-                                    console.log("Update URL: " + versionNo);
-                                    requestApi.downloadFile();
-                                    controller.displayUpdateScreen();
-                                } else if (responseValue === 200) {
-                                    console.log("Update is not needed");
+                        } else { // Grab initial data from ZIP file
+                            database.init(function(result) {
+                                if (result === -1) {
+                                    alert("Database crashed! Please restart the BabelApp");    
                                 } else {
-                                    console.log("An error occured, carry on");
+                                    // After initialization, request an update from server
+                                    localStorage.setItem('lastCheckTimestamp', new Date().getTime());
+                                    requestApi.doRequest(function(responseValue, updateUrl, versionNo) {
+                                        if (responseValue === 100) {
+                                            console.log("Update needed");
+                                            console.log("Update URL: " + updateUrl);
+                                            console.log("Update URL: " + versionNo);
+                                            requestApi.downloadFile();
+                                            controller.displayUpdateScreen();
+                                        } else if (responseValue === 200) {
+                                            console.log("Update is not needed");
+                                        } else {
+                                            console.log("An error occured, carry on");
+                                        }
+                                        $("#back-button").hide();
+                                        controller.listLanguages();
+                                    });        
                                 }
-                            });
+                            }); 
                         }
                     });
-                } else {
+                } else { // Database exists
                     requestApi.doRequest(function(responseValue, updateUrl, versionNo) {
+                        localStorage.setItem('lastCheckTimestamp', new Date().getTime());
                         if (responseValue === 100) {
                             console.log("Update needed");
                             console.log("Update URL: " + updateUrl);
@@ -80,15 +93,41 @@ var app = {
                             controller.displayUpdateScreen();
                         } else if (responseValue === 200) {
                             console.log("Update is not needed");
-                            } else {
+                        } else {
                             console.log("An error occured, carry on");
-                            }
+                        }
+                        $("#back-button").hide();
+                        controller.listLanguages();
                     });
                 }
             });
 
-            $("#back-button").hide();
-            controller.listLanguages();
+
+        },
+
+        onResume: function() {
+            console.log("THE TIMESTAMP: " + new Date(parseInt(localStorage.getItem('lastCheckTimestamp'))));
+            var lastSetDate = new Date(parseInt(localStorage.getItem('lastCheckTimestamp'))).getTime();
+            var currentDate = new Date().getTime();
+
+            if (currentDate - lastSetDate > 86400000) {
+                requestApi.doRequest(function(responseValue, updateUrl, versionNo) {
+                    localStorage.setItem('lastCheckTimestamp', new Date().getTime());
+                    if (responseValue === 100) {
+                        console.log("Update needed");
+                        console.log("Update URL: " + updateUrl);
+                        console.log("Update URL: " + versionNo);
+                        requestApi.downloadFile();
+                        controller.displayUpdateScreen();
+                    } else if (responseValue === 200) {
+                        console.log("Update is not needed");
+                    } else {
+                        console.log("An error occured, carry on");
+                    }
+                });                
+            }
+
+
 
         }
         // ,
@@ -123,7 +162,7 @@ var controller = {
                         var map = resultSet.rows.item(i).map;
 
                         var container = '<div class="list-item language" ontouchend="controller.listExpressions(\'' + id + '\', \'' + name + '\', \'' + info + '\', \'' + map + '\')">';
-                        console.log(container);
+                        //console.log(container);
                         var listLabel = '<div class="lang-label">';
                         var arrowIcon = '<span class="glyphicon glyphicon-circle-arrow-right pull-right"></span>';
                         var divEnd = '</div>';
@@ -173,7 +212,7 @@ var controller = {
                     var listLabel = '<div class="expr-label">';
                     var arrowIcon = '<span class="glyphicon glyphicon-play pull-right"></span>';
                     var divEnd = '</div>';
-                    console.log(english);
+                    //console.log(english);
                     $("#expression-list").append(container +
                         listLabel + english + " - " + translation +
                         divEnd +
@@ -202,7 +241,7 @@ var controller = {
         $("#info-button").hide();
         $("#language-list").hide();
         $("#expression-list").hide();
-        $("#info-screen").append('<div class="info-text">' + atob(info) + '</div>' +
+        $("#info-screen").append('<div class="info-text alert alert-info">' + atob(info) + '</div>' +
             '<img src="' + cordova.file.dataDirectory + map + '" style="width: 80%; height: auto; display: block; margin-left: auto; margin-right: auto; margin-top: 10px;">');
         $("#info-screen").show();
         $("#back-button").show();
