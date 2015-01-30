@@ -179,7 +179,7 @@ router.get('/version/:client_version', function(req, res) {
 				res.json({ status: 200,
 								 message: 'No new updates.' });
 		} else {
-			getUpdates(req, clientVersion, version.global_version, function(err, download) {
+			getUpdates(req, res, clientVersion, version.global_version, function(err, download) {
 				if (err) {
 					res.json({ status: 300,
 									   message: 'Error encountered. Please try again.' });
@@ -214,7 +214,7 @@ module.exports = router;
 
 
 // Helper to construct the updates. Consider moving it somewhere else after
-function getUpdates(req, clientVersion, serverVersion, done) {
+function getUpdates(req, res, clientVersion, serverVersion, done) {
 	var result = {};
 	result.version = serverVersion;
 	// Get the languages first
@@ -271,7 +271,7 @@ function getUpdates(req, clientVersion, serverVersion, done) {
   							} else {
   								archive.append(JSON.stringify(result), { name: 'scheme.json' }).finalize();
 						  		output.on('close', function() {
-						  			var link = req.protocol + '://' + req.get('host') + '/api/download/' + name;
+						  			var link = req.protocol + '://' + req.hostname + ':' + res.locals.port + '/api/download/' + name;
 						  			done(null, link);
 						  		});
   							}

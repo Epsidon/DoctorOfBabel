@@ -17,6 +17,10 @@ module.exports = function(passport) {
 			req.flash('errorLogin', 'Please login to access dashboard');
 			res.redirect(res.locals.static + '/login');
 		} else {
+			if(req.user.role === 'admin')
+				res.locals.admin = true;
+			else
+				res.locals.admin = false;
 			next();
 		}
 	});
@@ -25,10 +29,7 @@ module.exports = function(passport) {
 	// Check for user permission level
 	// Will be removed, we will just remove options for staff
 	router.get('/', function(req, res) {
-		if(req.user.role === 'admin')
-			res.render('dashboard/dashboard-admin');
-		if(req.user.role === 'staff')
-			res.render('dashboard/dashboard');			
+		res.render('dashboard/dashboard-admin');			
 	});
 
 
@@ -770,6 +771,14 @@ module.exports = function(passport) {
 
 
 	// USERS ROUTES
+
+	router.use(function(req, res, next) {
+		if (req.user.role === 'admin') {
+			next();
+		} else {
+			res.redirect(res.locals.static + '/dashboard');
+		}
+	});
 
 	router.get('/users', function(req, res, next) {
 		User.find(function(err, users) {
