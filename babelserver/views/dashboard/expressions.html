@@ -25,20 +25,29 @@
           </colgroup>
           <thead>
             <tr>
-              <th>ID</th>
+              <th>Language</th>
               <th>English</th>
               <th>Translation</th>
-              <th>Audio Path</th>
+              <th>Audio</th>
               <th>Modify</th>
             </tr>
           </thead>
           <tbody>
             {{#each expressions}}
               <tr>
-                <td>{{ this._id }}</td>
+                {{#each ../languages}}
+
+                  {{#ifCond this._id ../this.language}}
+                    <td>{{ this.name }}</td>
+                  {{/ifCond}}
+
+                {{/each}}
                 <td>{{ this.english }}</td>
                 <td>{{ this.translation }}</td>
-                <td><a href="{{../static}}/{{ this.audio }}">Link</a></td>
+                <td>
+                  <span class="glyphicon glyphicon-play-circle" style="font-size:30px;" onclick="document.getElementById('expr-audio-{{ this._id }}').play()"></span>
+                  <audio src="{{../static}}/{{ this.audio }}" id="expr-audio-{{ this._id }}"></audio>
+                </td>
                 <td><a href="expressions/{{ this._id }}/edit">Edit</a></td>
               </tr>
             {{/each}}
@@ -48,3 +57,37 @@
     </div>
   </div>
 </div>
+<script type="text/javascript">
+function sort_table(tbody, col, asc)
+{
+    var rows = tbody.rows;
+    var rlen = rows.length;
+    var arr = new Array();
+    var i, j, cells, clen;
+    for(i = 0; i < rlen; i++)
+    {
+        cells = rows[i].cells;
+        clen = cells.length;
+        arr[i] = new Array();
+      for(j = 0; j < clen; j++) { arr[i][j] = cells[j].innerHTML; }
+    }
+    arr.sort(function(a, b)
+    {
+        var retval=0;
+        var fA=parseFloat(a[col]);
+        var fB=parseFloat(b[col]);
+        if(a[col] != b[col])
+        {
+            if((fA==a[col]) && (fB==b[col]) ){ retval=( fA > fB ) ? asc : -1*asc; }
+            else { retval=(a[col] > b[col]) ? asc : -1*asc;}
+        }
+        return retval;      
+    });
+    for(var rowidx=0;rowidx<rlen;rowidx++)
+    {
+        for(var colidx=0;colidx<arr[rowidx].length;colidx++){ tbody.rows[rowidx].cells[colidx].innerHTML=arr[rowidx][colidx]; }
+    }
+}
+sort_table(document.getElementsByTagName('tbody').item(0), 1, true);
+sort_table(document.getElementsByTagName('tbody').item(0), 0, true);
+</script>

@@ -39,6 +39,9 @@ app.engine('html', exphbs(
               return ! RegExp(t).test(v) ? v : v.replace(t, t + ' selected="selected"')
             })
             .join('\n') 
+    },
+    ifCond: function(v1, v2, options) {
+      return (v1 == v2) ? options.fn(this) : options.inverse(this);
     }
   } 
 }));

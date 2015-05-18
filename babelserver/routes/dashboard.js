@@ -481,7 +481,17 @@ module.exports = function(passport) {
 				console.log(err);
 				next(err);
 			} else {
-				res.render('dashboard/expressions', { expressions: expressions });
+				Language.find({ removed: false }, function(err, languages) {
+					if (err) {
+						console.log(err);
+						next(err);
+					} else {
+						res.render('dashboard/expressions', {
+							languages: languages,
+							expressions: expressions
+						});
+					}
+				});
 			}
 		});
 	});

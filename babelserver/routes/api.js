@@ -4,6 +4,7 @@ var archiver = require('archiver');
 var uuid = require('node-uuid');
 var router = express.Router();
 var Expression = require('../models/expression');
+var DefaultExpression = require('../models/defaultexpression');
 var Language = require('../models/language');
 var User = require('../models/user');
 var Version = require('../models/version');
@@ -67,6 +68,30 @@ router.route('/expressions/remove')
 		});
 	});
 
+
+router.route('/expressions/new/:lang_id')
+
+	.get(function(req, res) {
+		Expression.find({ language: req.params.lang_id, removed: false }, function(err, expressions) {
+			if (err) {
+				console.log(err);
+				next(err);
+			} else {
+				var excludeExpressions = new Array();
+				expressions.forEach(function(element) {
+					excludeExpressions.push(element.english);
+				});
+				DefaultExpression.find({ english: {$nin: excludeExpressions }}, function(err, defaultExpressions) {
+					if (err) {
+						console.log(err);
+						next(err);
+					} else {
+						res.json(defaultExpressions);
+					}
+				});
+			}
+		});
+	});
 
 
 /* Languages */

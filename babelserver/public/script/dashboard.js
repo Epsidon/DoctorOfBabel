@@ -22,6 +22,39 @@ function addExpression(languageId) {
   $('#expression-list-new').prepend(newForm);
 }
 
+function updateListExpressions(){
+  var languageSelect = document.getElementById('select-lang');
+  var languageId = languageSelect.options[languageSelect.selectedIndex].value;
+  $("#select-expr").empty();
+
+  $.get('../../../api/expressions/new/' + languageId, function(data, status) {
+    if (data.length != 0) {
+        data.forEach(function(expr) {
+          var opt = document.createElement('option');
+          opt.value = expr.english;
+          opt.innerHTML = expr.english;
+          $("#select-expr").append(opt);
+        });
+    } else {
+      $(".form-expr").prepend('<div class="alert alert-danger alert-dismissible" role="alert">' +
+        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+        '<p>All expressions already have been translated for this language.</p>' +
+        '</div>');
+    }
+
+  });
+}
+
+function changePassword() {
+  var newField = 
+    '<div class="form-group">' +
+    '<label for="password">New Password</label>' +
+    '<input type="password" class="form-control" name="password" value="">' +
+    '</div>';
+  $("input[name*='password']").parent().remove();
+  $('#pwd-field').empty().append(newField);
+  $("input[name*='password']").focus();
+}
 
 // Handle ajax file uploads for audio files and images
 $(document).ready(function() {
