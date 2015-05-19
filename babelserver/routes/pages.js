@@ -3,10 +3,22 @@ var router = express.Router();
 var fs = require('fs');
 var Language = require('../models/language');
 var Expression = require('../models/expression');
+var Resources = require('../resources/resources');
 
 module.exports = function(passport) {
 
 	router.get('/', function(req, res) {
+		Language.find({removed: false, ready: true}, null, {sort: {name: 1}}, function(err, langs) {
+			if (err)
+				console.log(err);
+			res.render('home', { languages: langs, 
+				welcomeTitle: Resources.getWelcomeTitle, 
+				welcomeBody: Resources.getWelcomeBody,
+				welcomeInfo: Resources.getWelcomeInfo });
+		});
+	});
+
+	router.get('/admin', function(req, res) {
 		if (req.isAuthenticated()) {
 			res.redirect('/dashboard');
 		} else {
